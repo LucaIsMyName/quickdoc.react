@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { createFuzzySearch } from 'fuzzyfindjs';
 import type { MarkdownFile } from '../types';
 
 interface SearchResult {
@@ -13,15 +14,28 @@ interface SearchResult {
     text: string;
     highlight: string;
   }[];
+  score?: number;
+}
+
+interface SearchableItem {
+  id: string;
+  file: MarkdownFile;
+  section: {
+    title: string;
+    level: number;
+    slug: string;
+    content: string;
+  };
+  searchableText: string;
 }
 
 export const useDocumentSearch = (files: MarkdownFile[]) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  // Index all documents for search
-  const searchIndex = useMemo(() => {
-    const index: SearchResult[] = [];
+  // Create searchable items and fuzzy search instance
+  const { searchableItems, fuzzySearch } = useMemo(() => {
+    const items: SearchableItem[] = [];
 
     files.forEach(file => {
       // Split content into sections
@@ -41,10 +55,12 @@ export const useDocumentSearch = (files: MarkdownFile[]) => {
           // Save previous section
           if (sectionContent.length > 0) {
             currentSection.content = sectionContent.join('\n').trim();
-            index.push({
+            const searchableText = `${currentSection.title} ${currentSection.content}`;
+            items.push({
+              id: `${file.slug}-${currentSection.slug}`,
               file,
               section: { ...currentSection },
-              matches: []
+              searchableText
             });
           }
 
@@ -66,45 +82,121 @@ export const useDocumentSearch = (files: MarkdownFile[]) => {
       // Save last section
       if (sectionContent.length > 0) {
         currentSection.content = sectionContent.join('\n').trim();
-        index.push({
+        const searchableText = `${currentSection.title} ${currentSection.content}`;
+        items.push({
+          id: `${file.slug}-${currentSection.slug}`,
           file,
           section: { ...currentSection },
-          matches: []
+          searchableText
         });
       }
     });
 
-    return index;
+    // Create fuzzy search instance with searchable text array
+    const searchTexts = items.map(item => item.searchableText);
+    const fuzzySearchInstance = createFuzzySearch(searchTexts, {
+      languages: ['english'], // Auto-detect or specify languages
+      performance: 'comprehensive', // Good balance of speed and accuracy
+      maxResults: 20
+    });
+
+    return { searchableItems: items, fuzzySearch: fuzzySearchInstance };
   }, [files]);
 
-  // Search functionality
+  // Fuzzy search functionality
   const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return [];
+    if (!searchQuery.trim() || !fuzzySearch) return [];
 
-    const query = searchQuery.toLowerCase();
-    const results: SearchResult[] = [];
+    try {
+      // Use fuzzyfindjs for fuzzy search with typo tolerance
+      const fuzzyResults = fuzzySearch.search(searchQuery, 20);
 
-    searchIndex.forEach(item => {
-      const { section, file } = item;
-      const searchableText = `${section.title} ${section.content}`.toLowerCase();
-      
-      if (searchableText.includes(query)) {
-        // Find all matches and highlight them
-        const matches: { text: string; highlight: string }[] = [];
+      // Convert fuzzy results to our SearchResult format
+      const results: SearchResult[] = fuzzyResults.map((result: any) => {
+        // Find the corresponding searchable item by matching the display text
+        const item = searchableItems.find(item => item.searchableText === result.display);
         
-        // Search in title
-        if (section.title.toLowerCase().includes(query)) {
+        if (!item) {
+          return null;
+        }
+
+        const matches: { text: string; highlight: string }[] = [];
+
+        // Create matches from the search result
+        // Check if title contains the query
+        if (item.section.title.toLowerCase().includes(searchQuery.toLowerCase())) {
           matches.push({
-            text: section.title,
-            highlight: highlightText(section.title, query)
+            text: item.section.title,
+            highlight: highlightText(item.section.title, searchQuery)
           });
         }
 
-        // Search in content and find surrounding context
-        const contentLines = section.content.split('\n');
+        // Extract context from content that matches the query
+        const contentLines = item.section.content.split('\n');
         contentLines.forEach((line, index) => {
-          if (line.toLowerCase().includes(query) && line.trim()) {
+          if (line.toLowerCase().includes(searchQuery.toLowerCase()) && line.trim()) {
             // Get context (previous and next lines)
+            const contextStart = Math.max(0, index - 1);
+            const contextEnd = Math.min(contentLines.length - 1, index + 1);
+            const context = contentLines.slice(contextStart, contextEnd + 1).join(' ').trim();
+            
+            if (context && matches.length < 3) { // Limit to 3 matches per section
+              matches.push({
+                text: context,
+                highlight: highlightText(context, searchQuery)
+              });
+            }
+          }
+        });
+
+        // If no specific matches found, create a basic match from title
+        if (matches.length === 0) {
+          matches.push({
+            text: item.section.title,
+            highlight: highlightText(item.section.title, searchQuery)
+          });
+        }
+
+        return {
+          file: item.file,
+          section: item.section,
+          matches: matches.slice(0, 3), // Limit to 3 matches per section
+          score: result.score
+        };
+      }).filter(Boolean) as SearchResult[];
+
+      // Sort by score (higher is better in fuzzyfindjs)
+      return results.sort((a, b) => (b.score || 0) - (a.score || 0));
+    } catch (error) {
+      console.error('Fuzzy search error:', error);
+      // Fallback to basic search if fuzzy search fails
+      return basicSearch(searchQuery, searchableItems);
+    }
+  }, [searchableItems, searchQuery, fuzzySearch]);
+
+  // Fallback basic search function
+  const basicSearch = (query: string, items: SearchableItem[]): SearchResult[] => {
+    const lowerQuery = query.toLowerCase();
+    const results: SearchResult[] = [];
+
+    items.forEach(item => {
+      const searchableText = item.searchableText.toLowerCase();
+      
+      if (searchableText.includes(lowerQuery)) {
+        const matches: { text: string; highlight: string }[] = [];
+        
+        // Search in title
+        if (item.section.title.toLowerCase().includes(lowerQuery)) {
+          matches.push({
+            text: item.section.title,
+            highlight: highlightText(item.section.title, query)
+          });
+        }
+
+        // Search in content
+        const contentLines = item.section.content.split('\n');
+        contentLines.forEach((line, index) => {
+          if (line.toLowerCase().includes(lowerQuery) && line.trim() && matches.length < 3) {
             const contextStart = Math.max(0, index - 1);
             const contextEnd = Math.min(contentLines.length - 1, index + 1);
             const context = contentLines.slice(contextStart, contextEnd + 1).join(' ').trim();
@@ -118,16 +210,17 @@ export const useDocumentSearch = (files: MarkdownFile[]) => {
 
         if (matches.length > 0) {
           results.push({
-            file,
-            section,
-            matches: matches.slice(0, 3) // Limit to 3 matches per section
+            file: item.file,
+            section: item.section,
+            matches: matches.slice(0, 3),
+            score: 0.8 // Default score for basic search
           });
         }
       }
     });
 
-    return results.slice(0, 20); // Limit total results
-  }, [searchIndex, searchQuery]);
+    return results.slice(0, 20);
+  };
 
   const openSearch = () => setIsOpen(true);
   const closeSearch = () => {
@@ -147,6 +240,8 @@ export const useDocumentSearch = (files: MarkdownFile[]) => {
 
 // Helper function to highlight matching text
 function highlightText(text: string, query: string): string {
-  const regex = new RegExp(`(${query})`, 'gi');
+  if (!query.trim()) return text;
+  
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
   return text.replace(regex, '<mark>$1</mark>');
 }

@@ -3,6 +3,7 @@ import { Search, FileText, Hash, ArrowRight } from 'lucide-react';
 import type { MarkdownFile } from '../types';
 import { useAppState } from '../hooks/useAppState';
 import { useDocumentSearch } from '../hooks/useDocumentSearch';
+import { scrollToHeading } from '../utils/scrollHash';
 
 interface SearchDialogProps {
   files: MarkdownFile[];
@@ -29,7 +30,7 @@ export const SearchDialog = ({ files, isOpen, onClose }: SearchDialogProps) => {
       setCurrentSection(result.section.slug);
     }
     
-    // Update URL hash to scroll to the specific anchor
+    // Scroll to the specific anchor if it's a section
     if (result.section.slug && result.section.slug !== result.file.slug) {
       // Create anchor from section title
       const anchor = result.section.title
@@ -37,23 +38,9 @@ export const SearchDialog = ({ files, isOpen, onClose }: SearchDialogProps) => {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
       
-      // Update URL hash without triggering page reload
-      window.history.replaceState(null, '', `#${anchor}`);
-      
-      // Scroll to the anchor after a short delay to ensure content is loaded
+      // Use scroll utility with a delay to ensure content is loaded
       setTimeout(() => {
-        const element = document.getElementById(anchor);
-        if (element) {
-          // Account for sticky header height
-          const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--meta-nav-height')) || 40;
-          const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-          const offsetPosition = elementPosition - headerHeight;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth"
-          });
-        }
+        scrollToHeading(anchor);
       }, 100);
     }
     

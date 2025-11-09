@@ -12,16 +12,18 @@ A modern, fast, and beautiful documentation framework built with React, TypeScri
 - **SEO Optimized**: Dynamic meta tags and document titles
 - **Type-Safe**: Full TypeScript support
 - **Custom File Ordering**: Configure tab order via `app.config.ts`
+- **Error Boundaries**: Comprehensive error handling with graceful fallbacks
 - 📁 **Auto-Discovery** - Automatically loads all `.md` and `.mdx` files from `/public/pages`
 - 📑 **Tab Navigation** - Each markdown file becomes a tab
 - 🗂️ **Smart Sidebar** - H2 headings (configurable) become navigation items
 - 🔗 **URL Sync** - State syncs with URL and localStorage (URL > localStorage > defaults)
 - 📱 **Mobile First** - Fully responsive with smooth mobile experience
-- 🎨 **Syntax Highlighting** - Beautiful code blocks with highlight.js
+- 🎨 **Syntax Highlighting** - Beautiful code blocks with highlight.js and horizontal scroll
 - ⚛️ **MDX Support** - Use React components in your markdown
 - ⚙️ **Configurable** - Customize colors, fonts, navigation behavior, and more
 - 🌓 **Dark Mode** - Automatic dark mode support
 - 🚀 **Fast** - Built with Vite for lightning-fast development
+- 🛡️ **Error Resilient** - Multiple error boundaries prevent crashes
 
 ## 🚀 Quick Start
 
@@ -119,9 +121,17 @@ export const defaultConfig: AppConfig = {
       // ... more colors
     },
     fonts: {
-      sans: 'Geist, sans-serif',
-      mono: 'Geist Mono, monospace',
+      // System fonts (fallback) - optimized for each platform
+      sans: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      mono: '"SF Mono", "Monaco", "Consolas", monospace',
       size: 'medium',         // 'small' | 'medium' | 'large'
+      
+      // Google Fonts (default: Work Sans + JetBrains Mono)
+      googleFonts: {
+        sans: 'Work Sans:300,400,500,600,700',       // Professional, clean sans-serif
+        mono: 'JetBrains Mono:400,500,600,700',      // Developer-friendly monospace
+        preconnect: true                             // Add preconnect links for performance
+      }
     },
     spacing: {
       compact: false,
@@ -149,6 +159,7 @@ export const defaultConfig: AppConfig = {
 ### Key Configuration Options
 
 - **`breakingPoint`** - Which heading level creates sidebar navigation items
+- **`expandAllSections`** - Keep all sidebar subsections (h2-h6) expanded at all times (default: false)
 - **`fileOrder`** - Custom tab order (array of slugs), defaults to alphabetical
 - **`maxWidth`** - Maximum content width for optimal readability
 - **`enableMDX`** - Enable React components in markdown
@@ -157,7 +168,7 @@ export const defaultConfig: AppConfig = {
 - **`align`** - Content alignment for desktop only (`left`, `center`, `right`)
 - **`spacing`** - Content spacing (`compact`, `normal`, `relaxed`)
 - **`border.radius`** - Global border radius (`none`, `sm`, `md`, `xl`)
-- **`border.size`** - Global border width (`none`, `1`, `2`, `3`)
+- **`border.size`** - Border thickness (`none`, `1`, `2`, `3`) - also affects inline code borders
 - **`enableUserSidebarWidthChange`** - Allow users to resize sidebar (`true`, `false`)
 - **`pagination.enabled`** - Enable pagination between sections (`true`, `false`)
 - **`pagination.showOnTop`** - Show pagination at top of content (`true`, `false`)
@@ -355,5 +366,5 @@ MIT
 
 - Inspired by modern documentation sites
 - Built with amazing open-source tools
-- Geist fonts by Vercel
+- System fonts for optimal performance and native feel
 

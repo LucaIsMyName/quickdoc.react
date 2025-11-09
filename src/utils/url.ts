@@ -39,24 +39,25 @@ export const buildUrlPath = (file: string, headingId: string): string => {
 };
 
 /**
- * Update URL path based on app state
+ * Update URL path based on app state while preserving hash
  * @param state - Current app state
  */
 export const updateUrlHash = (state: AppState): void => {
   const { currentFile, currentSection } = state;
+  const currentHash = window.location.hash; // Preserve existing hash
   
   if (!currentFile) {
-    window.history.replaceState(null, '', '/');
+    window.history.replaceState(null, '', `/${currentHash}`);
     return;
   }
 
   if (!currentSection) {
-    window.history.replaceState(null, '', `/${currentFile}`);
+    window.history.replaceState(null, '', `/${currentFile}${currentHash}`);
     return;
   }
 
   const path = buildUrlPath(currentFile, currentSection);
-  window.history.replaceState(null, '', path);
+  window.history.replaceState(null, '', `${path}${currentHash}`);
 };
 
 /**

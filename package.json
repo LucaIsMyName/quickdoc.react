@@ -1,6 +1,6 @@
 {
   "name": "quickdoc.react",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "cmdk": "^1.1.1",
+    "fuzzyfindjs": "^1.0.51",
     "highlight.js": "^11.10.0",
     "lucide-react": "^0.454.0",
     "marked": "^14.1.2",

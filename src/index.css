@@ -8,6 +8,11 @@
   --content-text-align: left;
   --border-radius: 0.5rem;
   --border-size: 1px;
+  
+  /* Font variables - system fonts by default */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  --font-size-base: 16px;
 }
 
 /* Desktop-only content alignment */
@@ -32,12 +37,13 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
 }
 
 code,
 pre {
-  font-family: "Geist Mono", "Courier New", monospace !important;
+  font-family: var(--font-mono) !important;
 }
 
 button {
@@ -139,13 +145,31 @@ button {
   @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm text-gray-800 dark:text-gray-200;
 }
 
+/* Inline code borders - applied via CSS variables based on theme config */
+.markdown-content p code,
+.markdown-content li code,
+.markdown-content td code,
+.markdown-content th code,
+.markdown-content blockquote code {
+  border-width: var(--inline-code-border-width, 0);
+  border-style: solid;
+  border-color: var(--inline-code-border-color);
+}
+
 .markdown-content pre {
-  @apply bg-gray-50 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4 relative
+  @apply bg-gray-50 dark:bg-gray-800 p-4 rounded-lg mb-4 relative
          border border-gray-200 dark:border-gray-700;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto;
+  white-space: pre;
 }
 
 .markdown-content pre code {
   @apply bg-transparent p-0 text-sm leading-relaxed text-gray-800 dark:text-gray-200;
+  white-space: pre;
+  word-wrap: normal;
+  overflow-wrap: normal;
 }
 
 /* Syntax highlighting for light mode */
@@ -392,6 +416,45 @@ mark {
 /* Code blocks should always have a border regardless of config */
 .code-block, .markdown-content pre {
   border-width: 1px !important;
+  /* Ensure code blocks respect container width */
+  box-sizing: border-box;
+  min-width: 0; /* Allow shrinking */
+}
+
+/* Ensure code blocks don't break out of containers */
+.markdown-content {
+  overflow-x: hidden; /* Prevent horizontal overflow on the container */
+}
+
+.markdown-content pre {
+  /* Ensure proper scrolling behavior */
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.markdown-content pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.markdown-content pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.markdown-content pre::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.dark .markdown-content pre::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+.markdown-content pre::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.dark .markdown-content pre::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
 }
 
 /* Apply to specific elements that already have borders */

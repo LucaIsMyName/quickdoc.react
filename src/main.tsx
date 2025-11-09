@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import App from './App';
 import './index.css';
 
@@ -14,12 +15,25 @@ if (!rootElement) {
 
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
-    <HelmetProvider>
-      <ThemeProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ThemeProvider>
-    </HelmetProvider>
+    <ErrorBoundary
+      onError={(error, errorInfo) => {
+        // Log to console in development
+        console.error('Top-level error caught:', error, errorInfo);
+        
+        // In production, you might want to send to an error reporting service
+        if (process.env.NODE_ENV === 'production') {
+          // Example: Sentry, LogRocket, etc.
+          // errorReportingService.captureException(error, { extra: errorInfo });
+        }
+      }}
+    >
+      <HelmetProvider>
+        <ThemeProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
+      </HelmetProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );

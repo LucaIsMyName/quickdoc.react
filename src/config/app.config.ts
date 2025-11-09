@@ -4,6 +4,7 @@ export interface AppConfig {
     breakingPoint: "h1" | "h2" | "h3" | "h4";
     showH1InSidebar: boolean;
     collapsible: boolean;
+    expandAllSections: boolean; // Keep all sidebar sections expanded (h2-h6)
     sidebarWidth: {
       min: string;
       default: string;
@@ -36,6 +37,12 @@ export interface AppConfig {
       sans: string;
       mono: string;
       size: "small" | "medium" | "large";
+      // Optional: Override with Google Fonts
+      googleFonts?: {
+        sans?: string; // e.g., "Inter:400,500,600,700"
+        mono?: string; // e.g., "JetBrains Mono:400,500,600,700"
+        preconnect?: boolean; // Auto-add preconnect links
+      };
     };
     spacing: {
       compact: boolean;
@@ -65,6 +72,7 @@ export const defaultConfig: AppConfig = {
     breakingPoint: "h2",
     showH1InSidebar: true,
     collapsible: false,
+    expandAllSections: true, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
       min: "200px",
       default: "280px",
@@ -95,16 +103,22 @@ export const defaultConfig: AppConfig = {
       activeText: "#111827",
     },
     fonts: {
-      sans: "Geist, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
-      mono: "Geist Mono, Courier New, monospace",
+      sans: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+      mono: "'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace",
       size: "medium",
+      // Google Fonts: Work Sans + JetBrains Mono
+      googleFonts: {
+        sans: "Work Sans:300,400,500,600,700",
+        mono: "JetBrains Mono:400,500,600,700",
+        preconnect: true,
+      },
     },
     spacing: {
       compact: false,
     },
     border: {
-      radius: "none",
-      size: 3,
+      radius: "sm",
+      size: 1,
     },
   },
   content: {

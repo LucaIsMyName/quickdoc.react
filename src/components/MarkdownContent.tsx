@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import hljs from 'highlight.js';
 import { parseMarkdown } from '../utils/markdown';
+import { scrollToHeading } from '../utils/scrollHash';
 import type { AppConfig } from '../config/app.config';
 
 interface MarkdownContentProps {
@@ -81,15 +82,7 @@ export const MarkdownContent = ({ content, config, onNavigationExtracted }: Mark
       // Make all headings clickable to update URL
       htmlHeading.style.cursor = 'pointer';
       htmlHeading.onclick = () => {
-        window.history.replaceState(null, '', `#${id}`);
-        // Account for sticky header height using CSS variable
-        const elementPosition = heading.getBoundingClientRect().top + window.scrollY;
-        const offsetPosition = elementPosition - headerHeight;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth"
-        });
+        scrollToHeading(id);
       };
     });
   }, [content, config, onNavigationExtracted]);
