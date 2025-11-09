@@ -86,12 +86,12 @@ export const Sidebar = ({ navigation, currentSection, onSectionChange, isOpen, o
   return (
     <>
       {/* Mobile overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
-          onClick={onClose}
-        />
-      )}
+      <div
+        className={`fixed inset-0 bg-black/50 z-30 md:hidden transition-opacity duration-300 ease-in-out ${
+          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={onClose}
+      />
 
       {/* Sidebar */}
       <aside
@@ -101,8 +101,8 @@ export const Sidebar = ({ navigation, currentSection, onSectionChange, isOpen, o
           fixed md:sticky bottom-0 md:top-[40px] left-0 h-[calc(100vh-40px)]
           bg-white dark:bg-gray-900
           border-r border-gray-200 dark:border-gray-800
-          overflow-y-auto z-40 transition-transform duration-300
-          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          overflow-y-auto z-40 transition-all duration-300 ease-in-out
+          ${isOpen ? "translate-x-0 shadow-xl" : "-translate-x-full md:translate-x-0 shadow-none"}
         `}>
         <div className="p-2">
           {/* Navigation */}
@@ -114,14 +114,17 @@ export const Sidebar = ({ navigation, currentSection, onSectionChange, isOpen, o
                   onClick={() => handleClick(item)}
                   className={`
                     w-full text-left py-2 rounded-lg text-sm
-                    transition-colors duration-200
+                    transition-all duration-200 ease-in-out transform
                     ${item.level === 1 ? "text-base px-3 font-bold" : ""}
                     ${item.level === 2 ? "px-3" : ""}
                     ${item.level === 3 ? "text-sm ml-6  px-3" : ""}
                     ${item.level === 4 ? "text-xs ml-9 px-3" : ""}
                     ${item.level === 5 ? "text-xs ml-12 px-3" : ""}
                     ${item.level === 6 ? "text-xs ml-16 px-3" : ""}
-                    ${activeId === item.slug ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white" : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"}
+                    ${activeId === item.slug 
+                      ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white scale-[1.02]" 
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:scale-[1.01]"
+                    }
                   `}>
                   {item.title}
                 </button>
@@ -136,12 +139,12 @@ export const Sidebar = ({ navigation, currentSection, onSectionChange, isOpen, o
                         onClick={() => handleSubsectionClick(sub.slug)}
                         className={`
                           w-full text-left py-1.5 my-1 rounded text-xs
-                          transition-colors duration-200
+                          transition-all duration-200 ease-in-out transform
                           ${sub.level === 3 ? "ml-6 mr-3 px-3" : ""}
                           ${sub.level === 4 ? "ml-9 mr-3 px-3" : ""}
                           ${sub.level === 5 ? "ml-12 mr-3 px-3" : ""}
                           ${sub.level === 6 ? "ml-16 mr-3 px-3" : ""}
-                          text-gray-600 dark:text-gray-400
+                          text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.01]
                         `}>
                         {sub.title}
                       </button>

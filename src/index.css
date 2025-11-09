@@ -8,6 +8,21 @@
   --content-text-align: left;
 }
 
+/* Desktop-only content alignment */
+@media (min-width: 768px) {
+  .desktop-align-center {
+    justify-content: center !important;
+  }
+  
+  .desktop-align-right {
+    justify-content: flex-end !important;
+  }
+  
+  .desktop-align-left {
+    justify-content: flex-start !important;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -21,6 +36,10 @@ body {
 code,
 pre {
   font-family: "Geist Mono", "Courier New", monospace !important;
+}
+
+button {
+  @apply cursor-pointer;
 }
 
 /* Scrollbar styling */

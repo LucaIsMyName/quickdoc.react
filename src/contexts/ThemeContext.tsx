@@ -15,20 +15,30 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [isDark, setIsDark] = useState<boolean>(() => {
-    // Priority: localStorage > system preference
-    const stored = localStorage.getItem(STORAGE_KEY);
-    
-    if (stored !== null) {
-      // User has explicitly set a preference before
-      return stored === 'true';
+    // Default to system preference for SSR/hydration
+    if (typeof window === 'undefined') {
+      return false;
     }
     
-    // First visit - use system preference (don't save yet)
+    // Priority: localStorage > system preference
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      
+      if (stored !== null) {
+        // User has explicitly set a preference before
+        return stored === 'true';
+      }
+    } catch (e) {
+      // localStorage might be disabled
+      console.warn('Failed to access localStorage:', e);
+    }
+    
+    // First visit - use system preference
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
   useEffect(() => {
-    // Always update document class when state changes
+    // Initialize dark mode class on mount
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
@@ -36,7 +46,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }
     
     // Save user preference to localStorage
-    localStorage.setItem(STORAGE_KEY, String(isDark));
+    try {
+      localStorage.setItem(STORAGE_KEY, String(isDark));
+    } catch (e) {
+      console.warn('Failed to save to localStorage:', e);
+    }
   }, [isDark]);
 
   const toggle = () => {

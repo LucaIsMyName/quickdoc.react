@@ -42,6 +42,8 @@ export interface AppConfig {
     enableMDX: boolean;
     syntaxHighlighting: boolean;
     copyCodeButton: boolean;
+    align: "left" | "center" | "right";
+    spacing: "compact" | "normal" | "relaxed";
   };
 
   // Pages folder path (relative to public)
@@ -90,6 +92,8 @@ export const defaultConfig: AppConfig = {
     enableMDX: true,
     syntaxHighlighting: true,
     copyCodeButton: true,
+    align: "left",
+    spacing: "compact",
   },
   pagesPath: "/pages",
 };

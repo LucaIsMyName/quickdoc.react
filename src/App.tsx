@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { defaultConfig } from "./config/app.config";
 import { useMarkdownFiles } from "./hooks/useMarkdownFiles";
 import { useAppState } from "./hooks/useAppState";
 import { useTheme } from "./contexts/ThemeContext";
 import { splitContentBySections } from "./utils/contentSplitter";
+import { applyContentStyles } from "./utils/contentStyles";
 import { TabNavigation } from "./components/TabNavigation";
 import { Sidebar } from "./components/Sidebar";
 import { MarkdownContent } from "./components/MarkdownContent";
@@ -16,6 +17,21 @@ function App() {
   const [config] = useState(defaultConfig);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isDark, toggle: toggleDarkMode } = useTheme();
+  const mainContentRef = useRef<HTMLDivElement>(null);
+
+  // Apply content styles from config
+  useEffect(() => {
+    if (mainContentRef.current) {
+      applyContentStyles(config, mainContentRef.current);
+    }
+  }, [config, mainContentRef.current]);
+
+  // Ensure styles are applied after component mounts
+  useEffect(() => {
+    if (mainContentRef.current) {
+      applyContentStyles(config, mainContentRef.current);
+    }
+  }, []);
 
   // Load markdown files
   const { files, loading, error } = useMarkdownFiles(config.pagesPath, config);
@@ -128,14 +144,14 @@ function App() {
         />
 
         {/* Main Content */}
-        <main className="flex-1 min-w-0">
-          <div 
-            className="max-w-4xl mx-auto"
-            style={{
-              padding: 'var(--content-margin-y)',
-              textAlign: 'var(--content-text-align)' as any
-            }}
-          >
+        <main 
+          ref={mainContentRef}
+          className="flex-1 min-w-0 flex"
+          style={{
+            padding: 'var(--content-margin-y)',
+          }}
+        >
+          <div className="max-w-4xl mx-4 md:mx-6 lg:mx-8 xl:mx-12 w-full">
             {currentSection ? (
               <>
                 {/* Section Content - H1 is already in the markdown */}

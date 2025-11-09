@@ -102,7 +102,6 @@ export const MarkdownContent = ({ content, config, onNavigationExtracted }: Mark
       className="markdown-content prose prose-gray dark:prose-invert max-w-none"
       style={{ 
         maxWidth: config.content.maxWidth,
-        textAlign: 'var(--content-text-align)' as any
       }}
       dangerouslySetInnerHTML={{ __html: html }}
     />

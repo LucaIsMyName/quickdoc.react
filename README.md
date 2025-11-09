@@ -124,6 +124,8 @@ export const defaultConfig: AppConfig = {
     enableMDX: true,
     syntaxHighlighting: true,
     copyCodeButton: true,
+    align: 'left',           // 'left' | 'center' | 'right' (desktop only)
+    spacing: 'normal',        // 'compact' | 'normal' | 'relaxed'
   },
   
   pagesPath: '/pages',
@@ -138,6 +140,8 @@ export const defaultConfig: AppConfig = {
 - **`enableMDX`** - Enable React components in markdown
 - **`syntaxHighlighting`** - Enable code syntax highlighting
 - **`copyCodeButton`** - Add copy buttons to code blocks
+- **`align`** - Content alignment for desktop only (`left`, `center`, `right`)
+- **`spacing`** - Content spacing (`compact`, `normal`, `relaxed`)
 
 ### Custom File Ordering
 
