@@ -1,4 +1,12 @@
 export interface AppConfig {
+  // Site metadata
+  site: {
+    title: string;
+    description: string;
+    author: string;
+    url: string;
+  };
+
   // Navigation settings
   navigation: {
     breakingPoint: "h1" | "h2" | "h3" | "h4";
@@ -68,6 +76,12 @@ export interface AppConfig {
 }
 
 export const defaultConfig: AppConfig = {
+  site: {
+    title: 'QuickDoc',
+    description: 'Fast and beautiful documentation',
+    author: 'Your Name',
+    url: 'https://yourdomain.com',
+  },
   navigation: {
     breakingPoint: "h2",
     showH1InSidebar: true,
