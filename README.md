@@ -1,9 +1,17 @@
 # QuickDoc.React
 
-A modern, fast, and beautiful Markdown-based documentation framework built with React, TypeScript, and Tailwind CSS.
+A modern, fast, and beautiful documentation framework built with React, TypeScript, and Tailwind CSS.
 
 ## ✨ Features
 
+- **Automatic Navigation**: Generates sidebar navigation from Markdown headings
+- **Breaking Points**: Split long documents into sub-pages (default: H2 headings)
+- **Dark Mode**: Built-in dark mode with localStorage persistence
+- **Syntax Highlighting**: Code blocks with copy-to-clipboard functionality
+- **Responsive Design**: Mobile-first with collapsible sidebar
+- **SEO Optimized**: Dynamic meta tags and document titles
+- **Type-Safe**: Full TypeScript support
+- **Custom File Ordering**: Configure tab order via `app.config.ts`
 - 📁 **Auto-Discovery** - Automatically loads all `.md` and `.mdx` files from `/public/pages`
 - 📑 **Tab Navigation** - Each markdown file becomes a tab
 - 🗂️ **Smart Sidebar** - H2 headings (configurable) become navigation items
@@ -125,10 +133,23 @@ export const defaultConfig: AppConfig = {
 ### Key Configuration Options
 
 - **`breakingPoint`** - Which heading level creates sidebar navigation items
+- **`fileOrder`** - Custom tab order (array of slugs), defaults to alphabetical
 - **`maxWidth`** - Maximum content width for optimal readability
 - **`enableMDX`** - Enable React components in markdown
 - **`syntaxHighlighting`** - Enable code syntax highlighting
 - **`copyCodeButton`** - Add copy buttons to code blocks
+
+### Custom File Ordering
+
+By default, tabs are sorted alphabetically. To customize the order:
+
+```typescript
+navigation: {
+  breakingPoint: 'h2',
+  fileOrder: ['quick-start', 'quickdoc', 'markdown-guide', 'license'],
+  // Files not in the list will appear after, sorted alphabetically
+}
+```
 
 ## 📝 Writing Documentation
 

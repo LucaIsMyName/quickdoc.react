@@ -10,9 +10,6 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/test/setup.ts',
-  },
+  // Vite automatically handles SPA routing in dev mode
+  // For production, use public/_redirects file for deployment platforms
 });

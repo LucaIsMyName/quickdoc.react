@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import type { NavigationItem } from '../types';
+import { useEffect, useState, useRef } from "react";
+import type { NavigationItem } from "../types";
+import type { AppConfig } from "../config/app.config";
 
 interface SidebarProps {
   title: string;
@@ -8,24 +9,77 @@ interface SidebarProps {
   onSectionChange: (slug: string) => void;
   isOpen: boolean;
   onClose: () => void;
+  config: AppConfig;
 }
 
-export const Sidebar = ({
-  title,
-  navigation,
-  currentSection,
-  onSectionChange,
-  isOpen,
-  onClose,
-}: SidebarProps) => {
+export const Sidebar = ({ navigation, currentSection, onSectionChange, isOpen, onClose, config }: SidebarProps) => {
   const [activeId, setActiveId] = useState<string | null>(currentSection);
+  const [width, setWidth] = useState<number>(() => {
+    const stored = localStorage.getItem("sidebarWidth");
+    return stored ? parseInt(stored) : parseInt(config.navigation.sidebarWidth.default);
+  });
+  const [isResizing, setIsResizing] = useState(false);
+  const sidebarRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setActiveId(currentSection);
   }, [currentSection]);
 
+  useEffect(() => {
+    localStorage.setItem("sidebarWidth", String(width));
+  }, [width]);
+
+  const handleMouseDown = () => {
+    setIsResizing(true);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+
+      const minWidth = parseInt(config.navigation.sidebarWidth.min);
+      const maxWidth = parseInt(config.navigation.sidebarWidth.max);
+      const newWidth = Math.min(Math.max(e.clientX, minWidth), maxWidth);
+      setWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizing, config]);
+
   const handleClick = (item: NavigationItem) => {
     onSectionChange(item.slug);
+    onClose(); // Close mobile menu
+  };
+
+  const handleSubsectionClick = (slug: string) => {
+    // Scroll to subsection within current page and update URL hash
+    const element = document.getElementById(slug);
+    if (element) {
+      // Account for sticky header height using CSS variable
+      const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--meta-nav-height')) || 40;
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - headerHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+      
+      // Update URL hash without triggering navigation
+      window.history.replaceState(null, '', `#${slug}`);
+    }
     onClose(); // Close mobile menu
   };
 
@@ -41,47 +95,69 @@ export const Sidebar = ({
 
       {/* Sidebar */}
       <aside
+        ref={sidebarRef}
+        style={{ width: `${width}px` }}
         className={`
-          fixed md:sticky top-[57px] md:top-[57px] left-0 h-[calc(100vh-57px)]
-          w-64 md:w-72 lg:w-80 bg-white dark:bg-gray-900
+          fixed md:sticky bottom-0 md:top-[40px] left-0 h-[calc(100vh-40px)]
+          bg-white dark:bg-gray-900
           border-r border-gray-200 dark:border-gray-800
           overflow-y-auto z-40 transition-transform duration-300
-          ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        `}
-      >
-        <div className="p-4 md:p-6">
-          {/* Title */}
-          <div className="mb-6">
-            <h2 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
-              {title}
-            </h2>
-          </div>
-
+          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+        `}>
+        <div className="p-2">
           {/* Navigation */}
-          <nav className="space-y-1">
-            {navigation.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleClick(item)}
-                className={`
-                  w-full text-left px-3 py-2 rounded-lg text-sm
-                  transition-colors duration-200
-                  ${item.level === 1 ? 'font-semibold' : ''}
-                  ${item.level === 2 ? 'pl-3' : ''}
-                  ${item.level === 3 ? 'pl-6' : ''}
-                  ${item.level === 4 ? 'pl-9' : ''}
-                  ${
-                    activeId === item.slug
-                      ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }
-                `}
-              >
-                {item.title}
-              </button>
+          <nav>
+            {navigation.map((item, index) => (
+              <div key={item.id} className={index < navigation.length - 1 ? "mb-1" : ""}>
+                <button
+                  aria-label={`Navigate to ${item.title} Chapter`}
+                  onClick={() => handleClick(item)}
+                  className={`
+                    w-full text-left py-2 rounded-lg text-sm
+                    transition-colors duration-200
+                    ${item.level === 1 ? "text-base px-3 font-bold" : ""}
+                    ${item.level === 2 ? "px-3" : ""}
+                    ${item.level === 3 ? "text-sm ml-6  px-3" : ""}
+                    ${item.level === 4 ? "text-xs ml-9 px-3" : ""}
+                    ${item.level === 5 ? "text-xs ml-12 px-3" : ""}
+                    ${item.level === 6 ? "text-xs ml-16 px-3" : ""}
+                    ${activeId === item.slug ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white" : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"}
+                  `}>
+                  {item.title}
+                </button>
+
+                {/* Show subsections when this item is active */}
+                {activeId === item.slug && item.subsections && item.subsections.length > 0 && (
+                  <div className="space-y-1">
+                    {item.subsections.map((sub) => (
+                      <button
+                        aria-label={`Navigate to ${sub.title}`}
+                        key={sub.id}
+                        onClick={() => handleSubsectionClick(sub.slug)}
+                        className={`
+                          w-full text-left py-1.5 my-1 rounded text-xs
+                          transition-colors duration-200
+                          ${sub.level === 3 ? "ml-6 mr-3 px-3" : ""}
+                          ${sub.level === 4 ? "ml-9 mr-3 px-3" : ""}
+                          ${sub.level === 5 ? "ml-12 mr-3 px-3" : ""}
+                          ${sub.level === 6 ? "ml-16 mr-3 px-3" : ""}
+                          text-gray-600 dark:text-gray-400
+                        `}>
+                        {sub.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
         </div>
+
+        {/* Resize handle */}
+        <div
+          className="hidden md:block absolute top-0 right-0 w-1 h-full cursor-col-resize hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors"
+          onMouseDown={handleMouseDown}
+        />
       </aside>
     </>
   );

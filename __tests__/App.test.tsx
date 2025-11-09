@@ -1,28 +1,33 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import App from '../src/App';
 
 describe('App', () => {
   it('renders the app without crashing', () => {
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+    const { container } = render(
+      <HelmetProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </HelmetProvider>
     );
 
     // App should render (either loading, error, or content state)
-    expect(document.querySelector('div')).toBeTruthy();
+    expect(container.querySelector('div')).toBeTruthy();
   });
 
-  it('renders mobile menu button', () => {
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+  it('renders loading state initially', () => {
+    const { getByText } = render(
+      <HelmetProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </HelmetProvider>
     );
 
-    const menuButton = screen.getByLabelText(/Toggle menu/i);
-    expect(menuButton).toBeDefined();
+    // Should show loading text
+    expect(getByText(/Loading documentation/i)).toBeTruthy();
   });
 });

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import type { MarkdownFile } from '../types';
+import type { AppConfig } from '../config/app.config';
 import { extractTitle, generateSlug } from '../utils/markdown';
 
 /**
  * Hook to load and manage markdown files from the pages directory
  */
-export const useMarkdownFiles = (pagesPath: string) => {
+export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
   const [files, setFiles] = useState<MarkdownFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,8 +40,28 @@ export const useMarkdownFiles = (pagesPath: string) => {
           });
         }
 
-        // Sort files alphabetically by slug
-        loadedFiles.sort((a, b) => a.slug.localeCompare(b.slug));
+        // Sort files based on config or alphabetically
+        if (config?.navigation.fileOrder && config.navigation.fileOrder.length > 0) {
+          // Custom order: sort by position in fileOrder array
+          loadedFiles.sort((a, b) => {
+            const orderA = config.navigation.fileOrder?.indexOf(a.slug) ?? -1;
+            const orderB = config.navigation.fileOrder?.indexOf(b.slug) ?? -1;
+            
+            // If both are in the order list, sort by position
+            if (orderA !== -1 && orderB !== -1) {
+              return orderA - orderB;
+            }
+            // If only A is in the list, A comes first
+            if (orderA !== -1) return -1;
+            // If only B is in the list, B comes first
+            if (orderB !== -1) return 1;
+            // If neither is in the list, sort alphabetically
+            return a.slug.localeCompare(b.slug);
+          });
+        } else {
+          // Default: sort alphabetically by slug
+          loadedFiles.sort((a, b) => a.slug.localeCompare(b.slug));
+        }
 
         setFiles(loadedFiles);
       } catch (err) {
@@ -52,7 +73,7 @@ export const useMarkdownFiles = (pagesPath: string) => {
     };
 
     loadFiles();
-  }, [pagesPath]);
+  }, [pagesPath, config]);
 
   return { files, loading, error };
 };

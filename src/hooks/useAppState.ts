@@ -19,6 +19,26 @@ export const useAppState = (defaultFile: string | null) => {
     saveState(state);
   }, [state]);
 
+  // Sync state from URL on mount and when URL changes
+  useEffect(() => {
+    const syncFromUrl = () => {
+      const urlState = parseUrlHash();
+      if (urlState.currentFile || urlState.currentSection) {
+        setState((prev) => ({
+          currentFile: urlState.currentFile ?? prev.currentFile,
+          currentSection: urlState.currentSection ?? null,
+        }));
+      }
+    };
+
+    // Check URL on mount
+    syncFromUrl();
+
+    // Check URL periodically (for manual URL changes)
+    const interval = setInterval(syncFromUrl, 100);
+    return () => clearInterval(interval);
+  }, []);
+
   // Listen for browser back/forward navigation
   useEffect(() => {
     const handlePopState = () => {

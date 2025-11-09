@@ -5,11 +5,20 @@ export interface MarkdownFile {
   path: string;
 }
 
+export interface ContentSection {
+  slug: string;
+  title: string;
+  content: string;
+  level: number;
+  subsections: NavigationItem[];
+}
+
 export interface NavigationItem {
   id: string;
   title: string;
   level: number;
   slug: string;
+  subsections?: NavigationItem[];
 }
 
 export interface AppState {

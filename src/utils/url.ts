@@ -1,40 +1,62 @@
 import type { AppState } from '../types';
 
 /**
- * Parse URL hash to extract file and section
- * Format: #filename or #filename/section
+ * Parse URL path to extract file and section path
+ * Format: /filename or /filename/section-slug
+ * First segment is ALWAYS the file, second segment (if exists) is the section
  */
 export const parseUrlHash = (): Partial<AppState> => {
-  const hash = window.location.hash.slice(1); // Remove #
+  const path = window.location.pathname.slice(1); // Remove leading /
   
-  if (!hash) {
+  if (!path || path === '') {
     return {};
   }
 
-  const [file, section] = hash.split('/');
+  const segments = path.split('/').filter(Boolean);
+  if (segments.length === 0) {
+    return {};
+  }
+  
+  // First segment is the file slug
+  const file = segments[0] || null;
+  // Second segment (if exists) is the section slug within that file
+  const section = segments.length > 1 ? segments[1] : null;
   
   return {
-    currentFile: file || null,
+    currentFile: file,
     currentSection: section || null,
   };
 };
 
 /**
- * Update URL hash based on app state
+ * Build URL path from file and section
+ * @param file - Current file slug
+ * @param headingId - Target heading ID (section slug)
+ */
+export const buildUrlPath = (file: string, headingId: string): string => {
+  // Simple format: /filename/section-slug
+  return `/${file}/${headingId}`;
+};
+
+/**
+ * Update URL path based on app state
+ * @param state - Current app state
  */
 export const updateUrlHash = (state: AppState): void => {
   const { currentFile, currentSection } = state;
   
   if (!currentFile) {
-    window.history.replaceState(null, '', window.location.pathname);
+    window.history.replaceState(null, '', '/');
     return;
   }
 
-  const hash = currentSection 
-    ? `#${currentFile}/${currentSection}`
-    : `#${currentFile}`;
-  
-  window.history.replaceState(null, '', hash);
+  if (!currentSection) {
+    window.history.replaceState(null, '', `/${currentFile}`);
+    return;
+  }
+
+  const path = buildUrlPath(currentFile, currentSection);
+  window.history.replaceState(null, '', path);
 };
 
 /**
@@ -52,3 +74,5 @@ export const getInitialState = (
     currentSection: urlState.currentSection ?? localStorageState?.currentSection ?? null,
   };
 };
+
+// Removed getHeadingPath - not needed for simple file/section URLs

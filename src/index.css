@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --meta-nav-height: 40px;
+  --content-margin-y: 1rem;
+  --content-text-align: left;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -9,12 +15,12 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 code,
 pre {
-  font-family: 'Geist Mono', 'Courier New', monospace !important;
+  font-family: "Geist Mono", "Courier New", monospace !important;
 }
 
 /* Scrollbar styling */
@@ -32,13 +38,31 @@ pre {
   border-radius: 2px;
 }
 
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
 }
 
 /* Markdown content styling */
 .markdown-content {
   @apply text-gray-800 dark:text-gray-200;
+}
+
+/* Headings scroll margin for sticky header */
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  scroll-margin-top: calc(var(--meta-nav-height) + 1rem);
 }
 
 .markdown-content h1 {
@@ -95,11 +119,12 @@ pre {
 }
 
 .markdown-content pre {
-  @apply bg-gray-50 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto mb-4 relative;
+  @apply bg-gray-50 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4 relative
+         border border-gray-200 dark:border-gray-700;
 }
 
 .markdown-content pre code {
-  @apply bg-transparent p-0 text-sm leading-relaxed;
+  @apply bg-transparent p-0 text-sm leading-relaxed text-gray-800 dark:text-gray-200;
 }
 
 .markdown-content blockquote {
@@ -128,10 +153,18 @@ pre {
 }
 
 /* Copy button for code blocks */
+.copy-button-container {
+  @apply absolute top-2 right-2;
+}
+
 .copy-button {
-  @apply absolute top-2 right-2 px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 
-         text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 
-         transition-colors opacity-0 group-hover:opacity-100;
+  @apply p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 
+         rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200
+         opacity-0 flex items-center justify-center;
+}
+
+.markdown-content pre {
+  @apply relative;
 }
 
 .markdown-content pre:hover .copy-button {
@@ -139,5 +172,9 @@ pre {
 }
 
 .copy-button.copied {
-  @apply bg-green-500 text-white;
+  @apply bg-green-500 dark:bg-green-600 text-white opacity-100;
+}
+
+.copy-button svg {
+  @apply w-4 h-4;
 }

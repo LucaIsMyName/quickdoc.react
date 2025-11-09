@@ -7,7 +7,7 @@ export const MobileMenuButton = ({ onClick, isOpen }: MobileMenuButtonProps) => 
   return (
     <button
       onClick={onClick}
-      className="md:hidden fixed bottom-6 left-6 z-50 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors"
+      className="md:hidden fixed bottom-6 left-6 z-50 p-3 bg-gray-800 dark:bg-gray-700 text-white rounded-full shadow-lg hover:bg-gray-900 dark:hover:bg-gray-600 transition-colors"
       aria-label="Toggle menu"
     >
       <svg

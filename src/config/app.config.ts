@@ -1,11 +1,17 @@
 export interface AppConfig {
   // Navigation settings
   navigation: {
-    breakingPoint: 'h1' | 'h2' | 'h3' | 'h4';
+    breakingPoint: "h1" | "h2" | "h3" | "h4";
     showH1InSidebar: boolean;
     collapsible: boolean;
+    sidebarWidth: {
+      min: string;
+      default: string;
+      max: string;
+    };
+    fileOrder?: string[]; // Optional: Custom file order by slug
   };
-  
+
   // Style tokens
   theme: {
     colors: {
@@ -17,17 +23,19 @@ export interface AppConfig {
       textSecondary: string;
       border: string;
       accent: string;
+      activeBackground: string;
+      activeText: string;
     };
     fonts: {
       sans: string;
       mono: string;
-      size: 'small' | 'medium' | 'large';
+      size: "small" | "medium" | "large";
     };
     spacing: {
       compact: boolean;
     };
   };
-  
+
   // Content settings
   content: {
     maxWidth: string;
@@ -35,42 +43,53 @@ export interface AppConfig {
     syntaxHighlighting: boolean;
     copyCodeButton: boolean;
   };
-  
+
   // Pages folder path (relative to public)
   pagesPath: string;
 }
 
 export const defaultConfig: AppConfig = {
   navigation: {
-    breakingPoint: 'h2',
+    breakingPoint: "h2",
     showH1InSidebar: true,
     collapsible: false,
+    sidebarWidth: {
+      min: "200px",
+      default: "280px",
+      max: "400px",
+    },
+    // Optional: Specify custom file order (by slug)
+    // If not specified, files are sorted alphabetically
+    // Example: fileOrder: ['quick-start', 'quickdoc', 'markdown-guide', 'license']
+    fileOrder: ["quick-start", "quickdoc", "markdown-guide", "license"],
   },
   theme: {
     colors: {
-      primary: '#111827',
-      secondary: '#374151',
-      background: '#ffffff',
-      backgroundSecondary: '#f9fafb',
-      text: '#111827',
-      textSecondary: '#6b7280',
-      border: '#e5e7eb',
-      accent: '#2563eb',
+      primary: "#111827",
+      secondary: "#374151",
+      background: "#ffffff",
+      backgroundSecondary: "#f9fafb",
+      text: "#111827",
+      textSecondary: "#6b7280",
+      border: "#e5e7eb",
+      accent: "#111827",
+      activeBackground: "#f3f4f6",
+      activeText: "#111827",
     },
     fonts: {
-      sans: 'Geist, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif',
-      mono: 'Geist Mono, Courier New, monospace',
-      size: 'medium',
+      sans: "Geist, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+      mono: "Geist Mono, Courier New, monospace",
+      size: "medium",
     },
     spacing: {
       compact: false,
     },
   },
   content: {
-    maxWidth: '800px',
+    maxWidth: "800px",
     enableMDX: true,
     syntaxHighlighting: true,
     copyCodeButton: true,
   },
-  pagesPath: '/pages',
+  pagesPath: "/pages",
 };
