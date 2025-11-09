@@ -33,7 +33,7 @@ function App() {
   const location = useLocation();
 
   // Load markdown files
-  const { files, loading, error } = useMarkdownFiles(config.pagesPath);
+  const { files, loading, error } = useMarkdownFiles(config.pagesPath, config);
 
   // Get default file (first file) - moved before useAppState
   const defaultFile = files[0]?.slug ?? null;
@@ -127,11 +127,6 @@ function App() {
     [files]
   );
 
-  // Handle section changes
-  const handleSectionChange = useCallback((slug: string) => {
-    setCurrentSection(slug);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [setCurrentSection]);
 
   // Memoize mobile menu handlers
   const handleMobileMenuToggle = useCallback(() => {
@@ -343,7 +338,7 @@ function App() {
                         <Pagination
                           sections={contentSections}
                           currentSection={state.currentSection || contentSections[0]?.slug || null}
-                          onSectionChange={handleSectionChange}
+                          currentFile={state.currentFile}
                           showOnTop={true}
                           showOnBottom={false}
                           config={config}
@@ -365,7 +360,7 @@ function App() {
                         <Pagination
                           sections={contentSections}
                           currentSection={state.currentSection || contentSections[0]?.slug || null}
-                          onSectionChange={handleSectionChange}
+                          currentFile={state.currentFile}
                           showOnTop={false}
                           showOnBottom={true}
                           config={config}

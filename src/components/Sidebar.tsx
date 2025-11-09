@@ -94,14 +94,14 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
                           onClick={handleClose}
                           aria-label={`Navigate to ${sub.title}`}
                           className={`
-                            block w-full text-left py-1.5 my-1 rounded text-xs
+                            block text-left py-1.5 my-1 rounded text-xs
                             transition-all duration-200 ease-in-out transform
-                            truncate
+                            text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white
+                            truncate min-w-0
                             ${sub.level === 3 ? "ml-6 mr-3 px-3" : ""}
                             ${sub.level === 4 ? "ml-9 mr-3 px-3" : ""}
                             ${sub.level === 5 ? "ml-12 mr-3 px-3" : ""}
                             ${sub.level === 6 ? "ml-16 mr-3 px-3" : ""}
-                            text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white
                           `}>
                           <span className="block truncate">{sub.title}</span>
                         </Link>

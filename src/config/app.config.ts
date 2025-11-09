@@ -86,13 +86,13 @@ export const defaultConfig: AppConfig = {
     breakingPoint: "h2",
     showH1InSidebar: true,
     collapsible: false,
-    expandAllSections: false, // Keep all sidebar sections collapsed by default
+    expandAllSections: true, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
       min: "200px",
       default: "280px",
       max: "350px",
     },
-    enableUserSidebarWidthChange: false,
+    enableUserSidebarWidthChange: true,
     pagination: {
       enabled: true,
       showOnTop: false,
@@ -101,7 +101,7 @@ export const defaultConfig: AppConfig = {
     // Optional: Specify custom file order (by slug)
     // If not specified, files are sorted alphabetically
     // Example: fileOrder: ['quick-start', 'quickdoc', 'markdown-guide', 'license']
-    fileOrder: ["quick-start", "quickdoc", "markdown-guide", "license"],
+    fileOrder: ["quick-start", "quickdoc", "markdown-guide", "license", "changelog"],
   },
   theme: {
     colors: {
