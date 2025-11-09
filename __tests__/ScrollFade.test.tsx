@@ -138,7 +138,6 @@ describe('ScrollFade', () => {
   });
 
   it('properly cleans up event listeners', () => {
-    const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
     const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
 
     const { unmount } = render(

@@ -86,7 +86,7 @@ export const defaultConfig: AppConfig = {
     breakingPoint: "h2",
     showH1InSidebar: true,
     collapsible: false,
-    expandAllSections: true, // Keep all sidebar sections collapsed by default
+    expandAllSections: false, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
       min: "200px",
       default: "280px",

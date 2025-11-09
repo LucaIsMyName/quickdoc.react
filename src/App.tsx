@@ -41,6 +41,39 @@ function App() {
   // Manage app state with URL and localStorage sync
   const { state, setCurrentFile, setCurrentSection } = useAppState(defaultFile);
 
+  // Sync app state when React Router location changes (only for external navigation)
+  useEffect(() => {
+    const path = location.pathname.slice(1); // Remove leading /
+    
+    if (!path || path === '') {
+      return;
+    }
+
+    const segments = path.split('/').filter(Boolean);
+    if (segments.length === 0) {
+      return;
+    }
+    
+    // First segment is the file slug
+    const file = segments[0] || null;
+    // Second segment (if exists) is the section slug within that file
+    // Hash is used for scrolling within the section, not as the section itself
+    const section: string | null = segments.length > 1 ? (segments[1] || null) : null;
+    
+    // More reliable comparison - check each field individually
+    const fileChanged = file !== state.currentFile;
+    const sectionChanged = section !== state.currentSection;
+    
+    if (fileChanged || sectionChanged) {
+      if (fileChanged && file) {
+        setCurrentFile(file);
+      }
+      if (sectionChanged) {
+        setCurrentSection(section);
+      }
+    }
+  }, [location.pathname, location.hash, setCurrentFile, setCurrentSection, state.currentFile, state.currentSection]);
+
   // Check if current path matches any valid file or section
   const isValidPath = useMemo(() => {
     if (loading || files.length === 0) return true; // Don't show 404 while loading
@@ -78,7 +111,7 @@ function App() {
       slug: section.slug,
       subsections: section.subsections,
     }));
-  }, [contentSections]);
+  }, [contentSections, currentFile]);
 
   // Get current section content
   const currentSection = useMemo(() => {
@@ -118,34 +151,21 @@ function App() {
     setIsSearchOpen(false);
   }, []);
 
-  // Apply content styles from config
+  // Consolidated style application - avoid duplicate calls
   useEffect(() => {
+    // Apply all config-based styles together
+    applyBorderStyles(config);
+    applyFontStyles(config);
+    applyInlineCodeStyles(config);
+    
+    // Apply content styles if element is available
     if (mainContentRef.current) {
       applyContentStyles(config, mainContentRef.current);
     }
-    applyBorderStyles(config);
-    applyFontStyles(config);
-    applyInlineCodeStyles(config);
-  }, [config]);
-
-  // Apply meta nav styles
-  useEffect(() => {
+    
+    // Apply meta nav styles based on files
     applyMetaNavStyles(files.length > 1);
-  }, [files]);
-
-  // Apply content styles when files change (only run when files actually change)
-  useEffect(() => {
-    if (files.length > 0 && mainContentRef.current) {
-      applyContentStyles(config, mainContentRef.current);
-    }
-  }, [files.length]); // Only depend on files.length, not the entire files array
-
-  // Apply styles when config changes (separate from files)
-  useEffect(() => {
-    applyBorderStyles(config);
-    applyFontStyles(config);
-    applyInlineCodeStyles(config);
-  }, [config]);
+  }, [config, files.length]); // Consolidated dependencies
 
   // Initialize scroll-based hash updates
   useEffect(() => {
@@ -276,7 +296,6 @@ function App() {
                   <TabNavigation
                     files={files}
                     currentFile={state.currentFile}
-                    onFileChange={setCurrentFile}
                   />
                 </div>
                 

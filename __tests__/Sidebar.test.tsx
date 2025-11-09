@@ -1,17 +1,32 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { Sidebar } from '../src/components/Sidebar';
-import type { NavigationItem, AppConfig } from '../src/types';
+import type { NavigationItem } from '../src/types';
+import type { AppConfig } from '../src/config/app.config';
 
 const mockConfig: AppConfig = {
+  site: {
+    title: 'Test Site',
+    description: 'Test description',
+    author: 'Test Author',
+    url: 'https://test.com',
+  },
   navigation: {
     breakingPoint: 'h2',
     showH1InSidebar: true,
     collapsible: false,
+    expandAllSections: false,
     sidebarWidth: {
       min: '200px',
       default: '280px',
       max: '400px',
+    },
+    enableUserSidebarWidthChange: false,
+    pagination: {
+      enabled: true,
+      showOnTop: false,
+      showOnBottom: true,
     },
     fileOrder: [],
   },
@@ -36,12 +51,18 @@ const mockConfig: AppConfig = {
     spacing: {
       compact: false,
     },
+    border: {
+      radius: 'sm',
+      size: 1,
+    },
   },
   content: {
     maxWidth: '800px',
     enableMDX: true,
     syntaxHighlighting: true,
     copyCodeButton: true,
+    align: 'left',
+    spacing: 'normal',
   },
   pagesPath: '/pages',
 };
@@ -86,15 +107,16 @@ const mockNavigation: NavigationItem[] = [
 describe('Sidebar', () => {
   it('renders navigation items correctly', () => {
     render(
-      <Sidebar
-        title="Test Documentation"
-        navigation={mockNavigation}
-        currentSection="overview"
-        onSectionChange={() => {}}
-        isOpen={true}
-        onClose={() => {}}
-        config={mockConfig}
-      />
+      <BrowserRouter>
+        <Sidebar
+          title="Test Documentation"
+          navigation={mockNavigation}
+          currentSection="overview"
+          isOpen={true}
+          onClose={() => {}}
+          config={mockConfig}
+        />
+      </BrowserRouter>
     );
 
     expect(screen.getByText('Overview')).toBeTruthy();
@@ -103,15 +125,16 @@ describe('Sidebar', () => {
 
   it('renders subsections when active section has subsections', () => {
     render(
-      <Sidebar
-        title="Test Documentation"
-        navigation={mockNavigation}
-        currentSection="overview"
-        onSectionChange={() => {}}
-        isOpen={true}
-        onClose={() => {}}
-        config={mockConfig}
-      />
+      <BrowserRouter>
+        <Sidebar
+          title="Test Documentation"
+          navigation={mockNavigation}
+          currentSection="overview"
+          isOpen={true}
+          onClose={() => {}}
+          config={mockConfig}
+        />
+      </BrowserRouter>
     );
 
     expect(screen.getByText('Key Features')).toBeTruthy();
@@ -120,15 +143,16 @@ describe('Sidebar', () => {
 
   it('does not render subsections when section is not active', () => {
     render(
-      <Sidebar
-        title="Test Documentation"
-        navigation={mockNavigation}
-        currentSection="configuration"
-        onSectionChange={() => {}}
-        isOpen={true}
-        onClose={() => {}}
-        config={mockConfig}
-      />
+      <BrowserRouter>
+        <Sidebar
+          title="Test Documentation"
+          navigation={mockNavigation}
+          currentSection="configuration"
+          isOpen={true}
+          onClose={() => {}}
+          config={mockConfig}
+        />
+      </BrowserRouter>
     );
 
     expect(screen.queryByText('Key Features')).toBeFalsy();
@@ -138,15 +162,16 @@ describe('Sidebar', () => {
 
   it('applies correct CSS classes for subsection container without extra margin', () => {
     const { container } = render(
-      <Sidebar
-        title="Test Documentation"
-        navigation={mockNavigation}
-        currentSection="overview"
-        onSectionChange={() => {}}
-        isOpen={true}
-        onClose={() => {}}
-        config={mockConfig}
-      />
+      <BrowserRouter>
+        <Sidebar
+          title="Test Documentation"
+          navigation={mockNavigation}
+          currentSection="overview"
+          isOpen={true}
+          onClose={() => {}}
+          config={mockConfig}
+        />
+      </BrowserRouter>
     );
 
     // Find the subsection container
@@ -159,19 +184,20 @@ describe('Sidebar', () => {
 
   it('applies correct indentation for different heading levels', () => {
     const { container } = render(
-      <Sidebar
-        title="Test Documentation"
-        navigation={mockNavigation}
-        currentSection="overview"
-        onSectionChange={() => {}}
-        isOpen={true}
-        onClose={() => {}}
-        config={mockConfig}
-      />
+      <BrowserRouter>
+        <Sidebar
+          title="Test Documentation"
+          navigation={mockNavigation}
+          currentSection="overview"
+          isOpen={true}
+          onClose={() => {}}
+          config={mockConfig}
+        />
+      </BrowserRouter>
     );
 
     // Check that H3 subsections have proper indentation
-    const h3Subsections = container.querySelectorAll('.pl-9');
+    const h3Subsections = container.querySelectorAll('.ml-6');
     expect(h3Subsections.length).toBeGreaterThan(0);
   });
 });

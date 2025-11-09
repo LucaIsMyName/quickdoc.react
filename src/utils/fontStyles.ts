@@ -8,9 +8,16 @@ export const applyFontStyles = (config: AppConfig) => {
   const root = document.documentElement;
   const { fonts } = config.theme;
 
-  // Check if Google Fonts are configured
+  // Check if Google Fonts are configured and not already loaded
   if (fonts.googleFonts?.sans || fonts.googleFonts?.mono) {
-    loadGoogleFonts(fonts.googleFonts, fonts);
+    // Check if fonts are already loaded to prevent re-loading
+    const existingLink = document.querySelector(`link[href*="fonts.googleapis.com"]`);
+    if (!existingLink) {
+      loadGoogleFonts(fonts.googleFonts, fonts);
+    } else {
+      // Fonts already loaded, just apply variables
+      applyFontVariables(fonts, true);
+    }
   } else {
     // Use system fonts only and apply immediately
     applyFontVariables(fonts, false);

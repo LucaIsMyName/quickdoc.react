@@ -2,15 +2,18 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { ThemeProvider } from '../src/contexts/ThemeContext';
 import App from '../src/App';
 
 describe('App', () => {
   it('renders the app without crashing', () => {
     const { container } = render(
       <HelmetProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <ThemeProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
       </HelmetProvider>
     );
 
@@ -21,9 +24,11 @@ describe('App', () => {
   it('renders loading state initially', () => {
     const { getByText } = render(
       <HelmetProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <ThemeProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
       </HelmetProvider>
     );
 
@@ -35,14 +40,16 @@ describe('App', () => {
     // Mock console.error to catch React hooks violations
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     
-    let rerender: any;
+    let rerender: (ui: React.ReactElement) => void;
     
     act(() => {
       const result = render(
         <HelmetProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <ThemeProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ThemeProvider>
         </HelmetProvider>
       );
       rerender = result.rerender;
@@ -52,9 +59,11 @@ describe('App', () => {
     act(() => {
       rerender(
         <HelmetProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <ThemeProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ThemeProvider>
         </HelmetProvider>
       );
     });
@@ -62,9 +71,11 @@ describe('App', () => {
     act(() => {
       rerender(
         <HelmetProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <ThemeProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ThemeProvider>
         </HelmetProvider>
       );
     });
@@ -85,9 +96,11 @@ describe('App', () => {
     
     const { rerender } = render(
       <HelmetProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <ThemeProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
       </HelmetProvider>
     );
 
@@ -97,9 +110,11 @@ describe('App', () => {
       window.history.pushState({}, '', '/some-page');
       rerender(
         <HelmetProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <ThemeProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ThemeProvider>
         </HelmetProvider>
       );
     });
@@ -108,9 +123,11 @@ describe('App', () => {
       window.history.pushState({}, '', '/');
       rerender(
         <HelmetProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <ThemeProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ThemeProvider>
         </HelmetProvider>
       );
     });

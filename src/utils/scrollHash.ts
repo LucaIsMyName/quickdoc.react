@@ -62,25 +62,34 @@ const updateHashFromScroll = (): void => {
 };
 
 /**
- * Initialize scroll-based hash updates
+ * Initialize scroll-based hash updates with throttling
  */
 export const initScrollHashUpdates = (): (() => void) => {
+  let ticking = false;
+  
   const handleScroll = () => {
-    if (!isScrolling) {
-      isScrolling = true;
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        if (!isScrolling) {
+          isScrolling = true;
+        }
+
+        // Clear existing timeout
+        clearTimeout(scrollTimeout);
+
+        // Set a timeout to update hash after scrolling stops
+        scrollTimeout = setTimeout(() => {
+          updateHashFromScroll();
+          isScrolling = false;
+        }, 150); // Wait 150ms after scrolling stops
+        
+        ticking = false;
+      });
+      ticking = true;
     }
-
-    // Clear existing timeout
-    clearTimeout(scrollTimeout);
-
-    // Set a timeout to update hash after scrolling stops
-    scrollTimeout = setTimeout(() => {
-      updateHashFromScroll();
-      isScrolling = false;
-    }, 100); // Wait 100ms after scrolling stops
   };
 
-  // Add scroll listener
+  // Add scroll listener with passive flag for better performance
   window.addEventListener('scroll', handleScroll, { passive: true });
 
   // Return cleanup function

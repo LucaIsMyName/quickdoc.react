@@ -34,9 +34,13 @@ export const useAppState = (defaultFile: string | null) => {
     // Check URL on mount
     syncFromUrl();
 
-    // Check URL periodically (for manual URL changes)
-    const interval = setInterval(syncFromUrl, 100);
-    return () => clearInterval(interval);
+    // Use focus event instead of polling for manual URL changes
+    const handleFocus = () => {
+      syncFromUrl();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
   // Listen for browser back/forward navigation

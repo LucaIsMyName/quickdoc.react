@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import { Search, FileText, Hash, ArrowRight } from 'lucide-react';
 import type { MarkdownFile } from '../types';
 import { useAppState } from '../hooks/useAppState';
@@ -11,7 +11,7 @@ interface SearchDialogProps {
   onClose: () => void;
 }
 
-export const SearchDialog = ({ files, isOpen, onClose }: SearchDialogProps) => {
+const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) => {
   const { searchQuery, setSearchQuery, searchResults } = useDocumentSearch(files);
   const { setCurrentFile, setCurrentSection } = useAppState(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -140,3 +140,6 @@ export const SearchDialog = ({ files, isOpen, onClose }: SearchDialogProps) => {
     </div>
   );
 };
+
+// Memoize SearchDialog to prevent unnecessary re-renders
+export const SearchDialog = memo(SearchDialogComponent);
