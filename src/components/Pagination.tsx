@@ -51,7 +51,7 @@ export const Pagination = ({ sections, currentSection, onSectionChange, showOnTo
         <div
           ref={containerRef}
           className="sticky top-0 z-30  backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 px-4 py-3">
-          <div className="flex items-center justify-between max-w-4xl mx-auto">
+          <div className="flex items-center justify-between px-0 mx-auto">
             <button
               onClick={goToPrevious}
               disabled={currentIndex <= 0}
@@ -66,12 +66,15 @@ export const Pagination = ({ sections, currentSection, onSectionChange, showOnTo
             </button>
 
             <div className="flex items-center gap-1">
+               <span className="text-sm text-gray-600 dark:text-gray-400">
+                {currentIndex + 1} of {sections.length}
+              </span>
               {sections.map((section, index) => (
                 <button
                   key={section.slug}
                   onClick={() => goToSection(index)}
                   className={`
-                    w-2 h-2 transition-all duration-200
+                    w-2 h-2 transition-all duration-200 rounded-full
                     ${index === currentIndex ? "bg-gray-900 dark:bg-white w-6" : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"}
                   `}
                   aria-label={`Go to ${section.title}`}
@@ -97,8 +100,10 @@ export const Pagination = ({ sections, currentSection, onSectionChange, showOnTo
       )}
 
       {showOnBottom && (
-        <div className="sticky bottom-0 z-30 border-t border-gray-200 dark:border-gray-800 px-4 py-3 mt-8">
-          <div className="flex items-center justify-between max-w-4xl mx-auto">
+         <div
+          ref={containerRef}
+          className="sticky top-0 z-30  backdrop-blur-sm border-t border-gray-200 dark:border-gray-800 px-4 py-3">
+          <div className="flex items-center justify-between px-0 mx-auto">
             <button
               onClick={goToPrevious}
               disabled={currentIndex <= 0}
@@ -112,24 +117,22 @@ export const Pagination = ({ sections, currentSection, onSectionChange, showOnTo
               <span className="sr-only">Previous</span>
             </button>
 
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-1">
+               <span className="text-sm text-gray-600 dark:text-gray-400">
                 {currentIndex + 1} of {sections.length}
               </span>
-              <div className="flex items-center gap-1">
-                {sections.map((section, index) => (
-                  <button
-                    key={section.slug}
-                    onClick={() => goToSection(index)}
-                    className={`
-                      w-2 h-2 rounded-full transition-all duration-200
-                      ${index === currentIndex ? "bg-gray-900 dark:bg-white w-6" : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"}
-                    `}
-                    aria-label={`Go to ${section.title}`}
-                    title={section.title}
-                  />
-                ))}
-              </div>
+              {sections.map((section, index) => (
+                <button
+                  key={section.slug}
+                  onClick={() => goToSection(index)}
+                  className={`
+                    w-2 h-2 transition-all duration-200 rounded-full
+                    ${index === currentIndex ? "bg-gray-900 dark:bg-white w-6" : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"}
+                  `}
+                  aria-label={`Go to ${section.title}`}
+                  title={section.title}
+                />
+              ))}
             </div>
 
             <button
