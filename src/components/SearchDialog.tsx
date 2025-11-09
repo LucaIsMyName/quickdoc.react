@@ -23,9 +23,40 @@ export const SearchDialog = ({ files, isOpen, onClose }: SearchDialogProps) => {
 
   const handleSelect = (result: any) => {
     setCurrentFile(result.file.slug);
+    
+    // Set the current section
     if (result.section.slug !== result.file.slug) {
       setCurrentSection(result.section.slug);
     }
+    
+    // Update URL hash to scroll to the specific anchor
+    if (result.section.slug && result.section.slug !== result.file.slug) {
+      // Create anchor from section title
+      const anchor = result.section.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+      
+      // Update URL hash without triggering page reload
+      window.history.replaceState(null, '', `#${anchor}`);
+      
+      // Scroll to the anchor after a short delay to ensure content is loaded
+      setTimeout(() => {
+        const element = document.getElementById(anchor);
+        if (element) {
+          // Account for sticky header height
+          const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--meta-nav-height')) || 40;
+          const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+          const offsetPosition = elementPosition - headerHeight;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      }, 100);
+    }
+    
     onClose();
   };
 

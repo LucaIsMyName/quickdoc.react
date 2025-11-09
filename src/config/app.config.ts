@@ -70,7 +70,7 @@ export const defaultConfig: AppConfig = {
       default: "280px",
       max: "350px",
     },
-    enableUserSidebarWidthChange: true,
+    enableUserSidebarWidthChange: false,
     pagination: {
       enabled: true,
       showOnTop: false,
@@ -103,8 +103,8 @@ export const defaultConfig: AppConfig = {
       compact: false,
     },
     border: {
-      radius: "md",
-      size: "none",
+      radius: "none",
+      size: 3,
     },
   },
   content: {

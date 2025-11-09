@@ -6,6 +6,7 @@ import { useTheme } from "./contexts/ThemeContext";
 import { splitContentBySections } from "./utils/contentSplitter";
 import { applyContentStyles } from "./utils/contentStyles";
 import { applyBorderStyles } from "./utils/borderStyles";
+import { applyMetaNavStyles } from "./utils/metaNavStyles";
 import { TabNavigation } from "./components/TabNavigation";
 import { Sidebar } from "./components/Sidebar";
 import { MarkdownContent } from "./components/MarkdownContent";
@@ -55,6 +56,11 @@ function App() {
 
   // Load markdown files
   const { files, loading, error } = useMarkdownFiles(config.pagesPath, config);
+
+  // Apply meta nav styles based on file count
+  useEffect(() => {
+    applyMetaNavStyles(files.length > 1);
+  }, [files.length]);
 
   // Get default file (first file)
   const defaultFile = files[0]?.slug ?? null;
@@ -134,23 +140,46 @@ function App() {
         keywords={["documentation", "markdown", currentFile?.slug ?? ""]}
       />
 
-      {/* Header with Tab Navigation and Dark Mode Toggle */}
-      <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-        <div className="flex items-center justify-between">
-          <TabNavigation
-            files={files}
-            currentFile={state.currentFile}
-            onFileChange={setCurrentFile}
-          />
-          <div className="pr-4 flex items-center gap-2">
-            <SearchButton onClick={() => setIsSearchOpen(true)} />
-            <DarkModeToggle
-              isDark={isDark}
-              onToggle={toggleDarkMode}
+      {/* Header with Tab Navigation and Dark Mode Toggle - Only show if more than 1 file */}
+      {files.length > 1 && (
+        <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-between">
+            <TabNavigation
+              files={files}
+              currentFile={state.currentFile}
+              onFileChange={setCurrentFile}
             />
+            <div className="pr-4 flex items-center gap-2">
+              <SearchButton onClick={() => setIsSearchOpen(true)} />
+              <DarkModeToggle
+                isDark={isDark}
+                onToggle={toggleDarkMode}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Single file header - Only show search and dark mode toggle */}
+      {files.length === 1 && (
+        <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-between p-4">
+            <div className="md:hidden">
+              <MobileMenuButton
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <SearchButton onClick={() => setIsSearchOpen(true)} />
+              <DarkModeToggle
+                isDark={isDark}
+                onToggle={toggleDarkMode}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex">
         {/* Sidebar - Main Navigation (Breaking Points) */}
@@ -183,6 +212,7 @@ function App() {
                     onSectionChange={handleSectionChange}
                     showOnTop={true}
                     showOnBottom={false}
+                    config={config}
                   />
                 )}
 
@@ -200,6 +230,7 @@ function App() {
                     onSectionChange={handleSectionChange}
                     showOnTop={false}
                     showOnBottom={true}
+                    config={config}
                   />
                 )}
               </>

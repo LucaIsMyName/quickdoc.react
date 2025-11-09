@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { ContentSection } from "../types";
+import type { AppConfig } from "../config/app.config";
 
 interface PaginationProps {
   sections: ContentSection[];
@@ -8,9 +9,10 @@ interface PaginationProps {
   onSectionChange: (slug: string) => void;
   showOnTop: boolean;
   showOnBottom: boolean;
+  config: AppConfig;
 }
 
-export const Pagination = ({ sections, currentSection, onSectionChange, showOnTop, showOnBottom }: PaginationProps) => {
+export const Pagination = ({ sections, currentSection, onSectionChange, showOnTop, showOnBottom, config }: PaginationProps) => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +53,10 @@ export const Pagination = ({ sections, currentSection, onSectionChange, showOnTo
         <div
           ref={containerRef}
           className="sticky top-0 z-30  backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 px-4 py-3">
-          <div className="flex items-center justify-between px-0 mx-auto">
+          <div 
+            className="flex items-center justify-between px-0 mx-auto"
+            style={{ maxWidth: config.content.maxWidth }}
+          >
             <button
               onClick={goToPrevious}
               disabled={currentIndex <= 0}
@@ -102,8 +107,12 @@ export const Pagination = ({ sections, currentSection, onSectionChange, showOnTo
       {showOnBottom && (
          <div
           ref={containerRef}
+          style={{ maxWidth: config.content.maxWidth }}
           className="sticky top-0 z-30  backdrop-blur-sm border-t border-gray-200 dark:border-gray-800 px-4 py-3">
-          <div className="flex items-center justify-between px-0 mx-auto">
+          <div 
+            className="flex items-center justify-between px-0 mx-0 w-full flex-1"
+            
+          >
             <button
               onClick={goToPrevious}
               disabled={currentIndex <= 0}
