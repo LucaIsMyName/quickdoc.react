@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import type { NavigationItem } from "../types";
 import type { AppConfig } from "../config/app.config";
 import { ScrollFade } from "./ScrollFade";
+import { useSidebarWidth } from "../hooks/useSidebarWidth";
+import { SidebarWidthControl } from "./SidebarWidthControl";
 
 interface SidebarProps {
   title: string;
@@ -14,50 +16,13 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ navigation, currentSection, onSectionChange, isOpen, onClose, config }: SidebarProps) => {
-  const [activeId, setActiveId] = useState<string | null>(currentSection);
-  const [width, setWidth] = useState<number>(() => {
-    const stored = localStorage.getItem("sidebarWidth");
-    return stored ? parseInt(stored) : parseInt(config.navigation.sidebarWidth.default);
-  });
-  const [isResizing, setIsResizing] = useState(false);
-  const sidebarRef = useRef<HTMLElement>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const { width, setWidth, resetWidth, canResize } = useSidebarWidth(config);
 
   useEffect(() => {
     setActiveId(currentSection);
   }, [currentSection]);
-
-  useEffect(() => {
-    localStorage.setItem("sidebarWidth", String(width));
-  }, [width]);
-
-  const handleMouseDown = () => {
-    setIsResizing(true);
-  };
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isResizing) return;
-
-      const minWidth = parseInt(config.navigation.sidebarWidth.min);
-      const maxWidth = parseInt(config.navigation.sidebarWidth.max);
-      const newWidth = Math.min(Math.max(e.clientX, minWidth), maxWidth);
-      setWidth(newWidth);
-    };
-
-    const handleMouseUp = () => {
-      setIsResizing(false);
-    };
-
-    if (isResizing) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-    }
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isResizing, config]);
 
   const handleClick = (item: NavigationItem) => {
     onSectionChange(item.slug);
@@ -164,11 +129,14 @@ export const Sidebar = ({ navigation, currentSection, onSectionChange, isOpen, o
           </ScrollFade>
         </div>
 
-        {/* Resize handle */}
-        <div
-          className="hidden md:block absolute top-0 right-0 w-1 h-full cursor-col-resize hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors"
-          onMouseDown={handleMouseDown}
-        />
+        {/* Resize handle - only show if user resizing is enabled */}
+        {canResize && (
+          <SidebarWidthControl
+            width={width}
+            onWidthChange={setWidth}
+            onReset={resetWidth}
+          />
+        )}
       </aside>
     </>
   );

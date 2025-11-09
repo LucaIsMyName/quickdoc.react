@@ -40,7 +40,7 @@ export const SearchDialog = ({ files, isOpen, onClose }: SearchDialogProps) => {
       />
       
       {/* Dialog */}
-      <div className="relative z-[10000] mx-auto max-w-2xl w-full mx-4 rounded-lg bg-white dark:bg-gray-900 shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="relative z-[10000] mx-4 max-w-2xl w-full mx-4 rounded-lg bg-white dark:bg-gray-900 shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
         {/* Header */}
         <div className="flex items-center border-b border-gray-200 dark:border-gray-700 px-4">
           <Search className="mr-3 h-4 w-4 text-gray-500" />

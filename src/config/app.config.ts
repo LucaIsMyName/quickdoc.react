@@ -9,6 +9,7 @@ export interface AppConfig {
       default: string;
       max: string;
     };
+    enableUserSidebarWidthChange: boolean;
     pagination: {
       enabled: boolean;
       showOnTop: boolean;
@@ -67,8 +68,9 @@ export const defaultConfig: AppConfig = {
     sidebarWidth: {
       min: "200px",
       default: "280px",
-      max: "400px",
+      max: "350px",
     },
+    enableUserSidebarWidthChange: true,
     pagination: {
       enabled: true,
       showOnTop: false,
