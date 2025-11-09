@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback, memo } from "react";
 import { Link } from "react-router-dom";
 import type { NavigationItem } from "../types";
 import type { AppConfig } from "../config/app.config";
@@ -16,7 +16,7 @@ interface SidebarProps {
   currentFile?: string | null; // Current file slug for building URLs
 }
 
-export const Sidebar = ({ navigation, currentSection, isOpen, onClose, config, currentFile }: SidebarProps) => {
+const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config, currentFile }: SidebarProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { width, setWidth, resetWidth, canResize } = useSidebarWidth(config);
@@ -24,6 +24,11 @@ export const Sidebar = ({ navigation, currentSection, isOpen, onClose, config, c
   useEffect(() => {
     setActiveId(currentSection);
   }, [currentSection]);
+
+  // Memoize the close handler to prevent unnecessary re-renders
+  const handleClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
 
   return (
     <>
@@ -59,7 +64,7 @@ export const Sidebar = ({ navigation, currentSection, isOpen, onClose, config, c
                 <div key={item.id} className={index < navigation.length - 1 ? "mb-1" : "mb-1"}>
                   <Link
                     to={currentFile ? `/${currentFile}/${item.slug}` : `/${item.slug}`}
-                    onClick={onClose}
+                    onClick={handleClose}
                     aria-label={`Navigate to ${item.title} Chapter`}
                     className={`
                       block w-full text-left py-2 rounded-lg text-sm
@@ -86,7 +91,7 @@ export const Sidebar = ({ navigation, currentSection, isOpen, onClose, config, c
                         <Link
                           key={sub.id}
                           to={currentFile ? `/${currentFile}/${item.slug}#${sub.slug}` : `/${item.slug}#${sub.slug}`}
-                          onClick={onClose}
+                          onClick={handleClose}
                           aria-label={`Navigate to ${sub.title}`}
                           className={`
                             block w-full text-left py-1.5 my-1 rounded text-xs
@@ -124,3 +129,6 @@ export const Sidebar = ({ navigation, currentSection, isOpen, onClose, config, c
     </>
   );
 };
+
+// Memoize the Sidebar component to prevent unnecessary re-renders
+export const Sidebar = memo(SidebarComponent);

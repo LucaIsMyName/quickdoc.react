@@ -7,6 +7,17 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import App from './App';
 import './index.css';
 
+// React Scan for development mode performance monitoring
+if (process.env.NODE_ENV === 'development') {
+  import('react-scan').then(({ scan }) => {
+    scan({
+      enabled: true,
+      log: true, // Log to console
+      showToolbar: true, // Show performance toolbar
+    });
+  });
+}
+
 const rootElement = document.getElementById('root');
 
 if (!rootElement) {

@@ -1,11 +1,12 @@
 import { Sun, Moon } from 'lucide-react';
+import { memo } from 'react';
 
 interface DarkModeToggleProps {
   isDark: boolean;
   onToggle: () => void;
 }
 
-export const DarkModeToggle = ({ isDark, onToggle }: DarkModeToggleProps) => {
+export const DarkModeToggle = memo(({ isDark, onToggle }: DarkModeToggleProps) => {
   return (
     <div className="flex items-center gap-2">
       {/* Actual dark mode toggle */}
@@ -22,4 +23,4 @@ export const DarkModeToggle = ({ isDark, onToggle }: DarkModeToggleProps) => {
       </button>
     </div>
   );
-};
+});

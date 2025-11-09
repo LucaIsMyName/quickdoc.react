@@ -1,10 +1,11 @@
 import { Search } from 'lucide-react';
+import { memo } from 'react';
 
 interface SearchButtonProps {
   onClick: () => void;
 }
 
-export const SearchButton = ({ onClick }: SearchButtonProps) => {
+export const SearchButton = memo(({ onClick }: SearchButtonProps) => {
   return (
     <button
       onClick={onClick}
@@ -14,4 +15,4 @@ export const SearchButton = ({ onClick }: SearchButtonProps) => {
       <Search className="w-4 h-4 text-gray-700 dark:text-gray-300" />
     </button>
   );
-};
+});

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import hljs from 'highlight.js';
 import { parseMarkdown } from '../utils/markdown';
 import { scrollToHeading } from '../utils/scrollHash';
@@ -10,7 +10,7 @@ interface MarkdownContentProps {
   onNavigationExtracted?: (headings: HTMLHeadingElement[]) => void;
 }
 
-export const MarkdownContent = ({ content, config, onNavigationExtracted }: MarkdownContentProps) => {
+export const MarkdownContent = memo(({ content, config, onNavigationExtracted }: MarkdownContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -99,4 +99,4 @@ export const MarkdownContent = ({ content, config, onNavigationExtracted }: Mark
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
-};
+});

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { defaultConfig } from "./config/app.config";
 import { useMarkdownFiles } from "./hooks/useMarkdownFiles";
@@ -66,15 +66,19 @@ function App() {
     applyMetaNavStyles(files.length > 1);
   }, [files]);
 
-  // Apply content styles when files change
+  // Apply content styles when files change (only run when files actually change)
   useEffect(() => {
     if (files.length > 0 && mainContentRef.current) {
       applyContentStyles(config, mainContentRef.current);
     }
+  }, [files.length]); // Only depend on files.length, not the entire files array
+
+  // Apply styles when config changes (separate from files)
+  useEffect(() => {
     applyBorderStyles(config);
     applyFontStyles(config);
     applyInlineCodeStyles(config);
-  }, [files, config]);
+  }, [config]);
 
   // Initialize scroll-based hash updates
   useEffect(() => {
@@ -186,10 +190,28 @@ function App() {
   }, [contentSections, state.currentSection]);
 
   // Handle section changes
-  const handleSectionChange = (slug: string) => {
+  const handleSectionChange = useCallback((slug: string) => {
     setCurrentSection(slug);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  }, [setCurrentSection]);
+
+  // Memoize mobile menu handlers
+  const handleMobileMenuToggle = useCallback(() => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  }, [isMobileMenuOpen]);
+
+  const handleMobileMenuClose = useCallback(() => {
+    setIsMobileMenuOpen(false);
+  }, []);
+
+  // Memoize search handlers
+  const handleSearchOpen = useCallback(() => {
+    setIsSearchOpen(true);
+  }, []);
+
+  const handleSearchClose = useCallback(() => {
+    setIsSearchOpen(false);
+  }, []);
 
   if (loading) {
     return (
@@ -252,7 +274,7 @@ function App() {
                 </div>
                 
                 <div className="flex items-center space-x-2 ml-4">
-                  <SearchButton onClick={() => setIsSearchOpen(true)} />
+                  <SearchButton onClick={handleSearchOpen} />
                   <DarkModeToggle
                     isDark={isDark}
                     onToggle={toggleDarkMode}
@@ -271,7 +293,7 @@ function App() {
               navigation={mainNavigation}
               currentSection={state.currentSection || contentSections[0]?.slug || null}
               isOpen={isMobileMenuOpen}
-              onClose={() => setIsMobileMenuOpen(false)}
+              onClose={handleMobileMenuClose}
               config={config}
               currentFile={state.currentFile}
             />
@@ -342,13 +364,13 @@ function App() {
         {/* Mobile Menu Button */}
         <MobileMenuButton
           isOpen={isMobileMenuOpen}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={handleMobileMenuToggle}
         />
 
         {/* Search Dialog */}
         <SearchDialog
           isOpen={isSearchOpen}
-          onClose={() => setIsSearchOpen(false)}
+          onClose={handleSearchClose}
           files={files}
         />
       </div>
