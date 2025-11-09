@@ -129,8 +129,8 @@ export const Sidebar = ({ navigation, currentSection, onSectionChange, isOpen, o
                       ${item.level === 5 ? "text-xs ml-12 px-3" : ""}
                       ${item.level === 6 ? "text-xs ml-16 px-3" : ""}
                       ${activeId === item.slug 
-                        ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white scale-[1.02]" 
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:scale-[1.01]"
+                        ? "text-gray-900 dark:text-white" 
+                        : "text-gray-700 dark:text-gray-300"
                       }
                     `}>
                     {item.title}
@@ -151,7 +151,7 @@ export const Sidebar = ({ navigation, currentSection, onSectionChange, isOpen, o
                             ${sub.level === 4 ? "ml-9 mr-3 px-3" : ""}
                             ${sub.level === 5 ? "ml-12 mr-3 px-3" : ""}
                             ${sub.level === 6 ? "ml-16 mr-3 px-3" : ""}
-                            text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.01]
+                            text-gray-600 dark:text-gray-400
                           `}>
                           {sub.title}
                         </button>

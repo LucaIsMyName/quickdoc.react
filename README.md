@@ -103,6 +103,11 @@ export const defaultConfig: AppConfig = {
     showH1InSidebar: true,
     collapsible: false,
     sidebarWidth: { min: '200px', default: '280px', max: '400px' },
+    pagination: {
+      enabled: false,         // Enable pagination between sections
+      showOnTop: true,        // Show pagination at top of content
+      showOnBottom: true,     // Show pagination at bottom of content
+    },
   },
   
   // Theme settings
@@ -152,6 +157,9 @@ export const defaultConfig: AppConfig = {
 - **`spacing`** - Content spacing (`compact`, `normal`, `relaxed`)
 - **`border.radius`** - Global border radius (`none`, `sm`, `md`, `xl`)
 - **`border.size`** - Global border width (`none`, `1`, `2`, `3`)
+- **`pagination.enabled`** - Enable pagination between sections (`true`, `false`)
+- **`pagination.showOnTop`** - Show pagination at top of content (`true`, `false`)
+- **`pagination.showOnBottom`** - Show pagination at bottom of content (`true`, `false`)
 
 ### Custom File Ordering
 

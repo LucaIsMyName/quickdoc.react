@@ -9,6 +9,11 @@ export interface AppConfig {
       default: string;
       max: string;
     };
+    pagination: {
+      enabled: boolean;
+      showOnTop: boolean;
+      showOnBottom: boolean;
+    };
     fileOrder?: string[]; // Optional: Custom file order by slug
   };
 
@@ -63,6 +68,11 @@ export const defaultConfig: AppConfig = {
       min: "200px",
       default: "280px",
       max: "400px",
+    },
+    pagination: {
+      enabled: true,
+      showOnTop: false,
+      showOnBottom: true,
     },
     // Optional: Specify custom file order (by slug)
     // If not specified, files are sorted alphabetically

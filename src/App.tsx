@@ -13,6 +13,7 @@ import { MobileMenuButton } from "./components/MobileMenuButton";
 import { DarkModeToggle } from "./components/DarkModeToggle";
 import { SearchButton } from "./components/SearchButton";
 import { SearchDialog } from "./components/SearchDialog";
+import { Pagination } from "./components/Pagination";
 import { SEO } from "./components/SEO";
 import "highlight.js/styles/github.css";
 
@@ -174,11 +175,33 @@ function App() {
           <div className="max-w-4xl mx-4 md:mx-6 lg:mx-8 xl:mx-12 w-full">
             {currentSection ? (
               <>
+                {/* Pagination - Top */}
+                {config.navigation.pagination.enabled && config.navigation.pagination.showOnTop && (
+                  <Pagination
+                    sections={contentSections}
+                    currentSection={state.currentSection || contentSections[0]?.slug || null}
+                    onSectionChange={handleSectionChange}
+                    showOnTop={true}
+                    showOnBottom={false}
+                  />
+                )}
+
                 {/* Section Content - H1 is already in the markdown */}
                 <MarkdownContent
                   content={currentSection.content}
                   config={config}
                 />
+
+                {/* Pagination - Bottom */}
+                {config.navigation.pagination.enabled && config.navigation.pagination.showOnBottom && (
+                  <Pagination
+                    sections={contentSections}
+                    currentSection={state.currentSection || contentSections[0]?.slug || null}
+                    onSectionChange={handleSectionChange}
+                    showOnTop={false}
+                    showOnBottom={true}
+                  />
+                )}
               </>
             ) : currentFile ? (
               <div className="text-center py-12">
