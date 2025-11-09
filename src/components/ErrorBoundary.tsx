@@ -23,6 +23,15 @@ export class ErrorBoundary extends Component<Props, State> {
     };
   }
 
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    // Only re-render if error state changes or children actually change
+    return (
+      this.state.hasError !== nextState.hasError ||
+      this.state.error !== nextState.error ||
+      this.props.children !== nextProps.children
+    );
+  }
+
   static getDerivedStateFromError(error: Error): State {
     return {
       hasError: true,

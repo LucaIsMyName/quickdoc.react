@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo, useCallback } from 'react';
 
 interface ScrollFadeProps {
   children: React.ReactNode;
@@ -8,7 +8,7 @@ interface ScrollFadeProps {
   className?: string;
 }
 
-export const ScrollFade = ({ 
+const ScrollFadeComponent = ({ 
   children, 
   direction = 'vertical',
   size = 40,
@@ -19,29 +19,32 @@ export const ScrollFade = ({
   const [isScrollable, setIsScrollable] = useState(false);
   const [scrollPosition, setScrollPosition] = useState({ start: true, end: false });
 
-  useEffect(() => {
+  const checkScrollable = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    const checkScrollable = () => {
-      if (direction === 'vertical') {
-        const hasScroll = container.scrollHeight > container.clientHeight;
-        setIsScrollable(hasScroll);
-        
-        const atTop = container.scrollTop === 0;
-        const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 1;
-        
-        setScrollPosition({ start: atTop, end: atBottom });
-      } else {
-        const hasScroll = container.scrollWidth > container.clientWidth;
-        setIsScrollable(hasScroll);
-        
-        const atLeft = container.scrollLeft === 0;
-        const atRight = container.scrollLeft + container.clientWidth >= container.scrollWidth - 1;
-        
-        setScrollPosition({ start: atLeft, end: atRight });
-      }
-    };
+    if (direction === 'vertical') {
+      const hasScroll = container.scrollHeight > container.clientHeight;
+      setIsScrollable(hasScroll);
+      
+      const atTop = container.scrollTop === 0;
+      const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 1;
+      
+      setScrollPosition({ start: atTop, end: atBottom });
+    } else {
+      const hasScroll = container.scrollWidth > container.clientWidth;
+      setIsScrollable(hasScroll);
+      
+      const atLeft = container.scrollLeft === 0;
+      const atRight = container.scrollLeft + container.clientWidth >= container.scrollWidth - 1;
+      
+      setScrollPosition({ start: atLeft, end: atRight });
+    }
+  }, [direction]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
     checkScrollable();
     container.addEventListener('scroll', checkScrollable);
@@ -51,7 +54,7 @@ export const ScrollFade = ({
       container.removeEventListener('scroll', checkScrollable);
       window.removeEventListener('resize', checkScrollable);
     };
-  }, [direction]);
+  }, [checkScrollable]);
 
   if (!isScrollable) {
     return (
@@ -161,3 +164,6 @@ export const ScrollFade = ({
     </div>
   );
 };
+
+// Memoize the ScrollFade component to prevent unnecessary re-renders
+export const ScrollFade = memo(ScrollFadeComponent);

@@ -1,9 +1,11 @@
+import { memo } from "react";
+
 interface MobileMenuButtonProps {
   onClick: () => void;
   isOpen: boolean;
 }
 
-export const MobileMenuButton = ({ onClick, isOpen }: MobileMenuButtonProps) => {
+export const MobileMenuButton = memo(({ onClick, isOpen }: MobileMenuButtonProps) => {
   return (
     <button
       onClick={onClick}
@@ -34,4 +36,4 @@ export const MobileMenuButton = ({ onClick, isOpen }: MobileMenuButtonProps) => 
       </svg>
     </button>
   );
-};
+});

@@ -35,6 +35,12 @@ function App() {
   // Load markdown files
   const { files, loading, error } = useMarkdownFiles(config.pagesPath);
 
+  // Get default file (first file) - moved before useAppState
+  const defaultFile = files[0]?.slug ?? null;
+
+  // Manage app state with URL and localStorage sync
+  const { state, setCurrentFile, setCurrentSection } = useAppState(defaultFile);
+
   // Check if current path matches any valid file or section
   const isValidPath = useMemo(() => {
     if (loading || files.length === 0) return true; // Don't show 404 while loading
@@ -50,6 +56,67 @@ function App() {
     
     return files.some(file => file.slug === fileSlug);
   }, [location.pathname, files, loading]);
+
+  // Get current file content
+  const currentFile = useMemo(() => files.find((f) => f.slug === state.currentFile), [files, state.currentFile]);
+
+  // Split content into sections based on breaking points
+  const contentSections = useMemo(() => {
+    if (!currentFile) return [];
+    return splitContentBySections(currentFile.content, config.navigation.breakingPoint);
+  }, [currentFile, config.navigation.breakingPoint]);
+
+  // Get main navigation
+  const mainNavigation = useMemo(() => {
+    if (!currentFile) return [];
+    const sections = contentSections;
+
+    return sections.map((section, idx) => ({
+      id: `section-${idx}`,
+      title: section.title,
+      level: section.level,
+      slug: section.slug,
+      subsections: section.subsections,
+    }));
+  }, [contentSections]);
+
+  // Get current section content
+  const currentSection = useMemo(() => {
+    if (!state.currentSection) {
+      return contentSections[0] || null;
+    }
+    return contentSections.find((s) => s.slug === state.currentSection) || contentSections[0] || null;
+  }, [contentSections, state.currentSection]);
+
+  // Memoize the available files for 404 page to prevent unnecessary re-renders
+  const availableFiles = useMemo(() => 
+    files.map(f => ({ slug: f.slug, title: f.title })), 
+    [files]
+  );
+
+  // Handle section changes
+  const handleSectionChange = useCallback((slug: string) => {
+    setCurrentSection(slug);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [setCurrentSection]);
+
+  // Memoize mobile menu handlers
+  const handleMobileMenuToggle = useCallback(() => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  }, [isMobileMenuOpen]);
+
+  const handleMobileMenuClose = useCallback(() => {
+    setIsMobileMenuOpen(false);
+  }, []);
+
+  // Memoize search handlers
+  const handleSearchOpen = useCallback(() => {
+    setIsSearchOpen(true);
+  }, []);
+
+  const handleSearchClose = useCallback(() => {
+    setIsSearchOpen(false);
+  }, []);
 
   // Apply content styles from config
   useEffect(() => {
@@ -86,12 +153,6 @@ function App() {
     handleInitialHash();
     return cleanup;
   }, []);
-
-  // Get default file (first file)
-  const defaultFile = files[0]?.slug ?? null;
-
-  // Manage app state with URL and localStorage sync
-  const { state, setCurrentFile, setCurrentSection } = useAppState(defaultFile);
 
   // Handle hash scrolling when currentFile or currentSection changes
   useEffect(() => {
@@ -158,61 +219,7 @@ function App() {
     }
   }, [location]);
 
-  // Get current file content
-  const currentFile = useMemo(() => files.find((f) => f.slug === state.currentFile), [files, state.currentFile]);
-
-  // Split content into sections based on breaking points
-  const contentSections = useMemo(() => {
-    if (!currentFile) return [];
-    return splitContentBySections(currentFile.content, config.navigation.breakingPoint);
-  }, [currentFile, config.navigation.breakingPoint]);
-
-  // Get main navigation
-  const mainNavigation = useMemo(() => {
-    if (!currentFile) return [];
-    const sections = contentSections;
-
-    return sections.map((section, idx) => ({
-      id: `section-${idx}`,
-      title: section.title,
-      level: section.level,
-      slug: section.slug,
-      subsections: section.subsections,
-    }));
-  }, [contentSections]);
-
-  // Get current section content
-  const currentSection = useMemo(() => {
-    if (!state.currentSection) {
-      return contentSections[0] || null;
-    }
-    return contentSections.find((s) => s.slug === state.currentSection) || contentSections[0] || null;
-  }, [contentSections, state.currentSection]);
-
-  // Handle section changes
-  const handleSectionChange = useCallback((slug: string) => {
-    setCurrentSection(slug);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [setCurrentSection]);
-
-  // Memoize mobile menu handlers
-  const handleMobileMenuToggle = useCallback(() => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  }, [isMobileMenuOpen]);
-
-  const handleMobileMenuClose = useCallback(() => {
-    setIsMobileMenuOpen(false);
-  }, []);
-
-  // Memoize search handlers
-  const handleSearchOpen = useCallback(() => {
-    setIsSearchOpen(true);
-  }, []);
-
-  const handleSearchClose = useCallback(() => {
-    setIsSearchOpen(false);
-  }, []);
-
+  // Early returns for loading and error states - now after all hooks are called
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
@@ -245,7 +252,7 @@ function App() {
   if (!isValidPath) {
     return (
       <NotFound 
-        availableFiles={files.map(f => ({ slug: f.slug, title: f.title }))}
+        availableFiles={availableFiles}
         currentPath={location.pathname}
       />
     );

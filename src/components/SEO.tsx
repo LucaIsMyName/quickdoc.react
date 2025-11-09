@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { memo } from 'react';
 
 interface SEOProps {
   title: string;
@@ -9,7 +10,7 @@ interface SEOProps {
   canonical?: string;
 }
 
-export const SEO = ({
+export const SEO = memo<SEOProps>(({ 
   title,
   description = 'Modern markdown-based documentation framework built with React',
   keywords = ['documentation', 'markdown', 'react', 'typescript'],
@@ -52,4 +53,4 @@ export const SEO = ({
       <meta name="revisit-after" content="7 days" />
     </Helmet>
   );
-};
+});
