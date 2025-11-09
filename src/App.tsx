@@ -21,6 +21,7 @@ import { DarkModeToggle } from "./components/DarkModeToggle";
 import { SearchButton } from "./components/SearchButton";
 import { SearchDialog } from "./components/SearchDialog";
 import { Pagination } from "./components/Pagination";
+// import { ExportButton } from "./components/ExportButton";
 import { SEO } from "./components/SEO";
 import "highlight.js/styles/github.css";
 
@@ -351,6 +352,11 @@ function App() {
                       <MarkdownContent
                         content={currentSection.content}
                         config={config}
+                        exportProps={{
+                          content: currentSection.content,
+                          title: currentSection.title,
+                          filename: `${currentFile?.title || 'section'}-${currentSection.title}`
+                        }}
                       />
                     </ErrorBoundary>
 

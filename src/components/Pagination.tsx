@@ -42,7 +42,7 @@ export const Pagination = ({ sections, currentSection, currentFile, showOnTop, s
       {showOnTop && (
         <div
           ref={containerRef}
-          className="sticky top-0 z-30  backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 px-4 py-3">
+          className="sticky top-0 z-30  backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 py-3 ">
           <div 
             className="flex items-center justify-between px-0 mx-auto"
             style={{ maxWidth: config.content.maxWidth }}
@@ -62,7 +62,7 @@ export const Pagination = ({ sections, currentSection, currentFile, showOnTop, s
               </div>
             )}
 
-            <div className="flex items-center gap-1">
+            <div className=" items-center gap-1 hidden lg:flex">
                <span className="text-sm text-gray-600 dark:text-gray-400">
                 {currentIndex + 1} of {sections.length}
               </span>
@@ -102,7 +102,7 @@ export const Pagination = ({ sections, currentSection, currentFile, showOnTop, s
          <div
           ref={containerRef}
           style={{ maxWidth: config.content.maxWidth }}
-          className="sticky top-0 z-30  backdrop-blur-sm border-t border-gray-200 dark:border-gray-800 px-4 py-3">
+          className="sticky top-0 z-30  backdrop-blur-sm border-t border-gray-200 dark:border-gray-800 py-3">
           <div 
             className="flex items-center justify-between px-0 mx-0 w-full flex-1"
             
@@ -122,7 +122,7 @@ export const Pagination = ({ sections, currentSection, currentFile, showOnTop, s
               </div>
             )}
 
-            <div className="flex items-center gap-1">
+            <div className=" items-center gap-1 hidden lg:flex">
                <span className="text-sm text-gray-600 dark:text-gray-400">
                 {currentIndex + 1} of {sections.length}
               </span>

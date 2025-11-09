@@ -11,6 +11,7 @@ QuickDoc is a modern, fast, and beautiful documentation framework built with Rea
 - **Automatic Navigation**: Generates sidebar navigation from your Markdown headings
 - **Breaking Points**: Split long documents into sub-pages (default: H2 headings)
 - **Cross-Page Navigation**: Navigate directly between pages and sections with proper hash scrolling
+- **Export Functionality**: Export individual sections as PDF (print dialog) or Markdown files
 - **Expandable Sidebar**: Option to keep all sections expanded or collapsed
 - **Dark Mode**: Built-in dark mode with localStorage persistence
 - **Syntax Highlighting**: Code blocks with copy-to-clipboard functionality and full-width overflow
@@ -20,6 +21,7 @@ QuickDoc is a modern, fast, and beautiful documentation framework built with Rea
 - **Type-Safe**: Full TypeScript support
 - **Font System**: System fonts with Google Fonts override capability
 - **Configurable Footer**: Optional sidebar footer with title, author, and year
+- **Base UI Integration**: Modern accessible components with smooth animations
 
 ## Configuration
 
@@ -40,9 +42,9 @@ export const defaultConfig: AppConfig = {
   // Navigation settings
   navigation: {
     breakingPoint: 'h2', // h1, h2, h3, or h4
-    showH1InSidebar: true,
+    showH1InSidebar: false, // Hide H1 headings in sidebar
     collapsible: false,
-    expandAllSections: false, // Keep all sidebar sections expanded
+    expandAllSections: false, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
       default: '280px',
       min: '200px',
@@ -50,7 +52,7 @@ export const defaultConfig: AppConfig = {
     },
     enableUserSidebarWidthChange: false,
     pagination: {
-      enabled: true,
+      enabled: false, // Pagination disabled by default
       showOnTop: false,
       showOnBottom: true,
     },
@@ -143,7 +145,46 @@ navigation: {
 }
 ```
 
-#### File Ordering
+### Export Functionality
+
+QuickDoc includes built-in export capabilities for individual content sections, allowing users to save content as PDF or Markdown files.
+
+### Export Button
+
+Each content section displays an export button (positioned in the top-right corner) that provides:
+
+- **PDF Export**: Opens the browser's print dialog with optimized print styles
+- **Markdown Export**: Downloads the raw Markdown content as a `.md` file
+
+### Export Features
+
+#### PDF Export
+- **Print-optimized CSS**: Clean layout with proper margins (2cm left/right, 1cm top/bottom)
+- **Typography**: Optimized font sizes and spacing for print
+- **Content-only**: Hides navigation, sidebar, and UI elements
+- **Page breaks**: Intelligent page break handling for headings and code blocks
+- **A4 format**: Standardized page size for consistent output
+
+#### Markdown Export
+- **Clean filenames**: Auto-generated from section titles
+- **Raw content**: Exports the original Markdown source
+- **Browser download**: Uses blob-based file download
+
+### Responsive Design
+
+The export button adapts to screen size:
+- **Desktop**: Shows icon + "Export" text
+- **Mobile**: Shows icon only (space-efficient)
+
+### Technical Implementation
+
+Built with:
+- **Base UI Popover**: Accessible dropdown with smooth animations
+- **Drop-up behavior**: Menu appears above the button
+- **Print CSS**: Comprehensive `@media print` styles
+- **Blob API**: Client-side file generation and download
+
+### File Ordering
 
 Customize the tab order instead of alphabetical:
 
@@ -511,6 +552,8 @@ npm run lint        # Run ESLint
 - **marked**: Markdown parsing with extensions
 - **highlight.js**: Syntax highlighting for code blocks
 - **React Helmet Async**: SEO and meta tag management
+- **Base UI**: Accessible, unstyled React components (Popover)
+- **Lucide React**: Modern icon library with consistent design
 
 ## Troubleshooting
 
@@ -585,6 +628,32 @@ If error boundaries aren't catching errors:
 2. Verify error boundaries are properly placed
 3. Use error boundary hooks for async errors
 
+### Export Issues
+
+#### PDF Export Shows Red Background
+
+If PDF export displays a red background instead of content:
+1. Check print CSS is properly loaded
+2. Verify `@media print` styles are not conflicting
+3. Ensure content containers have white backgrounds
+4. Check browser's print preview settings
+
+#### Markdown Export Not Working
+
+If Markdown downloads fail:
+1. Check browser allows file downloads
+2. Verify blob API support in browser
+3. Check for JavaScript errors in console
+4. Ensure content is properly loaded
+
+#### Export Button Not Visible
+
+If the export button doesn't appear:
+1. Verify `ExportButton` component is imported in `MarkdownContent`
+2. Check `exportProps` are passed correctly from `App.tsx`
+3. Ensure responsive classes are working (`hidden md:inline`)
+4. Check z-index conflicts with other elements
+
 ## Performance
 
 ### Optimization Tips
@@ -597,29 +666,16 @@ If error boundaries aren't catching errors:
 ### Bundle Size
 
 Current bundle sizes (gzipped):
-- **CSS**: ~6.7KB
-- **JavaScript**: ~412KB (includes React, Router, highlight.js)
+- **CSS**: ~7.7KB (includes print styles and Base UI components)
+- **JavaScript**: ~445KB (includes React, Router, highlight.js, Base UI)
 - **Individual pages**: ~1-3KB each
 
-## Contributing
+### New Dependencies Impact
 
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new features
-5. Run tests: `npm test`
-6. Update documentation
-7. Submit a pull request
-
-### Development Guidelines
-
-- Follow TypeScript best practices
-- Add error boundaries for new components
-- Update configuration interfaces for new options
-- Test cross-page navigation scenarios
-- Ensure mobile responsiveness
+Recent additions:
+- **Base UI Popover**: ~15KB (accessible dropdown components)
+- **Export functionality**: ~2KB (PDF/Markdown export logic)
+- **Print CSS**: ~1KB (comprehensive print styling)
 
 ## Support
 

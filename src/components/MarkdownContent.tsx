@@ -2,15 +2,23 @@ import { useEffect, useRef, memo } from 'react';
 import hljs from 'highlight.js';
 import { parseMarkdown } from '../utils/markdown';
 import { scrollToHeading } from '../utils/scrollHash';
+import { ExportButton } from './ExportButton';
 import type { AppConfig } from '../config/app.config';
+
+interface ExportProps {
+  content: string;
+  title: string;
+  filename: string;
+}
 
 interface MarkdownContentProps {
   content: string;
   config: AppConfig;
   onNavigationExtracted?: (headings: HTMLHeadingElement[]) => void;
+  exportProps?: ExportProps;
 }
 
-export const MarkdownContent = memo(({ content, config, onNavigationExtracted }: MarkdownContentProps) => {
+export const MarkdownContent = memo(({ content, config, onNavigationExtracted, exportProps }: MarkdownContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -101,13 +109,26 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted }:
   const html = parseMarkdown(content);
 
   return (
-    <div
-      ref={contentRef}
-      className="markdown-content prose prose-gray dark:prose-invert max-w-none"
-      style={{ 
-        maxWidth: config.content.maxWidth,
-      }}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+    <div style={{ maxWidth: config.content.maxWidth }} className="relative">
+      {/* Export Button - positioned to align with first heading */}
+      {exportProps && (
+        <div className="fixed bottom-4 right-4 no-print z-10">
+          <ExportButton
+            content={exportProps.content}
+            title={exportProps.title}
+            filename={exportProps.filename}
+          />
+        </div>
+      )}
+      
+      <div
+        ref={contentRef}
+        className="markdown-content prose prose-gray dark:prose-invert max-w-none"
+        style={{ 
+          maxWidth: config.content.maxWidth,
+        }}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    </div>
   );
 });

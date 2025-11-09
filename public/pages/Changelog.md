@@ -15,11 +15,20 @@ Initial release
 
 ### Bugfixes
 
-- updated navigation work and set #id's
+- updated `<Sidebar />` and `<TabNavigation />` work and set #id's
 - no constant re-render anymore
+- Fixed `<Sidebar />` inner sub-items width issue - overlow-x
 
-## v0.2.0
+## v0.1.4
+
+### Features
+
+- Added print styles for PDF export
+- Added MD Export
+
+## v0.1.5
 
 ### Bugfixes
 
-- updated pagination to work with new navigation
+- fixed `<ExportButton />` placement
+
