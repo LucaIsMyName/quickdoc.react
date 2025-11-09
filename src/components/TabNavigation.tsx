@@ -1,4 +1,5 @@
 import type { MarkdownFile } from '../types';
+import { ScrollFade } from './ScrollFade';
 
 interface TabNavigationProps {
   files: MarkdownFile[];
@@ -9,13 +10,18 @@ interface TabNavigationProps {
 export const TabNavigation = ({ files, currentFile, onFileChange }: TabNavigationProps) => {
   return (
     <nav className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-      <nav className="flex overflow-x-auto scrollbar-thin">
+      <ScrollFade 
+        direction="horizontal" 
+        size={32}
+        intensity={0.9}
+        className="flex"
+      >
         {files.map((file) => (
           <button
             key={file.slug}
             onClick={() => onFileChange(file.slug)}
             className={`
-              px-4 py-2.5 text-xs font-medium whitespace-nowrap
+              px-4 py-2.5 text-xs font-medium whitespace-nowrap flex-shrink-0
               transition-colors duration-200 border-b-2
               ${
                 currentFile === file.slug
@@ -27,7 +33,7 @@ export const TabNavigation = ({ files, currentFile, onFileChange }: TabNavigatio
             {file.title}
           </button>
         ))}
-      </nav>
+      </ScrollFade>
     </nav>
   );
 };

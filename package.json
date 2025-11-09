@@ -1,6 +1,6 @@
 {
   "name": "quickdoc.react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,15 +12,18 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "cmdk": "^1.1.1",
+    "highlight.js": "^11.10.0",
+    "lucide-react": "^0.454.0",
+    "marked": "^14.1.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.2",
     "react-helmet-async": "^2.0.5",
-    "marked": "^14.1.2",
-    "highlight.js": "^11.10.0",
-    "lucide-react": "^0.454.0"
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
@@ -31,13 +34,11 @@
     "eslint": "^8.57.1",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.12",
+    "jsdom": "^25.0.1",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.6.2",
     "vite": "^5.4.8",
-    "vitest": "^2.1.2",
-    "@testing-library/react": "^16.0.1",
-    "@testing-library/jest-dom": "^6.5.0",
-    "jsdom": "^25.0.1"
+    "vitest": "^2.1.2"
   }
 }

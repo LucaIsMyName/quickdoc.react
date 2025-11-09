@@ -102,6 +102,7 @@ export const defaultConfig: AppConfig = {
     breakingPoint: 'h2',      // 'h1' | 'h2' | 'h3' | 'h4'
     showH1InSidebar: true,
     collapsible: false,
+    sidebarWidth: { min: '200px', default: '280px', max: '400px' },
   },
   
   // Theme settings
@@ -115,6 +116,13 @@ export const defaultConfig: AppConfig = {
       sans: 'Geist, sans-serif',
       mono: 'Geist Mono, monospace',
       size: 'medium',         // 'small' | 'medium' | 'large'
+    },
+    spacing: {
+      compact: false,
+    },
+    border: {
+      radius: 'md',        // 'none' | 'sm' | 'md' | 'xl'
+      size: 1,             // 'none' | 1 | 2 | 3
     },
   },
   
@@ -142,6 +150,8 @@ export const defaultConfig: AppConfig = {
 - **`copyCodeButton`** - Add copy buttons to code blocks
 - **`align`** - Content alignment for desktop only (`left`, `center`, `right`)
 - **`spacing`** - Content spacing (`compact`, `normal`, `relaxed`)
+- **`border.radius`** - Global border radius (`none`, `sm`, `md`, `xl`)
+- **`border.size`** - Global border width (`none`, `1`, `2`, `3`)
 
 ### Custom File Ordering
 

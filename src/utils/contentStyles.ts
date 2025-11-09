@@ -14,19 +14,10 @@ export const applyContentStyles = (config: AppConfig, mainContentElement: HTMLEl
   
   // Apply desktop-only alignment classes to the main content container
   if (mainContentElement) {
-    console.log('Applying alignment:', config.content.align);
-    console.log('Current classes:', mainContentElement.className);
-    
     // Remove existing alignment classes
     mainContentElement.classList.remove('desktop-align-left', 'desktop-align-center', 'desktop-align-right');
     
     // Add new alignment class for desktop only
-    const newClass = `desktop-align-${config.content.align}`;
-    mainContentElement.classList.add(newClass);
-    
-    console.log('Added class:', newClass);
-    console.log('Updated classes:', mainContentElement.className);
-  } else {
-    console.log('No main content element available');
+    mainContentElement.classList.add(`desktop-align-${config.content.align}`);
   }
 };

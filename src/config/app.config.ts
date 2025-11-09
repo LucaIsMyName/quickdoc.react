@@ -34,6 +34,10 @@ export interface AppConfig {
     spacing: {
       compact: boolean;
     };
+    border: {
+      radius: "none" | "sm" | "md" | "xl";
+      size: "none" | 1 | 2 | 3;
+    };
   };
 
   // Content settings
@@ -85,6 +89,10 @@ export const defaultConfig: AppConfig = {
     },
     spacing: {
       compact: false,
+    },
+    border: {
+      radius: "md",
+      size: "none",
     },
   },
   content: {

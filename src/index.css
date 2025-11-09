@@ -6,6 +6,8 @@
   --meta-nav-height: 40px;
   --content-margin-y: 1rem;
   --content-text-align: left;
+  --border-radius: 0.5rem;
+  --border-size: 1px;
 }
 
 /* Desktop-only content alignment */
@@ -358,4 +360,106 @@ button {
 
 .copy-button svg {
   @apply w-4 h-4;
+}
+
+/* Search highlighting */
+mark {
+  @apply bg-yellow-200 dark:bg-yellow-800 text-gray-900 dark:text-gray-100 px-0.5 rounded;
+}
+
+/* Modify existing border radius for elements that already have borders */
+.rounded {
+  border-radius: var(--border-radius) !important;
+}
+
+.rounded-lg {
+  border-radius: var(--border-radius) !important;
+}
+
+.rounded-md {
+  border-radius: var(--border-radius) !important;
+}
+
+.rounded-sm {
+  border-radius: var(--border-radius) !important;
+}
+
+/* Modify existing border sizes for elements that already have borders */
+.border {
+  border-width: var(--border-size) !important;
+}
+
+/* Code blocks should always have a border regardless of config */
+.code-block, .markdown-content pre {
+  border-width: 1px !important;
+}
+
+/* Apply to specific elements that already have borders */
+.search-dialog {
+  border-radius: var(--border-radius);
+  border-width: var(--border-size);
+}
+
+button {
+  @apply cursor-pointer;
+}
+
+/* ScrollFade component styles */
+.scroll-fade-container {
+  position: relative;
+}
+
+.scroll-fade-vertical .scroll-fade-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scroll-fade-horizontal .scroll-fade-content {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Dark mode support for ScrollFade */
+.dark .scroll-fade-start {
+  background: linear-gradient(
+    to bottom,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%,
+    rgba(17, 24, 39, 0) 100%
+  );
+}
+
+.dark .scroll-fade-end {
+  background: linear-gradient(
+    to top,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%,
+    rgba(17, 24, 39, 0) 100%
+  );
+}
+
+.dark .scroll-fade-horizontal .scroll-fade-start {
+  background: linear-gradient(
+    to right,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%,
+    rgba(17, 24, 39, 0) 100%
+  );
+}
+
+.dark .scroll-fade-horizontal .scroll-fade-end {
+  background: linear-gradient(
+    to left,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%,
+    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%,
+    rgba(17, 24, 39, 0) 100%
+  );
 }

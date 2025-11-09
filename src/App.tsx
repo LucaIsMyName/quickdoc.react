@@ -5,17 +5,21 @@ import { useAppState } from "./hooks/useAppState";
 import { useTheme } from "./contexts/ThemeContext";
 import { splitContentBySections } from "./utils/contentSplitter";
 import { applyContentStyles } from "./utils/contentStyles";
+import { applyBorderStyles } from "./utils/borderStyles";
 import { TabNavigation } from "./components/TabNavigation";
 import { Sidebar } from "./components/Sidebar";
 import { MarkdownContent } from "./components/MarkdownContent";
 import { MobileMenuButton } from "./components/MobileMenuButton";
 import { DarkModeToggle } from "./components/DarkModeToggle";
+import { SearchButton } from "./components/SearchButton";
+import { SearchDialog } from "./components/SearchDialog";
 import { SEO } from "./components/SEO";
 import "highlight.js/styles/github.css";
 
 function App() {
   const [config] = useState(defaultConfig);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { isDark, toggle: toggleDarkMode } = useTheme();
   const mainContentRef = useRef<HTMLDivElement>(null);
 
@@ -24,6 +28,7 @@ function App() {
     if (mainContentRef.current) {
       applyContentStyles(config, mainContentRef.current);
     }
+    applyBorderStyles(config);
   }, [config, mainContentRef.current]);
 
   // Ensure styles are applied after component mounts
@@ -31,6 +36,20 @@ function App() {
     if (mainContentRef.current) {
       applyContentStyles(config, mainContentRef.current);
     }
+    applyBorderStyles(config);
+  }, []);
+
+  // Keyboard shortcut for search (Cmd+K or Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Load markdown files
@@ -122,7 +141,8 @@ function App() {
             currentFile={state.currentFile}
             onFileChange={setCurrentFile}
           />
-          <div className="pr-4">
+          <div className="pr-4 flex items-center gap-2">
+            <SearchButton onClick={() => setIsSearchOpen(true)} />
             <DarkModeToggle
               isDark={isDark}
               onToggle={toggleDarkMode}
@@ -177,6 +197,13 @@ function App() {
       <MobileMenuButton
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         isOpen={isMobileMenuOpen}
+      />
+
+      {/* Search Dialog */}
+      <SearchDialog
+        files={files}
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
       />
     </div>
   );
