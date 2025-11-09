@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { defaultConfig } from "./config/app.config";
 import { useMarkdownFiles } from "./hooks/useMarkdownFiles";
 import { useAppState } from "./hooks/useAppState";
-import { useDarkMode } from "./hooks/useDarkMode";
+import { useTheme } from "./contexts/ThemeContext";
 import { splitContentBySections } from "./utils/contentSplitter";
 import { TabNavigation } from "./components/TabNavigation";
 import { Sidebar } from "./components/Sidebar";
@@ -15,7 +15,7 @@ import "highlight.js/styles/github.css";
 function App() {
   const [config] = useState(defaultConfig);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isDark, toggle: toggleDarkMode } = useDarkMode();
+  const { isDark, toggle: toggleDarkMode } = useTheme();
 
   // Load markdown files
   const { files, loading, error } = useMarkdownFiles(config.pagesPath, config);
