@@ -86,6 +86,27 @@ function App() {
   // Manage app state with URL and localStorage sync
   const { state, setCurrentFile, setCurrentSection } = useAppState(defaultFile);
 
+  // Handle hash scrolling when currentFile or currentSection changes
+  useEffect(() => {
+    const hash = window.location.hash.slice(1); // Remove #
+    if (hash) {
+      // Delay to ensure content is rendered
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--meta-nav-height')) || 40;
+          const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+          const offsetPosition = elementPosition - headerHeight;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      }, 200); // Increased delay to ensure content is fully rendered
+    }
+  }, [state.currentFile, state.currentSection]);
+
   // Get current file content
   const currentFile = useMemo(() => files.find((f) => f.slug === state.currentFile), [files, state.currentFile]);
 
