@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuzzyFindJS - Documentation</title>
+    <!-- Google Fonts: Geist and Geist Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+        id="hljs-light-theme">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+        id="hljs-dark-theme" disabled>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Theme variables */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-tertiary: #6b7280;
+            --border-primary: #e5e7eb;
+            --border-secondary: #d1d5db;
+            --accent-primary: #2563eb;
+            --accent-secondary: #3b82f6;
+            --accent-light: #eff6ff;
+            --code-bg: #f6f8fa;
+            --code-text: #24292f;
+            --inline-code-bg: #f3f4f6;
+            --inline-code-text: #1f2937;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #e2e8f0;
+            --text-tertiary: #94a3b8;
+            --border-primary: #334155;
+            --border-secondary: #475569;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #60a5fa;
+            --accent-light: #1e3a8a;
+            --code-bg: #0d1117;
+            --code-text: #f3f4f6;
+            --inline-code-bg: #1e293b;
+            --inline-code-text: #e2e8f0;
+        }
+
+        /* Geist fonts */
+        body {
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            /* Prevent body from scrolling */
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            /* transition: background-color 0.3s ease, color 0.3s ease; */
+        }
+
+        code,
+        pre {
+            font-family: 'Geist Mono', 'Courier New', monospace !important;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 57px);
+            overflow-y: auto;
+            width: 320px;
+        }
+
+        @media (min-width: 1280px) {
+            .sidebar {
+                width: 380px;
+            }
+        }
+
+        /* Content styling */
+        .content {
+            /* max-width: 800px; */
+            width: 100%;
+            overflow-x: hidden;
+            height: calc(100vh - 50px);
+            /* Full viewport height minus tab nav and chapter indicator space */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            padding: 1rem 2rem;
+            /* Move padding from main to content */
+        }
+
+        /* Content padding adjustments for different screen sizes */
+        @media (min-width: 768px) {
+            .content {
+                padding: 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .content {
+                padding: 3rem;
+            }
+        }
+
+        /* Prevent content overflow on mobile */
+        .content pre {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .content table {
+            display: block;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .content * {
+            word-wrap: break-word;
+        }
+
+        .content> :is(h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            p,
+            ul,
+            ol,
+            li,
+            pre,
+            code,
+            blockquote,
+            table,
+            th,
+            td) {
+            max-width: var(--content-max-width, 800px);
+            width: 100%;
+        }
+
+        .content h1 {
+            font-size: clamp(1.5rem, 10vw, 3rem);
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .content h2 {
+            font-size: clamp(1.25rem, 10vw, 2.5rem);
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .content h3 {
+            font-size: clamp(1.125rem, 8vw, 1.5rem);
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .content h4 {
+            font-size: clamp(1rem, 6vw, 1.25rem);
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-tertiary);
+        }
+
+        .content h5 {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-tertiary);
+        }
+
+        .content h6 {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-tertiary);
+        }
+
+        .content p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            color: var(--text-secondary);
+        }
+
+        .content ul,
+        .content ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+            list-style: none;
+        }
+
+        .content ul>li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .content ul>li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+
+        .content ol {
+            counter-reset: list-counter;
+        }
+
+        .content ol>li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+            counter-increment: list-counter;
+        }
+
+        .content ol>li::before {
+            content: counter(list-counter) ".";
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .content pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .content pre code {
+            font-family: 'Geist Mono', monospace !important;
+        }
+
+        :is(p, ul, ol, li, h1, h2, h3, h4, h5, h6, pre) code {
+            background-color: var(--inline-code-bg);
+            color: var(--inline-code-text);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-family: 'Geist Mono', monospace;
+            /* font-size: 0.875rem; */
+        }
+
+        .content pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        .content a {
+            color: var(--accent-primary);
+            /* text-decoration: none; */
+        }
+
+        .content blockquote {
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: var(--text-tertiary);
+            /* font-style: italic; */
+            background-color: var(--bg-secondary);
+            padding-bottom: 0.5em;
+            padding-top: 1em;
+            border: 1px solid var(--border-primary);
+            border-left: 4px solid var(--border-primary);
+        }
+
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        .content th,
+        .content td {
+            border: 1px solid var(--border-primary);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .content th {
+            background-color: var(--bg-secondary);
+            font-weight: 600;
+        }
+
+        /* Sidebar navigation */
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            /* color: var(--text-tertiary); */
+            text-decoration: none;
+            transition: all 0.2s;
+            /* border-left: 2px solid transparent; */
+        }
+
+        .nav-link.active {
+            color: var(--accent-primary);
+            /* border-left-color: var(--accent-primary); */
+            /* background-color: var(--accent-light); */
+            /* font-weight: 600; */
+        }
+
+        .nav-h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .nav-h3 {
+            font-size: 0.8125rem;
+            padding-left: 1.5rem;
+            font-weight: 500;
+        }
+
+        .nav-h4 {
+            font-size: 0.8rem;
+            padding-left: 2rem;
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .nav-h5,
+        .nav-h6 {
+            font-size: 0.75rem;
+            padding-left: 2.5rem;
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        /* Scroll offset for sub-headings */
+        h3,
+        h4,
+        h5,
+        h6 {
+            scroll-margin-top: 2rem;
+        }
+
+        /* Tab navigation styling */
+        .tab-nav {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            /* color: var(--text-tertiary); */
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            /* font-weight:400; */
+            /* border-bottom: 2px solid transparent; */
+            /* font-weight: 500; */
+            white-space: nowrap;
+        }
+
+        .tab-button.active {
+            /* color: var(--accent-primary); */
+            font-weight: 600;
+            border-bottom-color: var(--accent-primary);
+            /* background-color: var(--accent-light); */
+        }
+
+        .tab-container {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #d1d5db #f9fafb;
+        }
+
+        .tab-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .tab-container::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        .tab-container::-webkit-scrollbar-thumb {
+            background: var(--border-secondary);
+            border-radius: 3px;
+        }
+
+        /* Main content area with tabs */
+        .main-wrapper {
+            display: flex;
+            height: calc(100vh - 57px);
+            /* 57px is tab nav height */
+            overflow: hidden;
+            /* Prevent main wrapper from scrolling */
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-secondary);
+            border-color: var(--border-secondary);
+        }
+
+        /* Copy button for code blocks */
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border-primary);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .content pre:hover .copy-button {
+            opacity: 1;
+        }
+
+        .copy-button:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--border-secondary);
+            opacity: 1 !important;
+        }
+
+        .copy-button.copied {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+            opacity: 1 !important;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                top: 57px;
+                /* Account for tab nav */
+                width: 80%;
+                max-width: 300px;
+                background: var(--bg-primary);
+                z-index: 50;
+                transition: left 0.3s;
+                border-right: 1px solid var(--border-primary);
+                height: calc(100vh - 57px);
+                overflow-y: auto;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .mobile-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+
+            .mobile-overlay.open {
+                display: block;
+            }
+
+            /* Mobile content adjustments */
+            .main-wrapper {
+                height: calc(100vh - 57px);
+            }
+        }
+    </style>
+</head>
+
+<body class="">
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+        <div class="tab-container" id="tab-container">
+            <!-- Tabs will be generated here -->
+        </div>
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"
+            style="position: static; margin-left: auto; margin-right: 1rem;">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path class="sun-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                    style="display: block;"></path>
+                <path class="moon-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    style="display: none;"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn"
+        class="md:hidden fixed top-20 left-4 z-50 bg-gray-900 text-white p-2 border border-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="mobile-overlay"></div>
+
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar bg-white border-r border-gray-200 p-6"
+            style="background-color: var(--bg-primary); border-color: var(--border-primary);">
+            <div class="mb-8">
+                <h2 class="text-xl font-bold text-gray-900 mb-0" style="color: var(--text-primary);">FuzzyFindJS</h2>
+                <p class="text-sm text-gray-600" id="current-doc-title" style="color: var(--text-tertiary);">
+                    </p>
+            </div>
+            <nav id="nav-menu" class="space-y-1">
+                <!-- Navigation will be generated here -->
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 min-w-0 flex flex-col">
+            <!-- Chapter indicator -->
+            <div id="chapter-indicator" class="sr-only p-4 px-8 mb-6 text-sm text-gray-500 hidden flex-shrink-0">
+                <span id="chapter-progress"></span>
+            </div>
+            <div class="content  mx-auto" id="content">
+                <div class="text-center py-8 ">
+                    <div class="inline-block animate-spin h-8 w-8 border-4 border-gray-900 border-t-transparent mb-4"
+                        style="border-color: var(--text-primary) transparent transparent transparent;">
+                    </div>
+                    <p class="text-gray-600" style="color: var(--text-tertiary);">Loading documentation...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme management
+        const themeToggle = document.getElementById('theme-toggle');
+        const sunIcon = themeToggle.querySelector('.sun-icon');
+        const moonIcon = themeToggle.querySelector('.moon-icon');
+        const hljsLightTheme = document.getElementById('hljs-light-theme');
+        const hljsDarkTheme = document.getElementById('hljs-dark-theme');
+
+        // Initialize theme
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+            setTheme(theme);
+        }
+
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+                hljsLightTheme.disabled = true;
+                hljsDarkTheme.disabled = false;
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+                hljsLightTheme.disabled = false;
+                hljsDarkTheme.disabled = true;
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                setTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+
+        // Copy to clipboard functionality
+        function copyCodeToClipboard(button) {
+            const pre = button.closest('pre');
+            if (!pre) {
+                console.error('Could not find parent pre element');
+                return;
+            }
+
+            const code = pre.querySelector('code');
+            if (!code) {
+                console.error('Could not find code element within pre');
+                return;
+            }
+
+            // Try multiple methods to get the text content
+            let text = '';
+            if (code.innerText) {
+                text = code.innerText.trim();
+            } else if (code.textContent) {
+                text = code.textContent.trim();
+            } else {
+                console.error('No text found to copy');
+                return;
+            }
+
+            console.log('Attempting to copy text:', text.substring(0, 100) + (text.length > 100 ? '...' : ''));
+
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    console.log('Clipboard API successful');
+                    showCopySuccess(button);
+                }).catch(err => {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopyTextToClipboard(text, button);
+                });
+            } else {
+                // Fallback for older browsers
+                console.log('Using fallback copy method');
+                fallbackCopyTextToClipboard(text, button);
+            }
+        }
+
+        function showCopySuccess(button) {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 2000);
+        }
+
+        function fallbackCopyTextToClipboard(text, button) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    console.log('Fallback copy successful');
+                    showCopySuccess(button);
+                } else {
+                    console.error('Fallback copy failed');
+                }
+            } catch (err) {
+                console.error('Fallback copy error:', err);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        function addCopyButtonsToCode() {
+            const codeBlocks = document.querySelectorAll('.content pre');
+            console.log(`Found ${codeBlocks.length} code blocks`);
+
+            codeBlocks.forEach((pre, index) => {
+                // Check if copy button already exists
+                if (pre.querySelector('.copy-button')) {
+                    console.log(`Copy button already exists for block ${index}`);
+                    return;
+                }
+
+                // Ensure pre element has relative positioning for absolute positioning to work
+                if (getComputedStyle(pre).position === 'static') {
+                    pre.style.position = 'relative';
+                }
+
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-button';
+                copyButton.textContent = 'Copy';
+                copyButton.setAttribute('aria-label', 'Copy code to clipboard');
+                copyButton.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log(`Copy button clicked for block ${index}`);
+                    copyCodeToClipboard(copyButton);
+                };
+
+                // Also add double-click as backup
+                pre.addEventListener('dblclick', (e) => {
+                    e.preventDefault();
+                    console.log(`Double-click detected on block ${index}`);
+                    copyCodeToClipboard(copyButton);
+                });
+
+                pre.appendChild(copyButton);
+                console.log(`Added copy button to block ${index}`);
+            });
+        }
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            mobileOverlay.classList.toggle('open');
+        });
+
+        mobileOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            mobileOverlay.classList.remove('open');
+        });
+
+        // Initialize tabs and load documentation
+        async function initializeApp() {
+            createTabNavigation();
+            await loadDocumentation();
+        }
+
+        // Create tab navigation
+        function createTabNavigation() {
+            const tabContainer = document.getElementById('tab-container');
+            let tabsHTML = '';
+
+            markdownFiles.forEach((file, index) => {
+                tabsHTML += `
+                    <button class="tab-button ${index === currentFileIndex ? 'active' : ''}" 
+                            data-file-index="${index}">
+                        ${file.title}
+                    </button>
+                `;
+            });
+
+            tabContainer.innerHTML = tabsHTML;
+
+            // Add click handlers for tabs
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const fileIndex = parseInt(button.dataset.fileIndex);
+                    switchToFile(fileIndex);
+                });
+            });
+        }
+
+        // Switch to specific markdown file
+        async function switchToFile(fileIndex) {
+            if (fileIndex < 0 || fileIndex >= markdownFiles.length) return;
+
+            currentFileIndex = fileIndex;
+            currentChapterIndex = 0; // Reset to first chapter
+            chapters = []; // Clear chapters
+
+            // Update tab states
+            document.querySelectorAll('.tab-button').forEach((button, index) => {
+                button.classList.toggle('active', index === fileIndex);
+            });
+
+            // Update sidebar title
+            const currentDocTitle = document.getElementById('current-doc-title');
+            currentDocTitle.textContent = `${markdownFiles[fileIndex].title} Documentation`;
+
+            // Load and render the file
+            await loadDocumentation();
+
+            // Save state
+            saveStateToStorage();
+            updateURL();
+
+            // Close mobile menu
+            sidebar.classList.remove('open');
+            mobileOverlay.classList.remove('open');
+        }
+
+        // Fetch and render current documentation
+        async function loadDocumentation() {
+            try {
+                const currentFile = markdownFiles[currentFileIndex];
+
+                // Check cache first
+                if (!fileContents[currentFile.file]) {
+                    const response = await fetch(`../${currentFile.file}`);
+                    if (!response.ok) {
+                        throw new Error(`Failed to load ${currentFile.file}`);
+                    }
+                    fileContents[currentFile.file] = await response.text();
+                }
+
+                const markdown = fileContents[currentFile.file];
+
+                // Parse markdown to HTML
+                const html = marked.parse(markdown);
+
+                // Render content
+                document.getElementById('content').innerHTML = html;
+
+                // Apply syntax highlighting
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
+                // Add copy buttons to code blocks
+                addCopyButtonsToCode();
+
+                // Generate navigation
+                generateNavigation();
+
+            } catch (error) {
+                document.getElementById('content').innerHTML = `
+                    <div class="bg-red-50 border border-red-200 p-6">
+                        <h3 class="text-red-900 font-bold mb-2">Error Loading Documentation</h3>
+                        <p class="text-red-700">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Global state
+        let markdownFiles = [
+            { file: 'README.md', title: 'README' },
+            { file: 'FQL.md', title: 'FQL' },
+            // { file: 'PUBLISHING.md', title: 'Publishing' },
+            { file: 'QUICK_START.md', title: 'Quick Start' }
+        ];
+        let currentFileIndex = 0;
+        let chapters = [];
+        let currentChapterIndex = 0;
+        let fileContents = {}; // Cache for file contents
+
+        function generateNavigation() {
+            const content = document.getElementById('content');
+            const navMenu = document.getElementById('nav-menu');
+
+            // Find all H2 headings (chapters)
+            const h2Headings = content.querySelectorAll('h2');
+
+            // Build chapters array with sub-headings
+            chapters = [];
+            h2Headings.forEach((h2, index) => {
+                const chapterContent = [];
+                const subHeadings = [];
+                let currentElement = h2.nextElementSibling;
+
+                // Collect all content until next H2
+                while (currentElement && currentElement.tagName !== 'H2') {
+                    chapterContent.push(currentElement);
+
+                    // Track sub-headings (H3-H6)
+                    if (['H3', 'H4', 'H5', 'H6'].includes(currentElement.tagName)) {
+                        subHeadings.push({
+                            element: currentElement,
+                            level: currentElement.tagName.toLowerCase(),
+                            text: currentElement.textContent,
+                            id: `section-${index}-sub-${subHeadings.length}`
+                        });
+                    }
+
+                    currentElement = currentElement.nextElementSibling;
+                }
+
+                chapters.push({
+                    title: h2.textContent,
+                    heading: h2,
+                    content: chapterContent,
+                    subHeadings: subHeadings,
+                    index: index
+                });
+            });
+
+            // Create navigation menu (initially just chapters)
+            updateNavigationMenu();
+
+            // Show chapter from URL or first chapter
+            const state = getStateFromURL();
+            showChapter(state.chapter);
+        }
+
+        function updateNavigationMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            let navHTML = '';
+
+            chapters.forEach((chapter, index) => {
+                // Add separator before each chapter (except first)
+                if (index > 0 && index !== currentChapterIndex && currentChapterIndex !== index - 1) {
+                    navHTML += '<div class="sr-only h-px bg-gray-200 my-2"></div>';
+                }
+
+                // Chapter link
+                navHTML += `
+                    <a href="#" class="nav-link nav-h2" data-chapter="${index}">
+                        ${chapter.title}
+                    </a>
+                `;
+
+                // Sub-chapters (only show if this is the active chapter)
+                if (index === currentChapterIndex && chapter.subHeadings.length > 0) {
+                    navHTML += '<div class="pl-3 border-l-2 border-blue-100 ml-2 my-1">';
+                    chapter.subHeadings.forEach(sub => {
+                        navHTML += `
+                            <a href="#${sub.id}" class="nav-link nav-${sub.level}" data-subheading="${sub.id}">
+                                ${sub.text}
+                            </a>
+                        `;
+                    });
+                    navHTML += '</div>';
+                }
+            });
+
+            navMenu.innerHTML = navHTML;
+
+            // Add click handlers for chapters
+            document.querySelectorAll('[data-chapter]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const chapterIndex = parseInt(link.dataset.chapter);
+                    showChapter(chapterIndex);
+
+                    // Close mobile menu
+                    sidebar.classList.remove('open');
+                    mobileOverlay.classList.remove('open');
+                });
+            });
+
+            // Add click handlers for sub-headings
+            document.querySelectorAll('[data-subheading]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.dataset.subheading;
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+
+                    // Close mobile menu
+                    sidebar.classList.remove('open');
+                    mobileOverlay.classList.remove('open');
+                });
+            });
+        }
+
+        function showChapter(index) {
+            if (index < 0 || index >= chapters.length) return;
+
+            currentChapterIndex = index;
+            const chapter = chapters[index];
+            const content = document.getElementById('content');
+
+            // Clear content
+            content.innerHTML = '';
+
+            // Add chapter heading
+            const h2 = chapter.heading.cloneNode(true);
+            content.appendChild(h2);
+
+            // Add chapter content and assign IDs to sub-headings
+            chapter.content.forEach((element, idx) => {
+                const clonedElement = element.cloneNode(true);
+
+                // Assign ID to sub-headings for navigation
+                if (['H3', 'H4', 'H5', 'H6'].includes(clonedElement.tagName)) {
+                    const subHeading = chapter.subHeadings.find(sub =>
+                        sub.element.textContent === clonedElement.textContent
+                    );
+                    if (subHeading) {
+                        clonedElement.id = subHeading.id;
+                    }
+                }
+
+                content.appendChild(clonedElement);
+            });
+
+            // Re-apply syntax highlighting
+            content.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+
+            // Add copy buttons to code blocks
+            addCopyButtonsToCode();
+
+            // Add navigation buttons
+            addNavigationButtons();
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            // Update navigation menu to show/hide sub-chapters
+            updateNavigationMenu();
+
+            // Update active state in sidebar
+            document.querySelectorAll('[data-chapter]').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-chapter="${index}"]`)?.classList.add('active');
+
+            // Update chapter indicator
+            const indicator = document.getElementById('chapter-indicator');
+            const progress = document.getElementById('chapter-progress');
+            indicator.classList.remove('hidden');
+            progress.textContent = `Chapter ${index + 1} of ${chapters.length}`;
+
+            // Update URL and save state
+            updateURL();
+            saveStateToStorage();
+        }
+
+        function addNavigationButtons() {
+            const content = document.getElementById('content');
+            const navDiv = document.createElement('div');
+            navDiv.className = 'flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mt-12 pt-8 border-t border-gray-200';
+
+            // Previous button
+            if (currentChapterIndex > 0) {
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors';
+                const prevTitle = chapters[currentChapterIndex - 1].title;
+                const truncatedPrev = prevTitle.length > 30 ? prevTitle.substring(0, 30) + '...' : prevTitle;
+                prevBtn.innerHTML = `
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span class="truncate"><span class="hidden sm:inline">Previous: </span>${truncatedPrev}</span>
+                `;
+                prevBtn.onclick = () => showChapter(currentChapterIndex - 1);
+                navDiv.appendChild(prevBtn);
+            } else {
+                navDiv.appendChild(document.createElement('div'));
+            }
+
+            // Next button
+            if (currentChapterIndex < chapters.length - 1) {
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors';
+                const nextTitle = chapters[currentChapterIndex + 1].title;
+                const truncatedNext = nextTitle.length > 30 ? nextTitle.substring(0, 30) + '...' : nextTitle;
+                nextBtn.innerHTML = `
+                    <span class="truncate"><span class="hidden sm:inline">Next: </span>${truncatedNext}</span>
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                `;
+                nextBtn.onclick = () => showChapter(currentChapterIndex + 1);
+                navDiv.appendChild(nextBtn);
+            } else {
+                navDiv.appendChild(document.createElement('div'));
+            }
+
+            content.appendChild(navDiv);
+        }
+
+
+        // URL management
+        function updateURL() {
+            const currentFile = markdownFiles[currentFileIndex];
+            const chapter = chapters[currentChapterIndex];
+
+            if (chapter) {
+                const chapterSlug = chapter.title
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-|-$/g, '');
+                const newURL = `${window.location.pathname}#${currentFile.file}/${chapterSlug}`;
+                window.history.pushState({
+                    file: currentFileIndex,
+                    chapter: currentChapterIndex
+                }, '', newURL);
+            } else {
+                const newURL = `${window.location.pathname}#${currentFile.file}`;
+                window.history.pushState({
+                    file: currentFileIndex,
+                    chapter: 0
+                }, '', newURL);
+            }
+        }
+
+        function getStateFromURL() {
+            const hash = window.location.hash.slice(1); // Remove #
+            if (!hash) return { file: 0, chapter: 0 };
+
+            // Parse hash format: filename/chapter-slug or just filename
+            const parts = hash.split('/');
+            const fileName = parts[0];
+            const chapterSlug = parts[1];
+
+            // Find file index
+            const fileIndex = markdownFiles.findIndex(file => file.file === fileName);
+            const finalFileIndex = fileIndex >= 0 ? fileIndex : 0;
+
+            // If we have a chapter slug, find the chapter
+            if (chapterSlug && chapters.length > 0) {
+                const chapterIndex = chapters.findIndex(chapter => {
+                    const slug = chapter.title
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-|-$/g, '');
+                    return slug === chapterSlug;
+                });
+                return { file: finalFileIndex, chapter: chapterIndex >= 0 ? chapterIndex : 0 };
+            }
+
+            return { file: finalFileIndex, chapter: 0 };
+        }
+
+        // Storage management
+        function saveStateToStorage() {
+            const state = {
+                file: currentFileIndex,
+                chapter: currentChapterIndex
+            };
+            localStorage.setItem('docs-state', JSON.stringify(state));
+        }
+
+        function loadStateFromStorage() {
+            try {
+                const saved = localStorage.getItem('docs-state');
+                if (saved) {
+                    return JSON.parse(saved);
+                }
+            } catch (e) {
+                console.warn('Failed to load state from storage:', e);
+            }
+            return { file: 0, chapter: 0 };
+        }
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', async (e) => {
+            if (e.state && typeof e.state.file === 'number') {
+                // Switch to the file from the state
+                await switchToFile(e.state.file);
+                if (typeof e.state.chapter === 'number') {
+                    showChapter(e.state.chapter);
+                }
+            } else {
+                // Parse from URL
+                const state = getStateFromURL();
+                await switchToFile(state.file);
+                showChapter(state.chapter);
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // Left arrow or 'p' for previous
+            if ((e.key === 'ArrowLeft' || e.key === 'p') && currentChapterIndex > 0) {
+                showChapter(currentChapterIndex - 1);
+            }
+            // Right arrow or 'n' for next
+            else if ((e.key === 'ArrowRight' || e.key === 'n') && currentChapterIndex < chapters.length - 1) {
+                showChapter(currentChapterIndex + 1);
+            }
+        });
+
+        // Load documentation on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize theme
+            initTheme();
+
+            // Try to restore state from storage or URL
+            const storageState = loadStateFromStorage();
+            const urlState = getStateFromURL();
+
+            // Use URL state if available, otherwise storage state
+            const initialState = window.location.hash ? urlState : storageState;
+
+            // Initialize with the determined state
+            currentFileIndex = initialState.file;
+            currentChapterIndex = initialState.chapter;
+
+            await initializeApp();
+        });
+    </script>
+</body>
+
+</html>
