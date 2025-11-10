@@ -1,3 +1,5 @@
+import type { TailwindColorName } from '../utils/colorStyles';
+
 export interface AppConfig {
   // Site metadata
   site: {
@@ -29,18 +31,26 @@ export interface AppConfig {
 
   // Style tokens
   theme: {
-    colors: {
-      primary: string;
-      secondary: string;
-      background: string;
-      backgroundSecondary: string;
-      text: string;
-      textSecondary: string;
-      border: string;
-      accent: string;
-      activeBackground: string;
-      activeText: string;
-    };
+    colors: 
+      // New simplified color system
+      | {
+          accent: TailwindColorName;
+          light: TailwindColorName;
+          dark: TailwindColorName;
+        }
+      // Legacy color system (for backward compatibility)
+      | {
+          primary: string;
+          secondary: string;
+          background: string;
+          backgroundSecondary: string;
+          text: string;
+          textSecondary: string;
+          border: string;
+          accent: string;
+          activeBackground: string;
+          activeText: string;
+        };
     fonts: {
       sans: string;
       mono: string;
@@ -80,7 +90,7 @@ export const defaultConfig: AppConfig = {
     title: 'QuickDoc',
     description: 'Fast and beautiful documentation',
     author: 'Your Name',
-    url: 'https://yourdomain.com',
+    url: 'https://lucamack.at',
   },
   navigation: {
     breakingPoint: "h2",
@@ -105,17 +115,23 @@ export const defaultConfig: AppConfig = {
   },
   theme: {
     colors: {
-      primary: "#111827",
-      secondary: "#374151",
-      background: "#ffffff",
-      backgroundSecondary: "#f9fafb",
-      text: "#111827",
-      textSecondary: "#6b7280",
-      border: "#e5e7eb",
-      accent: "#111827",
-      activeBackground: "#f3f4f6",
-      activeText: "#111827",
+      accent: "sky",
+      light: "gray",
+      dark: "slate",
     },
+    // Legacy colors (commented out, will be automatically migrated)
+    // colors: {
+    //   primary: "#111827",
+    //   secondary: "#374151",
+    //   background: "#ffffff",
+    //   backgroundSecondary: "#f9fafb",
+    //   text: "#111827",
+    //   textSecondary: "#6b7280",
+    //   border: "#e5e7eb",
+    //   accent: "#111827",
+    //   activeBackground: "#f3f4f6",
+    //   activeText: "#111827",
+    // },
     fonts: {
       sans: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
       mono: "'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace",
@@ -131,7 +147,7 @@ export const defaultConfig: AppConfig = {
       compact: false,
     },
     border: {
-      radius: "sm",
+      radius: "none",
       size: 1,
     },
   },

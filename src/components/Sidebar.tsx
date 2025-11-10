@@ -46,8 +46,8 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
         style={{ width: `${width}px` }}
         className={`
           fixed md:sticky bottom-0 md:top-[40px] left-0 h-[calc(100vh-40px)]
-          bg-white dark:bg-gray-900
-          border-r border-gray-200 dark:border-gray-800
+          theme-bg
+          border-r theme-border
           overflow-y-auto overflow-x-hidden z-40 transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0 shadow-xl" : "-translate-x-full md:translate-x-0 shadow-none"}
         `}>
@@ -77,8 +77,8 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
                       ${item.level === 5 ? "text-xs ml-12 px-3" : ""}
                       ${item.level === 6 ? "text-xs ml-16 px-3" : ""}
                       ${activeId === item.slug 
-                        ? "text-gray-900 dark:text-white" 
-                        : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                        ? "sidebar-item-active" 
+                        : "theme-text-secondary hover:theme-text"
                       }
                     `}>
                     <span className="block truncate">{item.title}</span>
@@ -96,7 +96,7 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
                           className={`
                             block text-left py-1.5 my-1 rounded text-xs
                             transition-all duration-200 ease-in-out transform
-                            text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white
+                            theme-text-secondary hover:theme-text
                             truncate min-w-0
                             ${sub.level === 3 ? "ml-6 mr-3 px-3" : ""}
                             ${sub.level === 4 ? "ml-9 mr-3 px-3" : ""}

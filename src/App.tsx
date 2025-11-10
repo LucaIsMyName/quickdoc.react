@@ -10,6 +10,7 @@ import { applyBorderStyles } from "./utils/borderStyles";
 import { applyFontStyles } from "./utils/fontStyles";
 import { applyInlineCodeStyles } from "./utils/inlineCodeStyles";
 import { applyMetaNavStyles } from "./utils/metaNavStyles";
+import { applyColorStyles } from "./utils/colorStyles";
 import { initScrollHashUpdates, handleInitialHash } from "./utils/scrollHash";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NotFound } from "./components/NotFound";
@@ -149,18 +150,12 @@ function App() {
 
   // Consolidated style application - avoid duplicate calls
   useEffect(() => {
-    // Apply all config-based styles together
+    applyContentStyles(config, mainContentRef.current);
     applyBorderStyles(config);
     applyFontStyles(config);
     applyInlineCodeStyles(config);
-    
-    // Apply content styles if element is available
-    if (mainContentRef.current) {
-      applyContentStyles(config, mainContentRef.current);
-    }
-    
-    // Apply meta nav styles based on files
     applyMetaNavStyles(files.length > 1);
+    applyColorStyles(config);
   }, [config, files.length]); // Consolidated dependencies
 
   // Initialize scroll-based hash updates
@@ -238,10 +233,10 @@ function App() {
   // Early returns for loading and error states - now after all hooks are called
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center theme-bg-secondary">
         <div className="text-center">
-          <div className="inline-block animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading documentation...</p>
+          <div className="inline-block animate-spin h-8 w-8 border-4 theme-accent-border border-t-transparent rounded-full mb-4" />
+          <p className="theme-text-secondary">Loading documentation...</p>
         </div>
       </div>
     );
@@ -254,10 +249,10 @@ function App() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Documentation Not Available
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
+          <p className="theme-text-secondary mb-4">
             {error || "No documentation files found."}
           </p>
-          <p className="text-sm text-gray-500 dark:text-gray-500">
+          <p className="text-sm theme-text-secondary">
             Make sure your Markdown files are in the <code>public/pages</code> directory.
           </p>
         </div>
@@ -282,11 +277,11 @@ function App() {
         author={config.site.author}
       />
 
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+      <div className="min-h-screen theme-bg-secondary transition-colors duration-200">
         {/* Meta Navigation */}
         {files.length > 1 && (
           <ErrorBoundary>
-            <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+            <div className="sticky top-0 z-50 theme-bg border-b theme-border">
               <div className="flex items-center justify-between h-10">
                 <div className="flex items-center flex-1 min-w-0">
                   <TabNavigation
@@ -376,11 +371,11 @@ function App() {
                   </>
                 ) : currentFile ? (
                   <div className="text-center py-12">
-                    <p className="text-gray-600 dark:text-gray-400">Loading content...</p>
+                    <p className="theme-text-secondary">Loading content...</p>
                   </div>
                 ) : (
                   <div className="text-center py-12">
-                    <p className="text-gray-600 dark:text-gray-400">Select a document to view</p>
+                    <p className="theme-text-secondary">Select a document to view</p>
                   </div>
                 )}
               </div>

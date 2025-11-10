@@ -16,9 +16,9 @@ export const DarkModeToggle = memo(({ isDark, onToggle }: DarkModeToggleProps) =
         aria-label="Toggle dark mode"
       >
         {isDark ? (
-          <Sun className="w-4 h-4 text-yellow-500 dark:text-yellow-400" />
+          <Sun className="w-4 h-4 theme-accent" />
         ) : (
-          <Moon className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+          <Moon className="w-4 h-4 theme-text-secondary" />
         )}
       </button>
     </div>

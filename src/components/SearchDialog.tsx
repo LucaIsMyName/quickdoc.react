@@ -58,16 +58,16 @@ const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) =>
       />
       
       {/* Dialog */}
-      <div className="relative z-[10000] mx-4 max-w-2xl w-full mx-4 rounded-lg bg-white dark:bg-gray-900 shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="relative z-[10000] mx-4 max-w-2xl w-full mx-4 rounded-lg theme-bg shadow-2xl border theme-border overflow-hidden">
         {/* Header */}
-        <div className="flex items-center border-b border-gray-200 dark:border-gray-700 px-4">
-          <Search className="mr-3 h-4 w-4 text-gray-500" />
+        <div className="flex items-center border-b theme-border px-4">
+          <Search className="mr-3 h-4 w-4 theme-text-secondary" />
           <input
             ref={inputRef}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search documentation..."
-            className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none theme-text placeholder:theme-text-secondary disabled:cursor-not-allowed disabled:opacity-50"
             onKeyDown={(e) => {
               if (e.key === 'Escape') {
                 onClose();
@@ -79,13 +79,13 @@ const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) =>
         {/* Results */}
         <div className="max-h-96 overflow-y-auto p-2">
           {searchQuery.length === 0 && (
-            <div className="py-6 text-center text-sm text-gray-500">
+            <div className="py-6 text-center text-sm theme-text-secondary">
               Start typing to search documentation...
             </div>
           )}
 
           {searchQuery.length > 0 && searchResults.length === 0 && (
-            <div className="py-6 text-center text-sm text-gray-500">
+            <div className="py-6 text-center text-sm theme-text-secondary">
               No results found for "{searchQuery}"
             </div>
           )}
@@ -93,7 +93,7 @@ const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) =>
           {searchResults.map((result, index) => (
             <div key={`${result.file.slug}-${result.section.slug}-${index}`}>
               {/* File/Section Header */}
-              <div className="flex items-center px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+              <div className="flex items-center px-2 py-1 text-xs font-medium theme-text-secondary">
                 <FileText className="mr-2 h-3 w-3" />
                 {result.file.title}
                 {result.section.level > 1 && (
@@ -108,12 +108,12 @@ const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) =>
               {/* Search Results */}
               <div
                 onClick={() => handleSelect(result)}
-                className="flex flex-col px-2 py-2 text-sm rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="flex flex-col px-2 py-2 text-sm rounded cursor-pointer hover:theme-active-bg"
               >
                 {result.matches.map((match, matchIndex) => (
                   <div 
                     key={matchIndex}
-                    className="text-gray-700 dark:text-gray-300"
+                    className="theme-text-secondary"
                     dangerouslySetInnerHTML={{ __html: match.highlight }}
                   />
                 ))}
@@ -123,16 +123,16 @@ const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) =>
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-2">
-          <div className="text-xs text-gray-500">
+        <div className="flex items-center justify-between border-t theme-border px-4 py-2">
+          <div className="text-xs theme-text-secondary">
             {searchResults.length} results
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <kbd className="px-1.5 py-0.5 rounded border border-gray-300 dark:border-gray-600">↑↓</kbd>
+          <div className="flex items-center gap-2 text-xs theme-text-secondary">
+            <kbd className="px-1.5 py-0.5 rounded border theme-border">↑↓</kbd>
             <span>navigate</span>
-            <kbd className="px-1.5 py-0.5 rounded border border-gray-300 dark:border-gray-600">↵</kbd>
+            <kbd className="px-1.5 py-0.5 rounded border theme-border">↵</kbd>
             <span>select</span>
-            <kbd className="px-1.5 py-0.5 rounded border border-gray-300 dark:border-gray-600">esc</kbd>
+            <kbd className="px-1.5 py-0.5 rounded border theme-border">esc</kbd>
             <span>close</span>
           </div>
         </div>

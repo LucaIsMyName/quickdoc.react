@@ -9,10 +9,10 @@ export const SearchButton = memo(({ onClick }: SearchButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+      className="p-2 rounded-lg transition-colors hover:theme-active-bg"
       aria-label="Search documentation"
     >
-      <Search className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+      <Search className="w-4 h-4 theme-text-secondary" />
     </button>
   );
 });
