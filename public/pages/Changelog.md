@@ -2,6 +2,12 @@
 
 Changelog for the QuickDoc React versions.
 
+### v0.1.8
+
+### Bugfixes
+
+- fixed `<Example />` Compoents and MDX loading
+
 ## v0.1.7
 
 ### Features

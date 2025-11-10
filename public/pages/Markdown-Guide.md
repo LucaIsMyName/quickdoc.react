@@ -1,4 +1,4 @@
-import { Example } from "../components/example";
+import { Example } from "../src/components/Example";
 
 # Markdown Guide
 
