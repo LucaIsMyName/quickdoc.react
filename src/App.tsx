@@ -287,7 +287,7 @@ function App() {
         {files.length > 1 && (
           <ErrorBoundary>
             <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-              <div className="flex items-center justify-between h-10 px-4">
+              <div className="flex items-center justify-between h-10">
                 <div className="flex items-center flex-1 min-w-0">
                   <TabNavigation
                     files={files}

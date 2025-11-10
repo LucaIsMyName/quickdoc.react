@@ -32,3 +32,12 @@ Initial release
 
 - fixed `<ExportButton />` placement
 
+## v0.1.6
+
+### Bugfixes
+
+- fixed `<DarkModeToggle />` placement
+- fixed `<TabNavigation />` padding issue
+- fixed print PDF (more testing needed)
+
+
