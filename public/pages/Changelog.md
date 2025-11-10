@@ -7,14 +7,15 @@ Changelog for the QuickDoc React versions.
 ### Features
 
 - Simplified color schema by just providing a `primary` color and app does the rest
-- Implemented proper `config.theme.radius` Logic
-- Implemented proper `config.theme.border` Logic
-
+- Implemented `config.theme.radius` Logic
+- Implemented `config.theme.border` Logic
+- Implemented `config.search.enableFuzzySearch` Logic, makes fuzzy search opt-in
 ### Bugfixes
 
 - fixed `<DarkModeToggle />` placement
 - fixed `<TabNavigation />` padding issue
 - fixed print PDF (more testing needed)
+- fixed `<ScrollFade />` blur issue (by removing the blur)
 
 
 ## v0.1.5

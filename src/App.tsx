@@ -387,6 +387,7 @@ function App() {
           isOpen={isSearchOpen}
           onClose={handleSearchClose}
           files={files}
+          config={config}
         />
 
         {/* Floating Toolbar */}

@@ -1,19 +1,19 @@
 import { useEffect, useRef, memo } from 'react';
-import { Search, FileText, Hash, ArrowRight } from 'lucide-react';
+import { Search, FileText, Hash } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { MarkdownFile } from '../types';
-import { useAppState } from '../hooks/useAppState';
+import type { AppConfig } from '../config/app.config';
 import { useDocumentSearch } from '../hooks/useDocumentSearch';
-import { scrollToHeading } from '../utils/scrollHash';
 
 interface SearchDialogProps {
   files: MarkdownFile[];
   isOpen: boolean;
   onClose: () => void;
+  config: AppConfig;
 }
 
-const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) => {
-  const { searchQuery, setSearchQuery, searchResults } = useDocumentSearch(files);
-  const { setCurrentFile, setCurrentSection } = useAppState(null);
+const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogProps) => {
+  const { searchQuery, setSearchQuery, searchResults } = useDocumentSearch(files, config);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -22,29 +22,31 @@ const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) =>
     }
   }, [isOpen]);
 
-  const handleSelect = (result: any) => {
-    setCurrentFile(result.file.slug);
+  // Generate proper URL for navigation with breaking point support
+  const getResultUrl = (result: any) => {
+    const baseUrl = `/${result.file.slug}`;
     
-    // Set the current section
-    if (result.section.slug !== result.file.slug) {
-      setCurrentSection(result.section.slug);
+    // If it's just the file (level 1), link to file only
+    if (result.section.level === 1 || result.section.slug === result.file.slug) {
+      return baseUrl;
     }
     
-    // Scroll to the specific anchor if it's a section
+    // For sections, consider breaking points
     if (result.section.slug && result.section.slug !== result.file.slug) {
-      // Create anchor from section title
-      const anchor = result.section.title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
-      
-      // Use scroll utility with a delay to ensure content is loaded
-      setTimeout(() => {
-        scrollToHeading(anchor);
-      }, 100);
+      if (config.navigation.breakingPoint === 'h2') {
+        if (result.section.level === 2) {
+          // H2 sections get their own route segment: /file/breakpoint
+          return `${baseUrl}/${result.section.slug}`;
+        } else if (result.section.level > 2) {
+          // H3+ sections need parent H2 + anchor: /file/breakpoint#headline
+          // For now, just use anchor until we can find parent H2
+          return `${baseUrl}#${result.section.slug}`;
+        }
+      }
+      return `${baseUrl}#${result.section.slug}`;
     }
     
-    onClose();
+    return baseUrl;
   };
 
   if (!isOpen) return null;
@@ -91,33 +93,42 @@ const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) =>
           )}
 
           {searchResults.map((result, index) => (
-            <div key={`${result.file.slug}-${result.section.slug}-${index}`}>
-              {/* File/Section Header */}
-              <div className="flex items-center px-2 py-1 text-xs font-medium theme-text-secondary">
+            <div key={`${result.file.slug}-${result.section.slug}-${index}`} className="border-b theme-border last:border-b-0 pb-3 mb-3 last:pb-2 last:mb-0">
+              {/* File/Section Header - Original Layout */}
+              <div className="flex items-center px-3 py-1 text-xs font-medium theme-text-secondary">
                 <FileText className="mr-2 h-3 w-3" />
                 {result.file.title}
                 {result.section.level > 1 && (
                   <>
-                    <ArrowRight className="mx-1 h-3 w-3" />
+                    <span className="mx-1">→</span>
                     <Hash className="mr-1 h-3 w-3" />
                     {result.section.title}
                   </>
                 )}
               </div>
               
-              {/* Search Results */}
-              <div
-                onClick={() => handleSelect(result)}
-                className="flex flex-col px-2 py-2 text-sm rounded cursor-pointer hover:theme-active-bg"
+              {/* Main Link - Bigger and more prominent */}
+              <Link
+                to={getResultUrl(result)}
+                onClick={onClose}
+                className="block px-3 py-2 cursor-pointer hover:theme-active-bg transition-colors rounded-md mx-2"
               >
-                {result.matches.map((match, matchIndex) => (
-                  <div 
-                    key={matchIndex}
-                    className="theme-text-secondary"
-                    dangerouslySetInnerHTML={{ __html: match.highlight }}
-                  />
-                ))}
-              </div>
+                {/* Main title/heading - Make this bigger */}
+                <div className="text-base font-medium theme-text mb-1">
+                  {result.section.level > 1 ? result.section.title : result.file.title}
+                </div>
+                
+                {/* Search content - Make this smaller and less prominent */}
+                <div className="space-y-1">
+                  {result.matches.map((match, matchIndex) => (
+                    <div 
+                      key={matchIndex}
+                      className="text-xs theme-text-secondary opacity-75 leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: match.highlight }}
+                    />
+                  ))}
+                </div>
+              </Link>
             </div>
           ))}
         </div>

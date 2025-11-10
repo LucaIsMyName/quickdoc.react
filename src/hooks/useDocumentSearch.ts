@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { createFuzzySearch } from 'fuzzyfindjs';
 import type { MarkdownFile } from '../types';
+import type { AppConfig } from '../config/app.config';
 
 interface SearchResult {
   file: MarkdownFile;
@@ -29,7 +30,7 @@ interface SearchableItem {
   searchableText: string;
 }
 
-export const useDocumentSearch = (files: MarkdownFile[]) => {
+export const useDocumentSearch = (files: MarkdownFile[], config: AppConfig) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -103,16 +104,66 @@ export const useDocumentSearch = (files: MarkdownFile[]) => {
     return { searchableItems: items, fuzzySearch: fuzzySearchInstance };
   }, [files]);
 
-  // Fuzzy search functionality
+  // Fallback basic search function (moved before searchResults to avoid hoisting issues)
+  const basicSearch = (query: string, items: SearchableItem[]): SearchResult[] => {
+    const lowerQuery = query.toLowerCase();
+    const results: SearchResult[] = [];
+
+    items.forEach(item => {
+      const searchableText = item.searchableText.toLowerCase();
+      
+      if (searchableText.includes(lowerQuery)) {
+        const matches: { text: string; highlight: string }[] = [];
+        
+        // Search in title
+        if (item.section.title.toLowerCase().includes(lowerQuery)) {
+          matches.push({
+            text: item.section.title,
+            highlight: highlightText(item.section.title, query)
+          });
+        }
+
+        // Search in content
+        const contentLines = item.section.content.split('\n');
+        contentLines.forEach((line, index) => {
+          if (line.toLowerCase().includes(lowerQuery) && line.trim() && matches.length < 3) {
+            const contextStart = Math.max(0, index - 1);
+            const contextEnd = Math.min(contentLines.length - 1, index + 1);
+            const context = contentLines.slice(contextStart, contextEnd + 1).join(' ').trim();
+            
+            matches.push({
+              text: context,
+              highlight: highlightText(context, query)
+            });
+          }
+        });
+
+        if (matches.length > 0) {
+          results.push({
+            file: item.file,
+            section: item.section,
+            matches: matches.slice(0, 3),
+            score: 0.8 // Default score for basic search
+          });
+        }
+      }
+    });
+
+    return results.slice(0, 20);
+  };
+
+  // Search functionality (fuzzy or basic based on config)
   const searchResults = useMemo(() => {
-    if (!searchQuery.trim() || !fuzzySearch) return [];
+    if (!searchQuery.trim()) return [];
 
-    try {
-      // Use fuzzyfindjs for fuzzy search with typo tolerance
-      const fuzzyResults = fuzzySearch.search(searchQuery, 20);
+    // Use fuzzy search if enabled, otherwise use basic search
+    if (config.search.enableFuzzySearch && fuzzySearch) {
+      try {
+        // Use fuzzyfindjs for fuzzy search with typo tolerance
+        const fuzzyResults = fuzzySearch.search(searchQuery, 20);
 
-      // Convert fuzzy results to our SearchResult format
-      const results: SearchResult[] = fuzzyResults.map((result: any) => {
+        // Convert fuzzy results to our SearchResult format
+        const results: SearchResult[] = fuzzyResults.map((result: any) => {
         // Find the corresponding searchable item by matching the display text
         const item = searchableItems.find(item => item.searchableText === result.display);
         
@@ -165,62 +216,18 @@ export const useDocumentSearch = (files: MarkdownFile[]) => {
         };
       }).filter(Boolean) as SearchResult[];
 
-      // Sort by score (higher is better in fuzzyfindjs)
-      return results.sort((a, b) => (b.score || 0) - (a.score || 0));
-    } catch (error) {
-      console.error('Fuzzy search error:', error);
-      // Fallback to basic search if fuzzy search fails
+        // Sort by score (higher is better in fuzzyfindjs)
+        return results.sort((a, b) => (b.score || 0) - (a.score || 0));
+      } catch (error) {
+        console.error('Fuzzy search error:', error);
+        // Fallback to basic search if fuzzy search fails
+        return basicSearch(searchQuery, searchableItems);
+      }
+    } else {
+      // Use basic search when fuzzy search is disabled
       return basicSearch(searchQuery, searchableItems);
     }
-  }, [searchableItems, searchQuery, fuzzySearch]);
-
-  // Fallback basic search function
-  const basicSearch = (query: string, items: SearchableItem[]): SearchResult[] => {
-    const lowerQuery = query.toLowerCase();
-    const results: SearchResult[] = [];
-
-    items.forEach(item => {
-      const searchableText = item.searchableText.toLowerCase();
-      
-      if (searchableText.includes(lowerQuery)) {
-        const matches: { text: string; highlight: string }[] = [];
-        
-        // Search in title
-        if (item.section.title.toLowerCase().includes(lowerQuery)) {
-          matches.push({
-            text: item.section.title,
-            highlight: highlightText(item.section.title, query)
-          });
-        }
-
-        // Search in content
-        const contentLines = item.section.content.split('\n');
-        contentLines.forEach((line, index) => {
-          if (line.toLowerCase().includes(lowerQuery) && line.trim() && matches.length < 3) {
-            const contextStart = Math.max(0, index - 1);
-            const contextEnd = Math.min(contentLines.length - 1, index + 1);
-            const context = contentLines.slice(contextStart, contextEnd + 1).join(' ').trim();
-            
-            matches.push({
-              text: context,
-              highlight: highlightText(context, query)
-            });
-          }
-        });
-
-        if (matches.length > 0) {
-          results.push({
-            file: item.file,
-            section: item.section,
-            matches: matches.slice(0, 3),
-            score: 0.8 // Default score for basic search
-          });
-        }
-      }
-    });
-
-    return results.slice(0, 20);
-  };
+  }, [searchableItems, searchQuery, fuzzySearch, config.search.enableFuzzySearch]);
 
   const openSearch = () => setIsOpen(true);
   const closeSearch = () => {

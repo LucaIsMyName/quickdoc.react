@@ -81,6 +81,11 @@ export interface AppConfig {
     spacing: "compact" | "normal" | "relaxed";
   };
 
+  // Search configuration
+  search: {
+    enableFuzzySearch: boolean;
+  };
+
   // Pages folder path (relative to public)
   pagesPath: string;
 }
@@ -158,6 +163,9 @@ export const defaultConfig: AppConfig = {
     copyCodeButton: true,
     align: "left",
     spacing: "compact",
+  },
+  search: {
+    enableFuzzySearch: false, // Default to plain search
   },
   pagesPath: "/pages",
 };
