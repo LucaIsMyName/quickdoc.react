@@ -1,10 +1,18 @@
-import { useEffect, useState, useRef, useCallback, memo } from "react";
-import { Link } from "react-router-dom";
-import type { NavigationItem } from "../types";
-import type { AppConfig } from "../config/app.config";
-import { useSidebarWidth } from "../hooks/useSidebarWidth";
+import { memo, useRef, useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import type { AppConfig } from '../config/app.config';
+import { ScrollFade } from './ScrollFade';
 import { SidebarWidthControl } from "./SidebarWidthControl";
-import { ScrollFade } from "./ScrollFade";
+import { useSidebarWidth } from '../hooks/useSidebarWidth';
+
+// Define NavigationItem interface
+interface NavigationItem {
+  id: string;
+  title: string;
+  slug: string;
+  level: number;
+  subsections?: NavigationItem[];
+}
 
 interface SidebarProps {
   title: string;
@@ -46,9 +54,11 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
         style={{ width: `${width}px` }}
         className={`
           fixed md:sticky bottom-0 md:top-[40px] left-0 h-[calc(100vh-40px)]
-          theme-bg sidebar-container
+          ${config.theme.isSidebarTransparent ? 'bg-transparent' : 'theme-bg'}
+          ${config.theme.isSidebarTransparent ? '' : 'sidebar-container'}
           overflow-y-auto overflow-x-hidden z-40 transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0 shadow-xl" : "-translate-x-full md:translate-x-0 shadow-none"}
+          ${config.theme.isSidebarTransparent ? 'hover:sidebar-container' : ''}
         `}>
         <div className="p-2 h-full flex flex-col">
           <ScrollFade 
@@ -86,7 +96,7 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
                   {/* Show subsections based on config or active state */}
                   {((config.navigation.expandAllSections) || (activeId === item.slug)) && item.subsections && item.subsections.length > 0 && (
                     <div className="space-y-1">
-                      {item.subsections.map((sub) => (
+                      {item.subsections.map((sub: NavigationItem) => (
                         <Link
                           key={sub.id}
                           to={currentFile ? `/${currentFile}/${item.slug}#${sub.slug}` : `/${item.slug}#${sub.slug}`}

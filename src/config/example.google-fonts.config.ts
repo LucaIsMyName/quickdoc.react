@@ -36,6 +36,7 @@ export const googleFontsConfig: Pick<AppConfig, 'theme' | 'navigation'> = {
       activeBackground: "#f3f4f6",
       activeText: "#111827",
     },
+    isSidebarTransparent: false,
     fonts: {
       // System fonts as fallback
       sans: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",

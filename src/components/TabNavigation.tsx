@@ -1,4 +1,5 @@
 import type { MarkdownFile } from '../types';
+import type { AppConfig } from '../config/app.config';
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { ScrollFade } from './ScrollFade';
@@ -6,11 +7,12 @@ import { ScrollFade } from './ScrollFade';
 interface TabNavigationProps {
   files: MarkdownFile[];
   currentFile: string | null;
+  config: AppConfig;
 }
 
-const TabNavigationComponent = ({ files, currentFile }: TabNavigationProps) => {
+const TabNavigationComponent = ({ files, currentFile, config }: TabNavigationProps) => {
   return (
-    <nav className="sticky top-0 z-40 theme-bg border-b theme-border tab-navigation overflow-hidden">
+    <nav className={`sticky top-0 z-40 ${config.theme.isSidebarTransparent ? 'bg-transparent' : 'theme-bg'} border-b theme-border tab-navigation overflow-hidden`}>
       <ScrollFade 
         direction="horizontal" 
         size={24}

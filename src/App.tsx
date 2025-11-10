@@ -286,6 +286,7 @@ function App() {
                   <TabNavigation
                     files={files}
                     currentFile={state.currentFile}
+                    config={config}
                   />
                 </div>
                 

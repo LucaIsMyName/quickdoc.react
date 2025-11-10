@@ -51,6 +51,7 @@ export interface AppConfig {
           activeBackground: string;
           activeText: string;
         };
+    isSidebarTransparent: boolean;
     fonts: {
       sans: string;
       mono: string;
@@ -120,10 +121,11 @@ export const defaultConfig: AppConfig = {
   },
   theme: {
     colors: {
-      accent: "sky",
+      accent: "blue",
       light: "gray",
-      dark: "slate",
+      dark: "gray",
     },
+    isSidebarTransparent: false,
     // Legacy colors (commented out, will be automatically migrated)
     // colors: {
     //   primary: "#111827",

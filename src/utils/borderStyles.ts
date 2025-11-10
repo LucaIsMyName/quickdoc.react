@@ -210,6 +210,11 @@ const updateDynamicBorderStyles = (hasBorders: boolean) => {
       border-right: 1px solid var(--current-border-color) !important;
     }
 
+    /* Transparent sidebar hover effect */
+    .hover\\:sidebar-container:hover {
+      border-right: 1px solid var(--current-border-color) !important;
+    }
+
     /* TabNavigation never has radius (as requested) */
     .tab-navigation {
       border-radius: 0 !important;
