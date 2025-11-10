@@ -58,7 +58,7 @@ const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) =>
       />
       
       {/* Dialog */}
-      <div className="relative z-[10000] mx-4 max-w-2xl w-full mx-4 rounded-lg theme-bg shadow-2xl border theme-border overflow-hidden">
+      <div className="relative z-[10000] mx-4 max-w-2xl w-full mx-4 search-dialog theme-bg shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center border-b theme-border px-4">
           <Search className="mr-3 h-4 w-4 theme-text-secondary" />
@@ -67,7 +67,7 @@ const SearchDialogComponent = ({ files, isOpen, onClose }: SearchDialogProps) =>
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search documentation..."
-            className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none theme-text placeholder:theme-text-secondary disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-12 w-full bg-transparent py-3 text-sm outline-none theme-text placeholder:theme-text-secondary disabled:cursor-not-allowed disabled:opacity-50 theme-input"
             onKeyDown={(e) => {
               if (e.key === 'Escape') {
                 onClose();

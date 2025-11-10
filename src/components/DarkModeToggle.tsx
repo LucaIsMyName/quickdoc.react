@@ -12,7 +12,7 @@ export const DarkModeToggle = memo(({ isDark, onToggle }: DarkModeToggleProps) =
       {/* Actual dark mode toggle */}
       <button
         onClick={onToggle}
-        className="p-2 transition-colors"
+        className="p-2 transition-colors theme-radius-base"
         aria-label="Toggle dark mode"
       >
         {isDark ? (

@@ -46,8 +46,7 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
         style={{ width: `${width}px` }}
         className={`
           fixed md:sticky bottom-0 md:top-[40px] left-0 h-[calc(100vh-40px)]
-          theme-bg
-          border-r theme-border
+          theme-bg sidebar-container
           overflow-y-auto overflow-x-hidden z-40 transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0 shadow-xl" : "-translate-x-full md:translate-x-0 shadow-none"}
         `}>

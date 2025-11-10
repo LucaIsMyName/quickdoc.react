@@ -10,7 +10,7 @@ interface TabNavigationProps {
 
 const TabNavigationComponent = ({ files, currentFile }: TabNavigationProps) => {
   return (
-    <nav className="sticky top-0 z-40 theme-bg border-b theme-border">
+    <nav className="sticky top-0 z-40 theme-bg border-b theme-border tab-navigation">
       <ScrollFade 
         direction="horizontal" 
         size={32}
@@ -22,7 +22,7 @@ const TabNavigationComponent = ({ files, currentFile }: TabNavigationProps) => {
             key={file.slug}
             to={`/${file.slug}`}
             className={`
-              px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 border-b-2 border-transparent
+              px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 border-b-2 border-transparent tab-item
               ${currentFile === file.slug
                 ? 'tab-active'
                 : 'theme-text-secondary hover:theme-text'

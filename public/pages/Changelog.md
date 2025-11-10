@@ -2,9 +2,33 @@
 
 Changelog for the QuickDoc React versions.
 
-## v0.1.0
+## v0.1.6
 
-Initial release
+### Features
+
+- Simplified color schema by just proving a `primary` color and app does the rest
+- Implemented proper `config.theme.radius` Logic
+- Implemented proper `config.theme.border` Logic
+
+### Bugfixes
+
+- fixed `<DarkModeToggle />` placement
+- fixed `<TabNavigation />` padding issue
+- fixed print PDF (more testing needed)
+
+
+## v0.1.5
+
+### Bugfixes
+
+- fixed `<ExportButton />` placement
+
+## v0.1.4
+
+### Features
+
+- Added print styles for PDF export
+- Added MD Export
 
 ## v0.1.3
 
@@ -19,25 +43,7 @@ Initial release
 - no constant re-render anymore
 - Fixed `<Sidebar />` inner sub-items width issue - overlow-x
 
-## v0.1.4
+## v0.1.0
 
-### Features
-
-- Added print styles for PDF export
-- Added MD Export
-
-## v0.1.5
-
-### Bugfixes
-
-- fixed `<ExportButton />` placement
-
-## v0.1.6
-
-### Bugfixes
-
-- fixed `<DarkModeToggle />` placement
-- fixed `<TabNavigation />` padding issue
-- fixed print PDF (more testing needed)
-
+Initial release
 

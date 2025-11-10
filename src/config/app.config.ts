@@ -66,7 +66,7 @@ export interface AppConfig {
       compact: boolean;
     };
     border: {
-      radius: "none" | "sm" | "md" | "xl";
+      radius: "none" | "sm" | "md" | "lg";
       size: "none" | 1 | 2 | 3;
     };
   };
