@@ -43,9 +43,8 @@ const ExportButtonComponent = ({ content, title, filename }: ExportButtonProps) 
 
   return (
     <Popover.Root>
-      <Popover.Trigger className="flex items-center gap-2 px-2 sm:px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors duration-200">
+      <Popover.Trigger className="p-2 theme-text-secondary hover:theme-text hover:theme-active-bg theme-radius-base transition-colors duration-200" aria-label="Export options">
         <Download className="w-4 h-4" />
-        <span className="hidden md:inline">Export</span>
       </Popover.Trigger>
 
       <Popover.Portal>
@@ -54,28 +53,28 @@ const ExportButtonComponent = ({ content, title, filename }: ExportButtonProps) 
           align="end"
           sideOffset={8}
         >
-          <Popover.Popup className="w-48 md:w-64 lg:w-96 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50 py-1 origin-[var(--transform-origin)] transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0">
+          <Popover.Popup className="w-48 md:w-64 lg:w-96 theme-bg theme-border-medium shadow-lg z-50 py-1 origin-[var(--transform-origin)] transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0">
             {/* PDF Export */}
             <button
               onClick={exportAsPDF}
-              className="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 cursor-pointer"
+              className="flex items-center gap-3 w-full px-4 py-2 text-sm theme-text-secondary hover:theme-active-bg hover:theme-text transition-colors duration-200 cursor-pointer"
             >
               <Printer className="w-4 h-4" />
               <div className="text-left">
                 <div className="font-medium">Export as PDF</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">Print dialog</div>
+                <div className="text-xs theme-text-secondary opacity-75">Print dialog</div>
               </div>
             </button>
 
             {/* Markdown Export */}
             <button
               onClick={exportAsMarkdown}
-              className="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 cursor-pointer"
+              className="flex items-center gap-3 w-full px-4 py-2 text-sm theme-text-secondary hover:theme-active-bg hover:theme-text transition-colors duration-200 cursor-pointer"
             >
               <FileText className="w-4 h-4" />
               <div className="text-left">
                 <div className="font-medium">Export as Markdown</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">Download .md file</div>
+                <div className="text-xs theme-text-secondary opacity-75">Download .md file</div>
               </div>
             </button>
           </Popover.Popup>

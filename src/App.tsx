@@ -18,9 +18,8 @@ import { TabNavigation } from "./components/TabNavigation";
 import { Sidebar } from "./components/Sidebar";
 import { MarkdownContent } from "./components/MarkdownContent";
 import { MobileMenuButton } from "./components/MobileMenuButton";
-import { DarkModeToggle } from "./components/DarkModeToggle";
-import { SearchButton } from "./components/SearchButton";
 import { SearchDialog } from "./components/SearchDialog";
+import { FloatingToolbar } from "./components/FloatingToolbar";
 import { Pagination } from "./components/Pagination";
 // import { ExportButton } from "./components/ExportButton";
 import { SEO } from "./components/SEO";
@@ -290,13 +289,7 @@ function App() {
                   />
                 </div>
                 
-                <div className="flex items-center space-x-2 ml-4">
-                  <SearchButton onClick={handleSearchOpen} />
-                  <DarkModeToggle
-                    isDark={isDark}
-                    onToggle={toggleDarkMode}
-                  />
-                </div>
+                {/* Removed buttons - now in FloatingToolbar */}
               </div>
             </div>
           </ErrorBoundary>
@@ -394,6 +387,18 @@ function App() {
           isOpen={isSearchOpen}
           onClose={handleSearchClose}
           files={files}
+        />
+
+        {/* Floating Toolbar */}
+        <FloatingToolbar
+          isDark={isDark}
+          onToggleDarkMode={toggleDarkMode}
+          onSearchOpen={handleSearchOpen}
+          exportProps={currentFile && currentSection ? {
+            content: currentSection.content,
+            title: currentSection.title,
+            filename: `${currentFile.title || 'section'}-${currentSection.title}`
+          } : undefined}
         />
       </div>
     </>

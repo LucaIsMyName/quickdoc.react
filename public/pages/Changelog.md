@@ -6,7 +6,7 @@ Changelog for the QuickDoc React versions.
 
 ### Features
 
-- Simplified color schema by just proving a `primary` color and app does the rest
+- Simplified color schema by just providing a `primary` color and app does the rest
 - Implemented proper `config.theme.radius` Logic
 - Implemented proper `config.theme.border` Logic
 
