@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Menu, X } from "lucide-react";
 
 interface MobileMenuButtonProps {
   onClick: () => void;
@@ -9,31 +10,14 @@ export const MobileMenuButton = memo(({ onClick, isOpen }: MobileMenuButtonProps
   return (
     <button
       onClick={onClick}
-      className="md:hidden fixed bottom-6 left-6 z-50 p-3 bg-gray-800 dark:bg-gray-700 text-white rounded-full shadow-lg hover:bg-gray-900 dark:hover:bg-gray-600 transition-colors"
+      className="md:hidden fixed bottom-6 left-6 z-50 w-12 h-12 theme-accent-bg shadow-lg flex items-center justify-center theme-radius-medium transition-colors hover:opacity-90"
       aria-label="Toggle menu"
     >
-      <svg
-        className="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        {isOpen ? (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        ) : (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        )}
-      </svg>
+      {isOpen ? (
+        <X className="w-5 h-5 text-white" />
+      ) : (
+        <Menu className="w-5 h-5 text-white" />
+      )}
     </button>
   );
 });

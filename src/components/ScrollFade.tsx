@@ -90,8 +90,6 @@ const ScrollFadeComponent = ({
                   rgba(255, 255, 255, calc(var(--fade-intensity) * 0.3)) 90%,
                   rgba(255, 255, 255, 0) 100%
                 )`,
-                backdropFilter: `blur(calc(var(--fade-size) * 0.3))`,
-                WebkitBackdropFilter: `blur(calc(var(--fade-size) * 0.3))`,
               }
             : {
                 left: 0,
@@ -99,14 +97,11 @@ const ScrollFadeComponent = ({
                 bottom: 0,
                 width: 'var(--fade-size)',
                 background: `linear-gradient(to right, 
-                  rgba(255, 255, 255, calc(var(--fade-intensity) * 1)) 0%, 
-                  rgba(255, 255, 255, calc(var(--fade-intensity) * 0.8)) 30%,
-                  rgba(255, 255, 255, calc(var(--fade-intensity) * 0.6)) 60%,
-                  rgba(255, 255, 255, calc(var(--fade-intensity) * 0.3)) 90%,
-                  rgba(255, 255, 255, 0) 100%
+                  var(--current-bg) 0%, 
+                  color-mix(in srgb, var(--current-bg) 80%, transparent) 40%,
+                  color-mix(in srgb, var(--current-bg) 40%, transparent) 70%,
+                  transparent 100%
                 )`,
-                backdropFilter: `blur(calc(var(--fade-size) * 0.3))`,
-                WebkitBackdropFilter: `blur(calc(var(--fade-size) * 0.3))`,
               }
         }
       />
@@ -130,8 +125,6 @@ const ScrollFadeComponent = ({
                   rgba(255, 255, 255, calc(var(--fade-intensity) * 0.3)) 90%,
                   rgba(255, 255, 255, 0) 100%
                 )`,
-                backdropFilter: `blur(calc(var(--fade-size) * 0.3))`,
-                WebkitBackdropFilter: `blur(calc(var(--fade-size) * 0.3))`,
               }
             : {
                 right: 0,
@@ -139,14 +132,11 @@ const ScrollFadeComponent = ({
                 bottom: 0,
                 width: 'var(--fade-size)',
                 background: `linear-gradient(to left, 
-                  rgba(255, 255, 255, calc(var(--fade-intensity) * 1)) 0%, 
-                  rgba(255, 255, 255, calc(var(--fade-intensity) * 0.8)) 30%,
-                  rgba(255, 255, 255, calc(var(--fade-intensity) * 0.6)) 60%,
-                  rgba(255, 255, 255, calc(var(--fade-intensity) * 0.3)) 90%,
-                  rgba(255, 255, 255, 0) 100%
+                  var(--current-bg) 0%, 
+                  color-mix(in srgb, var(--current-bg) 80%, transparent) 40%,
+                  color-mix(in srgb, var(--current-bg) 40%, transparent) 70%,
+                  transparent 100%
                 )`,
-                backdropFilter: `blur(calc(var(--fade-size) * 0.3))`,
-                WebkitBackdropFilter: `blur(calc(var(--fade-size) * 0.3))`,
               }
         }
       />
