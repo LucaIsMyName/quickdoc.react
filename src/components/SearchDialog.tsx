@@ -203,19 +203,19 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
               <Link
                 to={getResultUrl(result)}
                 onClick={onClose}
-                className="block px-3 py-2 cursor-pointer hover:theme-active-bg transition-colors rounded-md mx-2"
+                className="block px-3 py-2 cursor-pointer hover:theme-active-bg transition-colors theme-radius-base mx-2 text-left"
               >
                 {/* Main title/heading - Make this bigger */}
-                <div className="text-base font-medium theme-text mb-1">
+                <div className="text-base font-medium theme-text mb-1 text-left">
                   {result.section.level > 1 ? result.section.title : result.file.title}
                 </div>
                 
                 {/* Search content - Make this smaller and less prominent */}
-                <div className="space-y-1">
+                <div className="space-y-1 text-left">
                   {result.matches.map((match, matchIndex) => (
                     <div 
                       key={matchIndex}
-                      className="text-xs theme-text-secondary opacity-75 leading-relaxed"
+                      className="text-xs theme-text-secondary opacity-75 leading-relaxed text-left"
                       dangerouslySetInnerHTML={{ __html: match.highlight }}
                     />
                   ))}
@@ -231,11 +231,11 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
             {searchResults.length} results
           </div>
           <div className="flex items-center gap-2 text-xs theme-text-secondary">
-            <kbd className="px-1.5 py-0.5 rounded border theme-border">↑↓</kbd>
+            <kbd className="px-1.5 py-0.5 theme-radius-small theme-border-small">↑↓</kbd>
             <span>navigate</span>
-            <kbd className="px-1.5 py-0.5 rounded border theme-border">↵</kbd>
+            <kbd className="px-1.5 py-0.5 theme-radius-small theme-border-small">↵</kbd>
             <span>select</span>
-            <kbd className="px-1.5 py-0.5 rounded border theme-border">esc</kbd>
+            <kbd className="px-1.5 py-0.5 theme-radius-small theme-border-small">esc</kbd>
             <span>close</span>
           </div>
         </div>
