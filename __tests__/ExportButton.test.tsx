@@ -15,9 +15,10 @@ describe('ExportButton', () => {
   it('renders export button', () => {
     render(<ExportButton {...mockProps} />);
     
-    const exportButton = screen.getByRole('button');
+    const exportButton = screen.getByRole('button', { name: /export options/i });
     expect(exportButton).toBeTruthy();
-    expect(screen.getByText('Export')).toBeTruthy();
+    // Button is icon-only, no text label
+    expect(exportButton.querySelector('svg')).toBeTruthy();
   });
 
   it('opens popover menu when clicked', () => {

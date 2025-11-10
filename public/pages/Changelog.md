@@ -7,6 +7,15 @@ Changelog for the QuickDoc React versions.
 ### Features
 
 - Implemented `config.enableNumberedSidebar`
+- Implemented code highlighting with tailwind css variables
+- Copy Button in Codeblock are now themes
+
+### Bugfixes
+
+- fixed  `config.enableNumberedSidebar` Bugs
+- fixed `<Copy />`generic styling by adding border-radius and border-size on `config.theme.border` & `border.theme.radius` keys
+- fixed `<Search />` generic styling by adding border-radius and border-size on `config.theme.border` & `border.theme.radius` keys
+- fixed `<SidebarWidthControl />` position absolute issue to position fixed style solution
 
 ## v0.1.6
 

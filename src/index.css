@@ -8,10 +8,10 @@
   --content-text-align: left;
   --border-radius: 0.5rem;
   --border-size: 1px;
-  
+
   /* Font variables - system fonts by default */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
   --font-size-base: 16px;
 }
 
@@ -20,11 +20,11 @@
   .desktop-align-center {
     justify-content: center !important;
   }
-  
+
   .desktop-align-right {
     justify-content: flex-end !important;
   }
-  
+
   .desktop-align-left {
     justify-content: flex-start !important;
   }
@@ -195,7 +195,7 @@ button {
   display: block !important;
 }
 
-/* Syntax highlighting for light mode */
+/* Syntax highlighting for light mode using Tailwind colors */
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-title,
@@ -203,68 +203,66 @@ button {
 .hljs-doctag,
 .hljs-name,
 .hljs-strong {
-  font-weight: 600;
-  color: #0000ff;
+  @apply font-semibold text-blue-600;
 }
 
 .hljs-comment,
 .hljs-quote {
-  color: #008000;
-  font-style: italic;
+  @apply text-green-600 italic;
 }
 
 .hljs-string,
 .hljs-literal,
 .hljs-doctag {
-  color: #a31515;
+  @apply text-red-600;
 }
 
 .hljs-number,
 .hljs-variable,
 .hljs-template-variable,
 .hljs-tag .hljs-attr {
-  color: #098658;
+  @apply text-emerald-600;
 }
 
 .hljs-type,
 .hljs-class .hljs-title {
-  color: #0000ff;
+  @apply text-blue-600;
 }
 
 .hljs-function,
 .hljs-built_in,
 .hljs-builtin-name {
-  color: #795e26;
+  @apply text-amber-700;
 }
 
 .hljs-attr {
-  color: #0451a5;
+  @apply text-sky-600;
 }
 
 .hljs-attribute {
-  color: #ff0000;
+  @apply text-red-500;
 }
 
 .hljs-meta,
 .hljs-meta-keyword {
-  color: #0000ff;
+  @apply text-blue-600;
 }
 
 .hljs-subst {
-  color: #000;
+  @apply text-gray-900;
 }
 
 .hljs-symbol,
 .hljs-bullet,
 .hljs-link {
-  color: #00b0e8;
+  @apply text-cyan-500;
 }
 
 .hljs-emphasis {
-  font-style: italic;
+  @apply italic;
 }
 
-/* Syntax highlighting for dark mode - brighter colors */
+/* Syntax highlighting for dark mode using Tailwind colors */
 .dark .hljs-keyword,
 .dark .hljs-selector-tag,
 .dark .hljs-title,
@@ -272,89 +270,84 @@ button {
 .dark .hljs-doctag,
 .dark .hljs-name,
 .dark .hljs-strong {
-  font-weight: 600;
-  color: #569cd6; /* Bright blue */
+  @apply font-semibold text-blue-400;
 }
 
 .dark .hljs-comment,
 .dark .hljs-quote {
-  color: #6a9955; /* Green */
-  font-style: italic;
+  @apply text-green-400 italic;
 }
 
 .dark .hljs-string,
 .dark .hljs-literal,
 .dark .hljs-doctag {
-  color: #ce9178; /* Light orange/coral */
+  @apply text-orange-300;
 }
 
 .dark .hljs-number,
 .dark .hljs-variable,
 .dark .hljs-template-variable,
 .dark .hljs-tag .hljs-attr {
-  color: #b5cea8; /* Light green */
+  @apply text-emerald-300;
 }
 
 .dark .hljs-type,
 .dark .hljs-class .hljs-title {
-  color: #4ec9b0; /* Bright cyan */
+  @apply text-cyan-400;
 }
 
 .dark .hljs-function,
 .dark .hljs-built_in,
 .dark .hljs-builtin-name {
-  color: #dcdcaa; /* Light yellow */
+  @apply text-yellow-300;
 }
 
 .dark .hljs-attr {
-  color: #9cdcfe; /* Light blue */
+  @apply text-sky-300;
 }
 
 .dark .hljs-attribute {
-  color: #ff6b6b; /* Bright red */
+  @apply text-red-400;
 }
 
 .dark .hljs-meta,
 .dark .hljs-meta-keyword {
-  color: #569cd6; /* Bright blue */
+  @apply text-blue-400;
 }
 
 .dark .hljs-subst {
-  color: #d4d4d4; /* Light gray */
+  @apply text-gray-300;
 }
 
 .dark .hljs-symbol,
 .dark .hljs-bullet,
 .dark .hljs-link {
-  color: #4fc1ff; /* Bright cyan */
+  @apply text-cyan-400;
 }
 
 .dark .hljs-emphasis {
-  font-style: italic;
+  @apply italic;
 }
 
 /* Additional dark mode improvements */
 .dark .hljs {
-  background: transparent !important;
-  color: #d4d4d4;
+  @apply bg-transparent text-gray-300;
 }
 
 .dark .hljs-addition {
-  color: #b5cea8;
-  background-color: #033416;
+  @apply text-emerald-300 bg-emerald-950;
 }
 
 .dark .hljs-deletion {
-  color: #ff6b6b;
-  background-color: #4a1818;
+  @apply text-red-400 bg-red-950;
 }
 
 .dark .hljs-meta-string {
-  color: #ce9178;
+  @apply text-orange-300;
 }
 
 .dark .hljs-regexp {
-  color: #d16969;
+  @apply text-rose-400;
 }
 
 .markdown-content blockquote {
@@ -388,13 +381,16 @@ button {
 }
 
 .copy-button {
-  @apply p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 
-         rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200
+  @apply p-2 transition-all duration-200
          opacity-0 flex items-center justify-center;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
-.markdown-content pre {
-  @apply relative;
+.copy-button:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
 }
 
 .markdown-content pre:hover .copy-button {
@@ -402,7 +398,9 @@ button {
 }
 
 .copy-button.copied {
-  @apply bg-green-500 dark:bg-green-600 text-white opacity-100;
+  @apply opacity-100;
+  background-color: var(--color-accent) !important;
+  color: var(--color-bg) !important;
 }
 
 .copy-button svg {
@@ -437,7 +435,8 @@ mark {
 }
 
 /* Code blocks should always have a border regardless of config */
-.code-block, .markdown-content pre {
+.code-block,
+.markdown-content pre {
   border-width: 1px !important;
   /* Ensure code blocks respect container width */
   box-sizing: border-box;
@@ -510,47 +509,19 @@ button {
 
 /* Dark mode support for ScrollFade */
 .dark .scroll-fade-start {
-  background: linear-gradient(
-    to bottom,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%,
-    rgba(17, 24, 39, 0) 100%
-  );
+  background: linear-gradient(to bottom, rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%, rgba(17, 24, 39, 0) 100%);
 }
 
 .dark .scroll-fade-end {
-  background: linear-gradient(
-    to top,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%,
-    rgba(17, 24, 39, 0) 100%
-  );
+  background: linear-gradient(to top, rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%, rgba(17, 24, 39, 0) 100%);
 }
 
 .dark .scroll-fade-horizontal .scroll-fade-start {
-  background: linear-gradient(
-    to right,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%,
-    rgba(17, 24, 39, 0) 100%
-  );
+  background: linear-gradient(to right, rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%, rgba(17, 24, 39, 0) 100%);
 }
 
 .dark .scroll-fade-horizontal .scroll-fade-end {
-  background: linear-gradient(
-    to left,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%,
-    rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%,
-    rgba(17, 24, 39, 0) 100%
-  );
+  background: linear-gradient(to left, rgba(17, 24, 39, calc(var(--fade-intensity) * 1)) 0%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.8)) 30%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.6)) 60%, rgba(17, 24, 39, calc(var(--fade-intensity) * 0.3)) 90%, rgba(17, 24, 39, 0) 100%);
 }
 
 /* Print Styles for PDF Export */
@@ -560,7 +531,7 @@ button {
     margin: 1cm 2cm;
     size: A4;
   }
-  
+
   /* Hide specific UI elements but keep content */
   nav:not(.markdown-content nav),
   aside,
@@ -580,12 +551,12 @@ button {
   .not-found {
     display: none !important;
   }
-  
+
   /* Hide all buttons except those inside markdown content */
   button:not(.markdown-content button) {
     display: none !important;
   }
-  
+
   /* Show only main content */
   body {
     background: white !important;
@@ -596,13 +567,13 @@ button {
     margin: 0 !important;
     padding: 0 !important;
   }
-  
+
   /* Root container */
   #root {
     background: white !important;
     color: black !important;
   }
-  
+
   /* Main content area */
   main,
   .main-content,
@@ -616,21 +587,21 @@ button {
     box-shadow: none !important;
     border: none !important;
   }
-  
+
   /* Ensure all containers have white background */
   div,
   section,
   article {
     background: white !important;
   }
-  
+
   /* Force visibility of content */
   .prose,
   .prose * {
     color: black !important;
     background: white !important;
   }
-  
+
   /* Typography for print */
   h1 {
     font-size: 24pt !important;
@@ -639,7 +610,7 @@ button {
     page-break-after: avoid !important;
     color: black !important;
   }
-  
+
   h2 {
     font-size: 20pt !important;
     font-weight: bold !important;
@@ -647,7 +618,7 @@ button {
     page-break-after: avoid !important;
     color: black !important;
   }
-  
+
   h3 {
     font-size: 16pt !important;
     font-weight: bold !important;
@@ -655,15 +626,17 @@ button {
     page-break-after: avoid !important;
     color: black !important;
   }
-  
-  h4, h5, h6 {
+
+  h4,
+  h5,
+  h6 {
     font-size: 14pt !important;
     font-weight: bold !important;
     margin: 12pt 0 6pt 0 !important;
     page-break-after: avoid !important;
     color: black !important;
   }
-  
+
   p {
     font-size: 12pt !important;
     line-height: 1.4 !important;
@@ -672,20 +645,21 @@ button {
     orphans: 3 !important;
     widows: 3 !important;
   }
-  
+
   /* Lists */
-  ul, ol {
+  ul,
+  ol {
     margin: 8pt 0 8pt 20pt !important;
     padding: 0 !important;
   }
-  
+
   li {
     font-size: 12pt !important;
     line-height: 1.4 !important;
     margin: 4pt 0 !important;
     color: black !important;
   }
-  
+
   /* Code blocks */
   pre {
     background: #f5f5f5 !important;
@@ -700,7 +674,7 @@ button {
     word-wrap: break-word !important;
     page-break-inside: avoid !important;
   }
-  
+
   code {
     font-family: var(--font-mono) !important;
     font-size: 10pt !important;
@@ -709,7 +683,7 @@ button {
     border-radius: 2pt !important;
     color: black !important;
   }
-  
+
   /* Tables */
   table {
     width: 100% !important;
@@ -717,20 +691,21 @@ button {
     margin: 8pt 0 !important;
     page-break-inside: avoid !important;
   }
-  
-  th, td {
+
+  th,
+  td {
     border: 1px solid #ddd !important;
     padding: 6pt 8pt !important;
     text-align: left !important;
     font-size: 11pt !important;
     color: black !important;
   }
-  
+
   th {
     background: #f5f5f5 !important;
     font-weight: bold !important;
   }
-  
+
   /* Blockquotes */
   blockquote {
     border-left: 3pt solid #ddd !important;
@@ -739,7 +714,7 @@ button {
     font-style: italic !important;
     color: #555 !important;
   }
-  
+
   /* Images */
   img {
     max-width: 100% !important;
@@ -747,30 +722,37 @@ button {
     page-break-inside: avoid !important;
     margin: 8pt 0 !important;
   }
-  
+
   /* Links */
   a {
     color: black !important;
     text-decoration: underline !important;
   }
-  
+
   /* Page breaks */
   .page-break {
     page-break-before: always !important;
   }
-  
+
   /* Avoid breaking these elements */
-  h1, h2, h3, h4, h5, h6,
-  pre, blockquote, table,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  pre,
+  blockquote,
+  table,
   .avoid-break {
     page-break-inside: avoid !important;
   }
-  
+
   /* Print-specific utilities */
   .print-only {
     display: block !important;
   }
-  
+
   .no-print {
     display: none !important;
   }

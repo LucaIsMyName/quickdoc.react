@@ -63,9 +63,9 @@ export const SidebarWidthControl = ({
   return (
     <div
       className={`
-        hidden md:flex absolute top-0 right-0 w-1 h-full cursor-col-resize
+        hidden md:flex absolute top-0 right-0 h-full cursor-col-resize
         transition-all duration-200 z-50
-        ${isHovered || isDragging ? 'bg-blue-500 dark:bg-blue-400 w-2' : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'}
+        ${isHovered || isDragging ? 'bg-blue-500 dark:bg-blue-400 w-2' : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 w-1'}
       `}
       onMouseDown={handleMouseDown}
       onMouseEnter={() => setIsHovered(true)}

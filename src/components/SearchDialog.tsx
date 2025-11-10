@@ -161,7 +161,7 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search documentation..."
-            className="flex h-12 w-full bg-transparent py-3 text-sm outline-none theme-text placeholder:theme-text-secondary disabled:cursor-not-allowed disabled:opacity-50 theme-input"
+            className="flex h-12 w-full bg-transparent py-2 text-sm !outline-none !border-none !focus:outline-none !focus:border-none theme-text placeholder:theme-text-secondary disabled:cursor-not-allowed disabled:opacity-50 theme-input"
             onKeyDown={(e) => {
               if (e.key === 'Escape') {
                 onClose();

@@ -1,3 +1,5 @@
+import { Example } from "../components/example";
+
 # Markdown Guide
 
 A comprehensive guide to writing documentation with Markdown in QuickDoc.
@@ -158,25 +160,19 @@ function greet(name) {
 
 **Supported languages**: javascript, typescript, python, java, html, css, bash, json, markdown, and many more.
 
-**Note**: QuickDoc automatically adds a copy button to all code blocks!
+#### MDX
 
-### Blockquotes
+QuickDoc also supports MDX (Markdown + JSX) for more complex components:
 
-Create blockquotes using `>`:
+```mdx
+import { Button } from "@/components/ui/button";
 
-```markdown
-> This is a blockquote.
-> It can span multiple lines.
->
-> You can even have multiple paragraphs.
+<Button>Click me</Button>
 ```
 
 Result:
 
-> This is a blockquote.
-> It can span multiple lines.
->
-> You can even have multiple paragraphs.
+<Example />
 
 ### Horizontal Rules
 

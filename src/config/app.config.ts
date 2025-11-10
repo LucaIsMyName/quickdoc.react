@@ -1,4 +1,4 @@
-import type { TailwindColorName } from '../utils/colorStyles';
+import type { TailwindColorName } from "../utils/colorStyles";
 
 export interface AppConfig {
   // Site metadata
@@ -32,9 +32,8 @@ export interface AppConfig {
 
   // Style tokens
   theme: {
-    colors: 
-      // New simplified color system
-      | {
+    colors: // New simplified color system
+    | {
           accent: TailwindColorName;
           light: TailwindColorName;
           dark: TailwindColorName;
@@ -94,10 +93,10 @@ export interface AppConfig {
 
 export const defaultConfig: AppConfig = {
   site: {
-    title: 'QuickDoc',
-    description: 'Fast and beautiful documentation',
-    author: 'Your Name',
-    url: 'https://lucamack.at',
+    title: "QuickDoc",
+    description: "Fast and beautiful documentation",
+    author: "Your Name",
+    url: "https://lucamack.at",
   },
   search: {
     enableFuzzySearch: false, // Default to plain search
@@ -120,34 +119,18 @@ export const defaultConfig: AppConfig = {
       showOnTop: false,
       showOnBottom: true,
     },
-    // Optional: Specify custom file order (by slug)
-    // If not specified, files are sorted alphabetically
-    // Example: fileOrder: ['quick-start', 'quickdoc', 'markdown-guide', 'license']
     fileOrder: ["quick-start", "quickdoc", "markdown-guide", "license", "changelog"],
   },
   theme: {
+    isSidebarTransparent: false,
     colors: {
       accent: "sky",
       light: "gray",
       dark: "gray",
     },
-    isSidebarTransparent: true,
-    // Legacy colors (commented out, will be automatically migrated)
-    // colors: {
-    //   primary: "#111827",
-    //   secondary: "#374151",
-    //   background: "#ffffff",
-    //   backgroundSecondary: "#f9fafb",
-    //   text: "#111827",
-    //   textSecondary: "#6b7280",
-    //   border: "#e5e7eb",
-    //   accent: "#111827",
-    //   activeBackground: "#f3f4f6",
-    //   activeText: "#111827",
-    // },
     fonts: {
-      sans: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
-      mono: "'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace",
+      sans: "'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+      mono: "'Geist Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace",
       size: "medium",
       // Google Fonts: Work Sans + JetBrains Mono
       googleFonts: {
@@ -160,8 +143,8 @@ export const defaultConfig: AppConfig = {
       compact: false,
     },
     border: {
-      radius: "none",
-      size: 1,
+      radius: "sm",
+      size: 1
     },
   },
   content: {
@@ -172,5 +155,4 @@ export const defaultConfig: AppConfig = {
     align: "left",
     spacing: "compact",
   },
-  
 };

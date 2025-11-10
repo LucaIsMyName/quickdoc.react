@@ -107,7 +107,6 @@ const generateSidebarNumbers = (navigation: NavigationItem[], config: AppConfig)
           h3Counter: 0, // Reset for this section's subsections
           h4Counter: 0 
         };
-        console.log(`DEBUG: Processing subsections for "${item.title}" with h2Counter=${h2Counter}`);
         numberSubsections(item.subsections, counterSnapshot, breakingPointLevel, numbers);
       }
     }
@@ -144,7 +143,6 @@ const numberSubsections = (
       if (sub.level === 3) {
         counters.h3Counter++;
         number = `${counters.h2Counter}.${counters.h3Counter}.`;
-        console.log(`DEBUG: H3 "${sub.title}" using h2Counter=${counters.h2Counter} -> number="${number}"`);
       } else if (sub.level === 4) {
         counters.h4Counter++;
         number = `${counters.h2Counter}.${counters.h3Counter}.${counters.h4Counter}.`;
@@ -194,9 +192,7 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
   
   // Generate sidebar numbers with proper dependencies
   const sidebarNumbers = useMemo(() => {
-    const numbers = generateSidebarNumbers(navigation, config);
-    console.log('DEBUG: Final sidebarNumbers object:', numbers);
-    return numbers;
+    return generateSidebarNumbers(navigation, config);
   }, [navigation, config.navigation.enableNumberedSidebar, config.navigation.breakingPoint, config.navigation.showH1InSidebar]);
 
   useEffect(() => {
@@ -219,7 +215,7 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
       />
 
       {/* Sidebar */}
-      <aside
+      <aside 
         ref={sidebarRef}
         style={{ width: `${width}px` }}
         className={`
@@ -229,6 +225,7 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
           overflow-y-auto overflow-x-hidden z-40 transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0 shadow-xl" : "-translate-x-full md:translate-x-0 shadow-none"}
           ${config.theme.isSidebarTransparent ? 'hover:sidebar-container' : ''}
+          relative
         `}>
         <div className="p-2 h-full flex flex-col">
           <ScrollFade 
