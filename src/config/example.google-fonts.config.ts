@@ -16,6 +16,7 @@ export const googleFontsConfig: Pick<AppConfig, 'theme' | 'navigation'> = {
       max: "350px",
     },
     enableUserSidebarWidthChange: false,
+    enableNumberedSidebar: false, // Disable numbered sidebar in example
     pagination: {
       enabled: true,
       showOnTop: false,

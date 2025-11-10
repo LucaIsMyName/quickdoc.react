@@ -170,6 +170,7 @@ export const defaultConfig: AppConfig = {
 - **`border.radius`** - Global border radius (`none`, `sm`, `md`, `xl`)
 - **`border.size`** - Border thickness (`none`, `1`, `2`, `3`) - also affects inline code borders
 - **`enableUserSidebarWidthChange`** - Allow users to resize sidebar (`true`, `false`)
+- **`enableNumberedSidebar`** - Enable hierarchical numbering for sidebar items (`true`, `false`)
 - **`pagination.enabled`** - Enable pagination between sections (`true`, `false`)
 - **`pagination.showOnTop`** - Show pagination at top of content (`true`, `false`)
 - **`pagination.showOnBottom`** - Show pagination at bottom of content (`true`, `false`)
@@ -185,6 +186,40 @@ navigation: {
   // Files not in the list will appear after, sorted alphabetically
 }
 ```
+
+### Numbered Sidebar
+
+Enable hierarchical numbering for sidebar navigation items:
+
+```typescript
+navigation: {
+  enableNumberedSidebar: true, // Enable numbered sidebar items
+  breakingPoint: 'h2',        // Start numbering from this level
+}
+```
+
+**Numbering Examples:**
+
+- **Breaking point `h2`** (default):
+  ```
+  1. First Section
+     1.1. First Subsection
+     1.2. Second Subsection
+  2. Second Section
+     2.1. Another Subsection
+  ```
+
+- **Breaking point `h1`**:
+  ```
+  1. Document Title
+  2. First Section
+     2.1. First Subsection
+     2.2. Second Subsection
+  3. Second Section
+     3.1. Another Subsection
+  ```
+
+The numbering automatically adapts to your breaking point configuration and supports up to 4 levels deep (e.g., `2.3.4.1.`).
 
 ## 📝 Writing Documentation
 

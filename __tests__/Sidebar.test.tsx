@@ -23,6 +23,7 @@ const mockConfig: AppConfig = {
       max: '400px',
     },
     enableUserSidebarWidthChange: false,
+    enableNumberedSidebar: false,
     pagination: {
       enabled: true,
       showOnTop: false,
@@ -32,17 +33,11 @@ const mockConfig: AppConfig = {
   },
   theme: {
     colors: {
-      primary: '#111827',
-      secondary: '#374151',
-      background: '#ffffff',
-      backgroundSecondary: '#f9fafb',
-      text: '#111827',
-      textSecondary: '#6b7280',
-      border: '#e5e7eb',
-      accent: '#111827',
-      activeBackground: '#f3f4f6',
-      activeText: '#111827',
+      accent: 'blue',
+      light: 'gray',
+      dark: 'gray',
     },
+    isSidebarTransparent: false,
     fonts: {
       sans: 'Geist, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif',
       mono: 'Geist Mono, Courier New, monospace',
@@ -63,6 +58,9 @@ const mockConfig: AppConfig = {
     copyCodeButton: true,
     align: 'left',
     spacing: 'normal',
+  },
+  search: {
+    enableFuzzySearch: false,
   },
   pagesPath: '/pages',
 };
@@ -199,5 +197,316 @@ describe('Sidebar', () => {
     // Check that H3 subsections have proper indentation
     const h3Subsections = container.querySelectorAll('.ml-6');
     expect(h3Subsections.length).toBeGreaterThan(0);
+  });
+
+  describe('Sidebar Numbering System', () => {
+    const numberedConfig: AppConfig = {
+      ...mockConfig,
+      navigation: {
+        ...mockConfig.navigation,
+        enableNumberedSidebar: true,
+        expandAllSections: true,
+      },
+    };
+
+    const complexNavigation: NavigationItem[] = [
+      {
+        id: 'section-0',
+        title: 'Introduction',
+        level: 1,
+        slug: 'introduction',
+        subsections: [],
+      },
+      {
+        id: 'section-1',
+        title: 'Basic Syntax',
+        level: 2,
+        slug: 'basic-syntax',
+        subsections: [
+          {
+            id: 'heading-0',
+            title: 'Headings',
+            level: 3,
+            slug: 'headings',
+          },
+          {
+            id: 'heading-1',
+            title: 'Paragraphs',
+            level: 3,
+            slug: 'paragraphs',
+          },
+        ],
+      },
+      {
+        id: 'section-2',
+        title: 'Best Practices',
+        level: 2,
+        slug: 'best-practices',
+        subsections: [
+          {
+            id: 'heading-2',
+            title: 'Document Structure',
+            level: 3,
+            slug: 'document-structure',
+          },
+          {
+            id: 'heading-3',
+            title: 'Writing Tips',
+            level: 3,
+            slug: 'writing-tips',
+          },
+          {
+            id: 'heading-4',
+            title: 'Code Examples',
+            level: 3,
+            slug: 'code-examples',
+          },
+          {
+            id: 'heading-5',
+            title: 'Avoiding Common Mistakes',
+            level: 3,
+            slug: 'avoiding-common-mistakes',
+            subsections: [
+              {
+                id: 'heading-6',
+                title: "Don't skip heading levels",
+                level: 4,
+                slug: 'dont-skip-heading-levels',
+              },
+              {
+                id: 'heading-7',
+                title: "Don't forget blank lines",
+                level: 4,
+                slug: 'dont-forget-blank-lines',
+              },
+              {
+                id: 'heading-8',
+                title: "Don't use headings in code blocks",
+                level: 4,
+                slug: 'dont-use-headings-in-code-blocks',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'section-3',
+        title: 'Advanced Features',
+        level: 2,
+        slug: 'advanced-features',
+        subsections: [
+          {
+            id: 'heading-9',
+            title: 'Task Lists',
+            level: 3,
+            slug: 'task-lists',
+          },
+        ],
+      },
+    ];
+
+    it('numbers H2 sections correctly (1., 2., 3.)', () => {
+      render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={complexNavigation}
+            currentSection="basic-syntax"
+            isOpen={true}
+            onClose={() => {}}
+            config={numberedConfig}
+          />
+        </BrowserRouter>
+      );
+
+      // Check main section numbers (exact matches to avoid matching subsections)
+      expect(screen.getByText(/^1\.$/)).toBeTruthy(); // Basic Syntax
+      expect(screen.getByText(/^2\.$/)).toBeTruthy(); // Best Practices
+      expect(screen.getByText(/^3\.$/)).toBeTruthy(); // Advanced Features
+    });
+
+    it('numbers H3 subsections correctly (1.1., 1.2., 2.1., 2.2.)', () => {
+      render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={complexNavigation}
+            currentSection="basic-syntax"
+            isOpen={true}
+            onClose={() => {}}
+            config={numberedConfig}
+          />
+        </BrowserRouter>
+      );
+
+      // Check H3 subsection numbers under section 1 (exact matches)
+      expect(screen.getByText(/^1\.1\.$/)).toBeTruthy(); // Headings
+      expect(screen.getByText(/^1\.2\.$/)).toBeTruthy(); // Paragraphs
+    });
+
+    it('numbers H4 sub-subsections correctly (2.4.1., 2.4.2., 2.4.3.)', () => {
+      render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={complexNavigation}
+            currentSection="best-practices"
+            isOpen={true}
+            onClose={() => {}}
+            config={numberedConfig}
+          />
+        </BrowserRouter>
+      );
+
+      // Check H4 sub-subsection numbers under section 2.4 (exact matches)
+      expect(screen.getByText(/^2\.4\.1\.$/)).toBeTruthy(); // Don't skip heading levels
+      expect(screen.getByText(/^2\.4\.2\.$/)).toBeTruthy(); // Don't forget blank lines
+      expect(screen.getByText(/^2\.4\.3\.$/)).toBeTruthy(); // Don't use headings in code blocks
+    });
+
+    it('maintains correct numbering across multiple sections', () => {
+      render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={complexNavigation}
+            currentSection="best-practices"
+            isOpen={true}
+            onClose={() => {}}
+            config={numberedConfig}
+          />
+        </BrowserRouter>
+      );
+
+      // Section 2 subsections should be numbered 2.1, 2.2, 2.3, 2.4
+      expect(screen.getByText(/^2\.1\.$/)).toBeTruthy(); // Document Structure (exact match)
+      expect(screen.getByText(/^2\.2\.$/)).toBeTruthy(); // Writing Tips (exact match)
+      expect(screen.getByText(/^2\.3\.$/)).toBeTruthy(); // Code Examples (exact match)
+      // 2.4. will match multiple times (2.4., 2.4.1., 2.4.2., 2.4.3.), so use getAllByText
+      const matches = screen.getAllByText(/2\.4\./);
+      expect(matches.length).toBeGreaterThan(0); // Should find at least the parent 2.4.
+    });
+
+    it('does not show numbers when enableNumberedSidebar is false', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={complexNavigation}
+            currentSection="basic-syntax"
+            isOpen={true}
+            onClose={() => {}}
+            config={mockConfig}
+          />
+        </BrowserRouter>
+      );
+
+      // Check that no numbering spans exist
+      const numberSpans = container.querySelectorAll('.font-mono.text-xs.opacity-75');
+      expect(numberSpans.length).toBe(0);
+    });
+
+    it('shows numbers when enableNumberedSidebar is true', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={complexNavigation}
+            currentSection="basic-syntax"
+            isOpen={true}
+            onClose={() => {}}
+            config={numberedConfig}
+          />
+        </BrowserRouter>
+      );
+
+      // Check that numbering spans exist
+      const numberSpans = container.querySelectorAll('.font-mono.text-xs.opacity-75');
+      expect(numberSpans.length).toBeGreaterThan(0);
+    });
+
+    it('correctly numbers all H3 subsections under section 3 (3.1., 3.2., 3.3., 3.4.)', () => {
+      render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={complexNavigation}
+            currentSection="advanced-features"
+            isOpen={true}
+            onClose={() => {}}
+            config={numberedConfig}
+          />
+        </BrowserRouter>
+      );
+
+      // Section 3 should have number 3.
+      expect(screen.getByText(/^3\.$/)).toBeTruthy();
+      
+      // Its first subsection should be 3.1., not 7.1. or any other incorrect number
+      expect(screen.getByText(/^3\.1\.$/)).toBeTruthy();
+    });
+
+    it('verifies complete numbering sequence for section 2 and all its subsections', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={complexNavigation}
+            currentSection="best-practices"
+            isOpen={true}
+            onClose={() => {}}
+            config={numberedConfig}
+          />
+        </BrowserRouter>
+      );
+
+      // Get all number spans
+      const numberSpans = Array.from(container.querySelectorAll('.font-mono.text-xs.opacity-75'));
+      const numbers = numberSpans.map(span => span.textContent?.trim() || '');
+      
+      // Should contain the complete sequence for section 2
+      expect(numbers).toContain('2.');
+      expect(numbers).toContain('2.1.');
+      expect(numbers).toContain('2.2.');
+      expect(numbers).toContain('2.3.');
+      expect(numbers).toContain('2.4.');
+      expect(numbers).toContain('2.4.1.');
+      expect(numbers).toContain('2.4.2.');
+      expect(numbers).toContain('2.4.3.');
+      
+      // Should NOT contain incorrect numbers like 7.1., 5.3., etc.
+      expect(numbers).not.toContain('7.1.');
+      expect(numbers).not.toContain('5.3.');
+      expect(numbers).not.toContain('3.4.1.'); // This should be 2.4.1.
+    });
+
+    it('ensures counters reset properly between main sections', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={complexNavigation}
+            currentSection="basic-syntax"
+            isOpen={true}
+            onClose={() => {}}
+            config={numberedConfig}
+          />
+        </BrowserRouter>
+      );
+
+      // Get all number spans
+      const numberSpans = Array.from(container.querySelectorAll('.font-mono.text-xs.opacity-75'));
+      const numbers = numberSpans.map(span => span.textContent?.trim() || '');
+      
+      // Section 1 subsections should be 1.1, 1.2
+      expect(numbers).toContain('1.1.');
+      expect(numbers).toContain('1.2.');
+      
+      // Section 2 subsections should start fresh at 2.1, not continue from 1.2
+      expect(numbers).toContain('2.1.');
+      
+      // Should not have incorrect numbers
+      expect(numbers.filter(n => n === '1.3.').length).toBe(0);
+    });
   });
 });

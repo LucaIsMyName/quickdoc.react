@@ -21,6 +21,7 @@ export interface AppConfig {
       max: string;
     };
     enableUserSidebarWidthChange: boolean;
+    enableNumberedSidebar: boolean;
     pagination: {
       enabled: boolean;
       showOnTop: boolean;
@@ -98,17 +99,22 @@ export const defaultConfig: AppConfig = {
     author: 'Your Name',
     url: 'https://lucamack.at',
   },
+  search: {
+    enableFuzzySearch: false, // Default to plain search
+  },
+  pagesPath: "/pages",
   navigation: {
-    breakingPoint: "h2",
+    breakingPoint: "h2", // Makes all H2 Content a seperate page
     showH1InSidebar: false,
     collapsible: false,
-    expandAllSections: false, // Keep all sidebar sections collapsed by default
+    expandAllSections: true, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
       min: "200px",
       default: "280px",
       max: "350px",
     },
     enableUserSidebarWidthChange: true,
+    enableNumberedSidebar: true, // Enable numbered sidebar items
     pagination: {
       enabled: false,
       showOnTop: false,
@@ -121,11 +127,11 @@ export const defaultConfig: AppConfig = {
   },
   theme: {
     colors: {
-      accent: "blue",
+      accent: "sky",
       light: "gray",
       dark: "gray",
     },
-    isSidebarTransparent: false,
+    isSidebarTransparent: true,
     // Legacy colors (commented out, will be automatically migrated)
     // colors: {
     //   primary: "#111827",
@@ -144,11 +150,11 @@ export const defaultConfig: AppConfig = {
       mono: "'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace",
       size: "medium",
       // Google Fonts: Work Sans + JetBrains Mono
-      // googleFonts: {
-      //   sans: "Work Sans:300,400,500,600,700",
-      //   mono: "JetBrains Mono:400,500,600,700",
-      //   preconnect: true,
-      // },
+      googleFonts: {
+        sans: "WoGeist:300,400,500,600,700",
+        mono: "Geist Mono:400,500,600,700",
+        preconnect: true,
+      },
     },
     spacing: {
       compact: false,
@@ -166,8 +172,5 @@ export const defaultConfig: AppConfig = {
     align: "left",
     spacing: "compact",
   },
-  search: {
-    enableFuzzySearch: false, // Default to plain search
-  },
-  pagesPath: "/pages",
+  
 };

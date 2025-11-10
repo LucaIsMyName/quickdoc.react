@@ -4,6 +4,10 @@ Changelog for the QuickDoc React versions.
 
 ## v0.1.7
 
+### Features
+
+- Implemented `config.enableNumberedSidebar`
+
 ## v0.1.6
 
 ### Features

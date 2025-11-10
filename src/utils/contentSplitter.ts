@@ -113,9 +113,11 @@ export const splitContentBySections = (
 };
 
 /**
- * Extract subsections (headings below breaking point) from content
- * Excludes headings inside code blocks
+ * Extract subsections (headings below the breaking point level)
  */
+// Global counter to ensure unique IDs across all sections
+let globalHeadingCounter = 0;
+
 const extractSubsections = (content: string, breakLevel: number): NavigationItem[] => {
   const items: NavigationItem[] = [];
   const lines = content.split('\n');
@@ -147,7 +149,7 @@ const extractSubsections = (content: string, breakLevel: number): NavigationItem
           .replace(/^-|-$/g, '');
         
         items.push({
-          id: `heading-${items.length}`,
+          id: `heading-${globalHeadingCounter++}`, // FIXED: Use global counter for unique IDs
           title,
           level,
           slug,
