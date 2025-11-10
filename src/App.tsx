@@ -319,7 +319,7 @@ function App() {
                 padding: 'var(--content-margin-y)',
               }}
             >
-              <div className="max-w-4xl mx-4 md:mx-6 lg:mx-8 xl:mx-12 w-full">
+              <div className="w-full mx-2 md:mx-6 md:max-w-4xl lg:mx-8 xl:mx-12">
                 {currentFile && currentSection ? (
                   <>
                     {/* Pagination - Top */}

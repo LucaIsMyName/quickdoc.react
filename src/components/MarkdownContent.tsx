@@ -115,7 +115,7 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
   const html = parseMarkdown(content);
 
   return (
-    <div style={{ maxWidth: config.content.maxWidth }} className="relative">
+    <div className="relative w-full">
       {/* Export Button - positioned to align with first heading */}
       {exportProps && (
         <div className="fixed bottom-4 right-4 no-print z-10">
@@ -129,10 +129,7 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
       
       <div
         ref={contentRef}
-        className="markdown-content prose prose-gray dark:prose-invert max-w-none"
-        style={{ 
-          maxWidth: config.content.maxWidth,
-        }}
+        className="markdown-content prose prose-gray dark:prose-invert max-w-none w-full"
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>
