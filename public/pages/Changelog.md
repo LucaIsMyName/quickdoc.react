@@ -2,6 +2,12 @@
 
 Changelog for the QuickDoc React versions.
 
+### v0.1.9
+
+### Bugfixes
+
+- fixed `<Sidebar />` and `<App />` Layout issues on mobile
+
 ### v0.1.8
 
 ### Bugfixes

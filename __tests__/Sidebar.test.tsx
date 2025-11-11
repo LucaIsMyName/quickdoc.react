@@ -509,4 +509,133 @@ describe('Sidebar', () => {
       expect(numbers.filter(n => n === '1.3.').length).toBe(0);
     });
   });
+
+  describe('Mobile Sidebar Overlay', () => {
+    it('applies fixed positioning on mobile and sticky on desktop', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={mockNavigation}
+            currentSection="overview"
+            isOpen={true}
+            onClose={() => {}}
+            config={mockConfig}
+          />
+        </BrowserRouter>
+      );
+
+      const sidebar = container.querySelector('aside');
+      expect(sidebar).toBeTruthy();
+      
+      // Check positioning classes
+      expect(sidebar?.className).toContain('fixed');
+      expect(sidebar?.className).toContain('md:sticky');
+    });
+
+    it('applies w-0 on mobile and w-auto on desktop to not reserve flex space', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={mockNavigation}
+            currentSection="overview"
+            isOpen={false}
+            onClose={() => {}}
+            config={mockConfig}
+          />
+        </BrowserRouter>
+      );
+
+      const sidebar = container.querySelector('aside');
+      expect(sidebar).toBeTruthy();
+      
+      // Check width classes - w-0 on mobile, md:w-auto on desktop
+      expect(sidebar?.className).toContain('w-0');
+      expect(sidebar?.className).toContain('md:w-auto');
+    });
+
+    it('translates sidebar off-screen when closed on mobile', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={mockNavigation}
+            currentSection="overview"
+            isOpen={false}
+            onClose={() => {}}
+            config={mockConfig}
+          />
+        </BrowserRouter>
+      );
+
+      const sidebar = container.querySelector('aside');
+      expect(sidebar).toBeTruthy();
+      
+      // Should be translated off-screen on mobile, but visible on desktop
+      expect(sidebar?.className).toContain('-translate-x-full');
+      expect(sidebar?.className).toContain('md:translate-x-0');
+    });
+
+    it('translates sidebar on-screen when open', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={mockNavigation}
+            currentSection="overview"
+            isOpen={true}
+            onClose={() => {}}
+            config={mockConfig}
+          />
+        </BrowserRouter>
+      );
+
+      const sidebar = container.querySelector('aside');
+      expect(sidebar).toBeTruthy();
+      
+      // Should be on-screen when open
+      expect(sidebar?.className).toContain('translate-x-0');
+    });
+
+    it('shows overlay backdrop on mobile when sidebar is open', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={mockNavigation}
+            currentSection="overview"
+            isOpen={true}
+            onClose={() => {}}
+            config={mockConfig}
+          />
+        </BrowserRouter>
+      );
+
+      const overlay = container.querySelector('.fixed.inset-0.bg-black\\/50');
+      expect(overlay).toBeTruthy();
+      expect(overlay?.className).toContain('opacity-100');
+      expect(overlay?.className).toContain('pointer-events-auto');
+    });
+
+    it('hides overlay backdrop when sidebar is closed', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={mockNavigation}
+            currentSection="overview"
+            isOpen={false}
+            onClose={() => {}}
+            config={mockConfig}
+          />
+        </BrowserRouter>
+      );
+
+      const overlay = container.querySelector('.fixed.inset-0.bg-black\\/50');
+      expect(overlay).toBeTruthy();
+      expect(overlay?.className).toContain('opacity-0');
+      expect(overlay?.className).toContain('pointer-events-none');
+    });
+  });
 });

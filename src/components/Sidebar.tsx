@@ -221,7 +221,7 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
           width: `${width}px`,
         }}
         className={`
-          absolute md:sticky top-[40px] left-0 h-[calc(100vh-40px)]
+          fixed md:sticky top-[40px] left-0 h-[calc(100vh-40px)]
           w-0 md:w-auto
           ${config.theme.isSidebarTransparent ? 'bg-transparent' : 'theme-bg'}
           ${config.theme.isSidebarTransparent ? '' : 'sidebar-container'}
