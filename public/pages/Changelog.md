@@ -2,20 +2,20 @@
 
 Changelog for the QuickDoc React versions.
 
-### v0.1.9
+## V0.1.9
 
 ### Bugfixes
 
 - fixed `<Sidebar />` and `<App />` Layout issues on mobile
 - `copyCodeBlock` now works with style theme
 
-### v0.1.8
+## V0.1.8
 
 ### Issues
 
 - MDX still buggy / not working
 
-## v0.1.7
+## V0.1.7
 
 ### Features
 
@@ -30,7 +30,7 @@ Changelog for the QuickDoc React versions.
 - fixed `<Search />` generic styling by adding border-radius and border-size on `config.theme.border` & `border.theme.radius` keys
 - fixed `<SidebarWidthControl />` position absolute issue to position fixed style solution
 
-## v0.1.6
+## V0.1.6
 
 ### Features
 
@@ -46,20 +46,20 @@ Changelog for the QuickDoc React versions.
 - fixed `<ScrollFade />` blur issue (by removing the blur)
 
 
-## v0.1.5
+## V0.1.5
 
 ### Bugfixes
 
 - fixed `<ExportButton />` placement
 
-## v0.1.4
+## V0.1.4
 
 ### Features
 
 - Added print styles for PDF export
 - Added MD Export
 
-## v0.1.3
+## V0.1.3
 
 ### Features
 
@@ -72,7 +72,7 @@ Changelog for the QuickDoc React versions.
 - no constant re-render anymore
 - Fixed `<Sidebar />` inner sub-items width issue - overlow-x
 
-## v0.1.0
+## V0.1.0
 
 Initial release
 
