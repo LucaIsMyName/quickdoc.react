@@ -385,7 +385,10 @@ button {
          opacity-0 flex items-center justify-center;
   background-color: var(--color-bg-secondary);
   color: var(--color-accent);
+  border-width: var(--border-width);
+  border-style: solid;
   border-color: var(--color-accent);
+  border-radius: var(--border-radius-small);
 }
 
 .copy-button:hover {

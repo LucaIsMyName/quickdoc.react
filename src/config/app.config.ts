@@ -152,7 +152,7 @@ export const defaultConfig: AppConfig = {
     enableMDX: true,
     syntaxHighlighting: true,
     copyCodeButton: true,
-    align: "left",
+    align: "center",
     spacing: "compact",
   },
 };

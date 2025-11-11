@@ -7,12 +7,13 @@ Changelog for the QuickDoc React versions.
 ### Bugfixes
 
 - fixed `<Sidebar />` and `<App />` Layout issues on mobile
+- `copyCodeBlock` now works with style theme
 
 ### v0.1.8
 
-### Bugfixes
+### Issues
 
-- fixed `<Example />` Compoents and MDX loading
+- MDX still buggy / not working
 
 ## v0.1.7
 
