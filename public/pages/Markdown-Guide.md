@@ -320,24 +320,6 @@ Paragraph text
 - List item
 ```
 
-#### Don't use headings in code blocks
-
-Code examples showing Markdown syntax should be in code blocks, not actual headings:
-
-❌ Bad:
-```markdown
-Here's how to make a heading:
-## Like This
-```
-
-✅ Good:
-````markdown
-Here's how to make a heading:
-```markdown
-## Like This
-```
-````
-
 ## Advanced Features
 
 ### Task Lists

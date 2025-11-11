@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { MarkdownContent } from '../src/components/MarkdownContent';
 import type { AppConfig } from '../src/config/app.config';
 
@@ -73,7 +73,7 @@ describe('MarkdownContent', () => {
   });
 
   describe('Copy Button Theming', () => {
-    it('renders copy button with theme border radius and size', () => {
+    it('renders copy button with theme border radius and size', async () => {
       const content = '```javascript\nconst test = "hello";\n```';
       
       const { container } = render(
@@ -81,16 +81,16 @@ describe('MarkdownContent', () => {
       );
 
       // Wait for the button to be added (it's added in useEffect)
-      setTimeout(() => {
+      await waitFor(() => {
         const copyButton = container.querySelector('.copy-button');
         expect(copyButton).toBeTruthy();
         
         // Check that the button has the copy-button class (which applies CSS variables)
         expect(copyButton?.className).toContain('copy-button');
-      }, 100);
+      });
     });
 
-    it('applies different border radius based on config', () => {
+    it('applies different border radius based on config', async () => {
       const content = '```javascript\nconst test = "hello";\n```';
       
       // Test with large radius
@@ -109,16 +109,16 @@ describe('MarkdownContent', () => {
         <MarkdownContent content={content} config={largeRadiusConfig} />
       );
 
-      setTimeout(() => {
+      await waitFor(() => {
         const copyButton = container.querySelector('.copy-button');
         expect(copyButton).toBeTruthy();
         
         // The button should have the copy-button class which uses CSS variables
         expect(copyButton?.className).toContain('copy-button');
-      }, 100);
+      });
     });
 
-    it('applies no border when size is set to none', () => {
+    it('applies no border when size is set to none', async () => {
       const content = '```javascript\nconst test = "hello";\n```';
       
       const noBorderConfig = {
@@ -136,10 +136,10 @@ describe('MarkdownContent', () => {
         <MarkdownContent content={content} config={noBorderConfig} />
       );
 
-      setTimeout(() => {
+      await waitFor(() => {
         const copyButton = container.querySelector('.copy-button');
         expect(copyButton).toBeTruthy();
-      }, 100);
+      });
     });
 
     it('does not render copy button when copyCodeButton is disabled', () => {
@@ -176,19 +176,19 @@ describe('MarkdownContent', () => {
       expect(codeBlock).toBeTruthy();
     });
 
-    it('applies syntax highlighting when enabled', () => {
+    it('applies syntax highlighting when enabled', async () => {
       const content = '```javascript\nconst test = "hello";\n```';
       
       const { container } = render(
         <MarkdownContent content={content} config={mockConfig} />
       );
 
-      setTimeout(() => {
+      await waitFor(() => {
         const codeBlock = container.querySelector('pre code');
         expect(codeBlock).toBeTruthy();
         // Highlight.js adds classes to the code element
         expect(codeBlock?.className).toBeTruthy();
-      }, 100);
+      });
     });
   });
 });

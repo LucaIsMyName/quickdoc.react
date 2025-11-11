@@ -106,7 +106,7 @@ export const defaultConfig: AppConfig = {
     breakingPoint: "h2", // Makes all H2 Content a seperate page
     showH1InSidebar: false,
     collapsible: false,
-    expandAllSections: true, // Keep all sidebar sections collapsed by default
+    expandAllSections: false, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
       min: "200px",
       default: "280px",
@@ -124,8 +124,8 @@ export const defaultConfig: AppConfig = {
   theme: {
     isSidebarTransparent: false,
     colors: {
-      accent: "sky",
-      light: "gray",
+      accent: "blue",
+      light: "neutral",
       dark: "gray",
     },
     fonts: {
@@ -134,7 +134,7 @@ export const defaultConfig: AppConfig = {
       size: "medium",
       // Google Fonts: Work Sans + JetBrains Mono
       googleFonts: {
-        sans: "WoGeist:300,400,500,600,700",
+        sans: "Geist:300,400,500,600,700",
         mono: "Geist Mono:400,500,600,700",
         preconnect: true,
       },
@@ -144,7 +144,7 @@ export const defaultConfig: AppConfig = {
     },
     border: {
       radius: "sm",
-      size: 1
+      size: "none"
     },
   },
   content: {
@@ -152,7 +152,7 @@ export const defaultConfig: AppConfig = {
     enableMDX: true,
     syntaxHighlighting: true,
     copyCodeButton: true,
-    align: "center",
+    align: "left",
     spacing: "compact",
   },
 };
