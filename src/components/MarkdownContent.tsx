@@ -26,6 +26,12 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
 
   // Check if this is an MDX file
   const isMDXSection = file?.isMDX === true;
+  
+  // Debug logging
+  console.log(`[MarkdownContent] Rendering - isMDXSection: ${isMDXSection}, content length: ${content.length}`);
+  if (isMDXSection) {
+    console.log(`[MarkdownContent] MDX section content preview:`, content.substring(0, 200));
+  }
 
   useEffect(() => {
     if (!contentRef.current) return;
@@ -133,11 +139,31 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
         ref={contentRef}
         className="markdown-content prose prose-gray dark:prose-invert max-w-none w-full"
       >
-        {isMDXSection && file?.MDXComponent ? (
-          // MDX Section: Use pre-compiled component from Vite
-          <MDXProvider>
-            <file.MDXComponent />
-          </MDXProvider>
+        {isMDXSection ? (
+          // MDX Section: Check if this section has React components
+          content.includes('<') && (content.includes('Counter') || content.includes('Alert')) ? (
+            // This section has React components - use full MDX component (temporary)
+            <div>
+              <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded">
+                <p className="text-sm text-blue-700 dark:text-blue-300">
+                  ⚠️ This section contains React components. Showing full MDX for now.
+                </p>
+              </div>
+              <MDXProvider>
+                {file?.MDXComponent && <file.MDXComponent />}
+              </MDXProvider>
+            </div>
+          ) : (
+            // This section is just markdown - render as HTML
+            <div>
+              <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
+                <p className="text-sm text-green-700 dark:text-green-300">
+                  ✅ Pure markdown section - rendering section content only
+                </p>
+              </div>
+              <div dangerouslySetInnerHTML={{ __html: parseMarkdown(content) }} />
+            </div>
+          )
         ) : (
           // Regular Markdown: Parse to HTML
           <div dangerouslySetInnerHTML={{ __html: html }} />
