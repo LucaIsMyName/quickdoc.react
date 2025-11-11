@@ -296,7 +296,7 @@ function App() {
           </ErrorBoundary>
         )}
 
-        <div className="flex">
+        <div  data-buggy-container className="flex">
           {/* Sidebar */}
           <ErrorBoundary>
             <Sidebar

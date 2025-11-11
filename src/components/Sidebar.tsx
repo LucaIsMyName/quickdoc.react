@@ -217,15 +217,17 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
       {/* Sidebar */}
       <aside 
         ref={sidebarRef}
-        style={{ width: `${width}px` }}
+        style={{ 
+          width: `${width}px`,
+        }}
         className={`
-          fixed md:sticky bottom-0 md:top-[40px] left-0 h-[calc(100vh-40px)]
+          absolute md:sticky top-[40px] left-0 h-[calc(100vh-40px)]
+          w-0 md:w-auto
           ${config.theme.isSidebarTransparent ? 'bg-transparent' : 'theme-bg'}
           ${config.theme.isSidebarTransparent ? '' : 'sidebar-container'}
           overflow-y-auto overflow-x-hidden z-40 transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0 shadow-xl" : "-translate-x-full md:translate-x-0 shadow-none"}
           ${config.theme.isSidebarTransparent ? 'hover:sidebar-container' : ''}
-          relative
         `}>
         <div className="p-2 h-full flex flex-col">
           <ScrollFade 
