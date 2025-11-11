@@ -41,12 +41,18 @@ Open `http://localhost:5173` and you'll see the documentation site with example 
 
 ### Adding Your Documentation
 
-1. **Create markdown files** in `/public/pages/`:
+1. **Create markdown or MDX files** in `/src/pages/`:
    ```bash
-   touch public/pages/My-Guide.md
+   # Markdown file
+   touch src/pages/My-Guide.md
+   
+   # Or MDX file with React components
+   touch src/pages/Interactive-Demo.mdx
    ```
 
 2. **Write your content**:
+   
+   **Markdown (.md):**
    ```markdown
    # My Guide
    
@@ -58,6 +64,27 @@ Open `http://localhost:5173` and you'll see the documentation site with example 
    
    More content...
    ```
+   
+   **MDX (.mdx) with React components:**
+   ```mdx
+   import React from 'react';
+   
+   # Interactive Demo
+   
+   ## Counter Example
+   
+   export const Counter = () => {
+     const [count, setCount] = React.useState(0);
+     return (
+       <div>
+         <p>Count: {count}</p>
+         <button onClick={() => setCount(count + 1)}>Increment</button>
+       </div>
+     );
+   };
+   
+   <Counter />
+   ```
 
 3. **Refresh** - Your new page appears as a tab automatically!
 
@@ -65,16 +92,17 @@ Open `http://localhost:5173` and you'll see the documentation site with example 
 
 ```
 quickdoc.react/
-├── public/
-│   └── pages/              # 📝 Your markdown files go here!
-│       ├── README.md
-│       ├── Quick-Start.md
-│       └── Configuration.md
 ├── src/
+│   ├── pages/              # 📝 Your markdown/MDX files go here!
+│   │   ├── Quick-Start.md
+│   │   ├── QuickDoc.md
+│   │   ├── Markdown-Guide.md
+│   │   └── MDX-Example.mdx  # Example with React components
 │   ├── components/         # React components
 │   │   ├── TabNavigation.tsx
 │   │   ├── Sidebar.tsx
 │   │   ├── MarkdownContent.tsx
+│   │   ├── MDXProvider.tsx  # MDX component provider
 │   │   └── MobileMenuButton.tsx
 │   ├── config/
 │   │   └── app.config.ts   # ⚙️ Configuration
@@ -83,9 +111,11 @@ quickdoc.react/
 │   │   └── useAppState.ts
 │   ├── utils/              # Utility functions
 │   │   ├── markdown.ts
+│   │   ├── contentSplitter.ts
 │   │   ├── storage.ts
 │   │   └── url.ts
 │   ├── types/              # TypeScript types
+│   ├── mdx.d.ts            # MDX type declarations
 │   ├── App.tsx             # Main app
 │   ├── main.tsx            # Entry point
 │   └── index.css           # Global styles
@@ -273,6 +303,94 @@ Link to other pages:
 [See Quick Start](/#quick-start)
 ```
 
+## ⚛️ MDX Support
+
+MDX allows you to use React components directly in your documentation. This enables interactive examples, custom UI components, and dynamic content.
+
+### Enabling MDX
+
+MDX is enabled by default. To disable it:
+
+```typescript
+// src/config/app.config.ts
+content: {
+  enableMDX: false,  // Disable MDX support
+}
+```
+
+### Creating MDX Files
+
+1. **Create an `.mdx` file** in `src/pages/`:
+   ```bash
+   touch src/pages/Interactive-Guide.mdx
+   ```
+
+2. **Import React** at the top:
+   ```mdx
+   import React from 'react';
+   ```
+
+3. **Write markdown** as usual:
+   ```mdx
+   # My Interactive Guide
+   
+   This is regular markdown content.
+   ```
+
+4. **Add React components**:
+   ```mdx
+   export const MyButton = () => {
+     const [clicked, setClicked] = React.useState(false);
+     return (
+       <button onClick={() => setClicked(true)}>
+         {clicked ? 'Clicked!' : 'Click me'}
+       </button>
+     );
+   };
+   
+   <MyButton />
+   ```
+
+### MDX Features
+
+- **Inline Components**: Define and use React components directly in your docs
+- **Import External Components**: Import components from your codebase
+- **Full JSX Support**: Use any valid JSX syntax
+- **Consistent Styling**: Components automatically match your theme
+- **Code Highlighting**: Code blocks work the same as in Markdown
+
+### MDX Example
+
+See `src/pages/MDX-Example.mdx` for a complete example with:
+- Interactive counter component
+- Custom alert components
+- Styled inline components
+- Mixed markdown and JSX content
+
+### MDX vs Markdown
+
+| Feature | Markdown (.md) | MDX (.mdx) |
+|---------|---------------|------------|
+| Static content | ✅ | ✅ |
+| Code blocks | ✅ | ✅ |
+| React components | ❌ | ✅ |
+| Interactive demos | ❌ | ✅ |
+| Import statements | ❌ | ✅ |
+| JSX syntax | ❌ | ✅ |
+
+**When to use MDX:**
+- Interactive tutorials
+- Live code examples
+- Custom UI components
+- Data visualizations
+- Dynamic content
+
+**When to use Markdown:**
+- Static documentation
+- Simple guides
+- API references
+- Changelogs
+
 ## 🎨 Styling
 
 ### Custom CSS
@@ -369,6 +487,7 @@ vercel --prod
 - **Styling**: Tailwind CSS 3
 - **Routing**: React Router 6
 - **Markdown**: marked
+- **MDX**: @mdx-js/rollup + @mdx-js/react
 - **Syntax Highlighting**: highlight.js
 - **Testing**: Vitest + React Testing Library
 - **Fonts**: Geist & Geist Mono

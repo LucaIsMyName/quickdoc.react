@@ -3,11 +3,24 @@ import type { ContentSection, NavigationItem } from '../types';
 /**
  * Split markdown content into sections based on breaking point
  * Each section becomes a separate "page"
+ * 
+ * Works for both markdown and MDX files
  */
 export const splitContentBySections = (
   content: string,
   breakingPoint: 'h1' | 'h2' | 'h3' | 'h4' = 'h2'
 ): ContentSection[] => {
+  // Ensure content is a string and not empty
+  if (!content || typeof content !== 'string' || content.trim() === '') {
+    return [{
+      slug: 'content',
+      title: 'Content',
+      content: '',
+      level: 1,
+      subsections: [],
+    }];
+  }
+
   const levelMap = { h1: 1, h2: 2, h3: 3, h4: 4 };
   const breakLevel = levelMap[breakingPoint];
   

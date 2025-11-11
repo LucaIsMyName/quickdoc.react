@@ -3,6 +3,10 @@ export interface MarkdownFile {
   title: string;
   content: string;
   path: string;
+  isMDX: boolean;
+  // For MDX files, this will be the component
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  MDXComponent?: React.ComponentType<any>;
 }
 
 export interface ContentSection {

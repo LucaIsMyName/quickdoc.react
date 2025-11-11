@@ -185,7 +185,12 @@ interface SidebarProps {
   currentFile?: string | null; // Current file slug for building URLs
 }
 
-const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config, currentFile }: SidebarProps) => {
+const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, config, currentFile }: SidebarProps) => {
+  console.log(`[DEBUG] Sidebar received navigation for ${currentFile}:`, navigation.length, 'items');
+  navigation.forEach((item, idx) => {
+    console.log(`  Sidebar ${idx + 1}: "${item.title}" (Level ${item.level}, Slug: ${item.slug})`);
+  });
+  
   const [activeId, setActiveId] = useState<string | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { width, setWidth, resetWidth, canResize } = useSidebarWidth(config);
@@ -352,7 +357,7 @@ const SidebarComponent = ({ navigation, currentSection, isOpen, onClose, config,
       </aside>
     </>
   );
-};
+});
 
-// Memoize the Sidebar component to prevent unnecessary re-renders
-export const Sidebar = memo(SidebarComponent);
+// Export the memoized Sidebar component
+export const Sidebar = SidebarComponent;

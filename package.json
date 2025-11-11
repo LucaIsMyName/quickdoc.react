@@ -13,6 +13,9 @@
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-beta.4",
+    "@mdx-js/react": "^3.1.1",
+    "@mdx-js/rollup": "^3.1.1",
+    "@types/mdx": "^2.0.13",
     "cmdk": "^1.1.1",
     "fuzzyfindjs": "^1.0.51",
     "highlight.js": "^11.10.0",

@@ -153,6 +153,116 @@ Run npm run build.`;
     });
   });
 
+  describe('MDX file handling', () => {
+    it('should process MDX content the same as markdown content', () => {
+      const mdxContent = `# MDX Example
+
+This is an example MDX file that demonstrates how to use React components in your documentation.
+
+## Interactive Counter
+
+Here's a simple React component embedded in the documentation:
+
+export const Counter = () => {
+  const [count, setCount] = React.useState(0);
+  return (
+    <div style={{ padding: '20px' }}>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+};
+
+<Counter />
+
+## Features
+
+MDX allows you to:
+
+- Write standard Markdown content
+- Embed React components directly
+- Create interactive documentation
+
+## Conclusion
+
+With MDX support, you can create rich, interactive documentation.`;
+
+      const sections = splitContentBySections(mdxContent, 'h2');
+      
+      // Should have introduction + 3 H2 sections
+      expect(sections).toHaveLength(4);
+      
+      // Check introduction section
+      expect(sections[0].slug).toBe('introduction');
+      expect(sections[0].title).toBe('MDX Example');
+      
+      // Check H2 sections are properly extracted
+      expect(sections[1].slug).toBe('interactive-counter');
+      expect(sections[1].title).toBe('Interactive Counter');
+      
+      expect(sections[2].slug).toBe('features');
+      expect(sections[2].title).toBe('Features');
+      
+      expect(sections[3].slug).toBe('conclusion');
+      expect(sections[3].title).toBe('Conclusion');
+    });
+
+    it('should handle MDX content with React components and JSX', () => {
+      const mdxWithJSX = `# MDX with JSX
+
+import { Button } from '@/components/ui/button';
+
+## Component Example
+
+Here's a button component:
+
+<Button variant="default">Click me</Button>
+
+## More Content
+
+Some additional content with inline code: \`const x = 1\`;
+
+### Subsection
+
+This should appear as a subsection.
+
+## Final Section
+
+The end of the document.`;
+
+      const sections = splitContentBySections(mdxWithJSX, 'h2');
+      
+      // Should have introduction + 3 H2 sections
+      expect(sections).toHaveLength(4);
+      
+      // Check that subsections are properly extracted
+      const featuresSection = sections.find(s => s.slug === 'more-content');
+      expect(featuresSection).toBeDefined();
+      expect(featuresSection?.subsections).toHaveLength(1);
+      expect(featuresSection?.subsections[0].title).toBe('Subsection');
+      expect(featuresSection?.subsections[0].level).toBe(3);
+    });
+
+    it('should return fallback section for truly empty content', () => {
+      const emptyContent = '';
+      const sections = splitContentBySections(emptyContent, 'h2');
+      
+      expect(sections).toHaveLength(1);
+      expect(sections[0].slug).toBe('content');
+      expect(sections[0].title).toBe('Content');
+      expect(sections[0].content).toBe('');
+    });
+
+    it('should return fallback section for null/undefined content', () => {
+      const nullContent = null as any;
+      const sections = splitContentBySections(nullContent, 'h2');
+      
+      expect(sections).toHaveLength(1);
+      expect(sections[0].slug).toBe('content');
+      expect(sections[0].title).toBe('Content');
+    });
+  });
+
   describe('URL mapping', () => {
     it('section slugs map to URL segments', () => {
       const sections = splitContentBySections(sampleMarkdown, 'h2');

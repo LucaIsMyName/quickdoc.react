@@ -1,0 +1,123 @@
+import React from 'react';
+
+# MDX Example
+
+This is an example MDX file that demonstrates how to use React components in your documentation.
+
+## Interactive Counter
+
+Here's a simple React component embedded in the documentation:
+
+export const Counter = () => {
+  const [count, setCount] = React.useState(0);
+  return (
+    <div style={{ 
+      padding: '20px', 
+      border: '2px solid #3b82f6', 
+      borderRadius: '8px', 
+      margin: '20px 0',
+      textAlign: 'center'
+    }}>
+      <p style={{ fontSize: '24px', fontWeight: 'bold' }}>Count: {count}</p>
+      <button 
+        onClick={() => setCount(count + 1)}
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          marginRight: '10px'
+        }}
+      >
+        Increment
+      </button>
+      <button 
+        onClick={() => setCount(0)}
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          backgroundColor: '#ef4444',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+      >
+        Reset
+      </button>
+    </div>
+  );
+};
+
+<Counter />
+
+## Features
+
+MDX allows you to:
+
+- Write standard Markdown content
+- Embed React components directly
+- Create interactive documentation
+- Use JSX syntax
+- Import and use external components
+
+## Code Example
+
+You can still use regular code blocks:
+
+```typescript
+const greeting = (name: string) => {
+  return `Hello, ${name}!`;
+};
+
+console.log(greeting('World'));
+```
+
+## Alert Component
+
+export const Alert = ({ type = 'info', children }) => {
+  const colors = {
+    info: { bg: '#dbeafe', border: '#3b82f6', text: '#1e40af' },
+    warning: { bg: '#fef3c7', border: '#f59e0b', text: '#92400e' },
+    success: { bg: '#d1fae5', border: '#10b981', text: '#065f46' },
+    error: { bg: '#fee2e2', border: '#ef4444', text: '#991b1b' }
+  };
+  const style = colors[type] || colors.info;
+  return (
+    <div style={{
+      padding: '16px',
+      margin: '16px 0',
+      backgroundColor: style.bg,
+      border: `2px solid ${style.border}`,
+      borderRadius: '8px',
+      color: style.text
+    }}>
+      {children}
+    </div>
+  );
+};
+
+<Alert type="info">
+  This is an informational alert created with a React component!
+</Alert>
+
+<Alert type="success">
+  MDX is now working in your QuickDoc project!
+</Alert>
+
+<Alert type="warning">
+  Remember to enable MDX in your config: `content.enableMDX: true`
+</Alert>
+
+## Conclusion
+
+With MDX support, you can create rich, interactive documentation that goes beyond static markdown. This opens up possibilities for:
+
+- Live code examples
+- Interactive tutorials
+- Custom UI components
+- Data visualizations
+- And much more!

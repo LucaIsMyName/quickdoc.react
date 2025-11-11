@@ -97,7 +97,15 @@ function App() {
   // Split content into sections based on breaking points
   const contentSections = useMemo(() => {
     if (!currentFile) return [];
-    return splitContentBySections(currentFile.content, config.navigation.breakingPoint);
+    console.log(`[DEBUG] Splitting content for file: ${currentFile.slug}`);
+    console.log(`[DEBUG] Content preview:`, currentFile.content.substring(0, 200));
+    console.log(`[DEBUG] Breaking point:`, config.navigation.breakingPoint);
+    const sections = splitContentBySections(currentFile.content, config.navigation.breakingPoint);
+    console.log(`[DEBUG] Generated ${sections.length} sections:`);
+    sections.forEach((section, idx) => {
+      console.log(`  ${idx + 1}. Title: "${section.title}", Slug: "${section.slug}", Level: ${section.level}, Subsections: ${section.subsections.length}`);
+    });
+    return sections;
   }, [currentFile, config.navigation.breakingPoint]);
 
   // Get main navigation
@@ -105,13 +113,20 @@ function App() {
     if (!currentFile) return [];
     const sections = contentSections;
 
-    return sections.map((section, idx) => ({
+    const navigation = sections.map((section, idx) => ({
       id: `section-${idx}`,
       title: section.title,
       level: section.level,
       slug: section.slug,
       subsections: section.subsections,
     }));
+    
+    console.log(`[DEBUG] Main navigation for ${currentFile.slug}:`);
+    navigation.forEach((item, idx) => {
+      console.log(`  ${idx + 1}. ID: "${item.id}", Title: "${item.title}", Level: ${item.level}, Slug: "${item.slug}"`);
+    });
+    
+    return navigation;
   }, [contentSections, currentFile]);
 
   // Get current section content
@@ -252,7 +267,7 @@ function App() {
             {error || "No documentation files found."}
           </p>
           <p className="text-sm theme-text-secondary">
-            Make sure your Markdown files are in the <code>public/pages</code> directory.
+            Make sure your Markdown/MDX files are in the <code>src/pages</code> directory.
           </p>
         </div>
       </div>
@@ -341,6 +356,7 @@ function App() {
                       <MarkdownContent
                         content={currentSection.content}
                         config={config}
+                        file={currentFile}
                         exportProps={{
                           content: currentSection.content,
                           title: currentSection.title,

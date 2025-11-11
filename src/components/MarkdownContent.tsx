@@ -3,7 +3,9 @@ import hljs from 'highlight.js';
 import { parseMarkdown } from '../utils/markdown';
 import { scrollToHeading } from '../utils/scrollHash';
 import { ExportButton } from './ExportButton';
+import { MDXProvider } from './MDXProvider';
 import type { AppConfig } from '../config/app.config';
+import type { MarkdownFile } from '../types';
 
 interface ExportProps {
   content: string;
@@ -16,9 +18,10 @@ interface MarkdownContentProps {
   config: AppConfig;
   onNavigationExtracted?: (headings: HTMLHeadingElement[]) => void;
   exportProps?: ExportProps;
+  file?: MarkdownFile; // Optional: for MDX rendering
 }
 
-export const MarkdownContent = memo(({ content, config, onNavigationExtracted, exportProps }: MarkdownContentProps) => {
+export const MarkdownContent = memo(({ content, config, onNavigationExtracted, exportProps, file }: MarkdownContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -107,7 +110,9 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
     }
   }, [content, config, onNavigationExtracted]);
 
-  const html = parseMarkdown(content);
+  // Check if this is an MDX file
+  const isMDX = file?.isMDX && file?.MDXComponent;
+  const html = !isMDX ? parseMarkdown(content) : '';
 
   return (
     <div className="relative w-full">
@@ -125,8 +130,15 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
       <div
         ref={contentRef}
         className="markdown-content prose prose-gray dark:prose-invert max-w-none w-full"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      >
+        {isMDX && file?.MDXComponent ? (
+          <MDXProvider>
+            <file.MDXComponent />
+          </MDXProvider>
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        )}
+      </div>
     </div>
   );
 });
