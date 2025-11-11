@@ -24,6 +24,9 @@ interface MarkdownContentProps {
 export const MarkdownContent = memo(({ content, config, onNavigationExtracted, exportProps, file }: MarkdownContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
+  // Check if this is an MDX file
+  const isMDXSection = file?.isMDX === true;
+
   useEffect(() => {
     if (!contentRef.current) return;
 
@@ -110,9 +113,8 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
     }
   }, [content, config, onNavigationExtracted]);
 
-  // Check if this is an MDX file
-  const isMDX = file?.isMDX && file?.MDXComponent;
-  const html = !isMDX ? parseMarkdown(content) : '';
+  // Parse regular markdown if not MDX
+  const html = !isMDXSection ? parseMarkdown(content) : '';
 
   return (
     <div className="relative w-full">
@@ -131,11 +133,13 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
         ref={contentRef}
         className="markdown-content prose prose-gray dark:prose-invert max-w-none w-full"
       >
-        {isMDX && file?.MDXComponent ? (
+        {isMDXSection && file?.MDXComponent ? (
+          // MDX Section: Use pre-compiled component from Vite
           <MDXProvider>
             <file.MDXComponent />
           </MDXProvider>
         ) : (
+          // Regular Markdown: Parse to HTML
           <div dangerouslySetInnerHTML={{ __html: html }} />
         )}
       </div>

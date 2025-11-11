@@ -98,9 +98,10 @@ function App() {
   const contentSections = useMemo(() => {
     if (!currentFile) return [];
     console.log(`[DEBUG] Splitting content for file: ${currentFile.slug}`);
+    console.log(`[DEBUG] Is MDX: ${currentFile.isMDX}`);
     console.log(`[DEBUG] Content preview:`, currentFile.content.substring(0, 200));
     console.log(`[DEBUG] Breaking point:`, config.navigation.breakingPoint);
-    const sections = splitContentBySections(currentFile.content, config.navigation.breakingPoint);
+    const sections = splitContentBySections(currentFile.content, config.navigation.breakingPoint, currentFile.isMDX);
     console.log(`[DEBUG] Generated ${sections.length} sections:`);
     sections.forEach((section, idx) => {
       console.log(`  ${idx + 1}. Title: "${section.title}", Slug: "${section.slug}", Level: ${section.level}, Subsections: ${section.subsections.length}`);
