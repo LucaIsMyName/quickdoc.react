@@ -124,7 +124,7 @@ export const defaultConfig: AppConfig = {
   theme: {
     isSidebarTransparent: false,
     colors: {
-      accent: "blue",
+      accent: "sky",
       light: "neutral",
       dark: "gray",
     },

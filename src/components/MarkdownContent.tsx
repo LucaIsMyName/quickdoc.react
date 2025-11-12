@@ -144,7 +144,7 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
           content.includes('<') && (content.includes('Counter') || content.includes('Alert')) ? (
             // This section has React components - use full MDX component (temporary)
             <div>
-              <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded">
+              <div className="sr-only mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded">
                 <p className="text-sm text-blue-700 dark:text-blue-300">
                   ⚠️ This section contains React components. Showing full MDX for now.
                 </p>
@@ -156,7 +156,7 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
           ) : (
             // This section is just markdown - render as HTML
             <div>
-              <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
+              <div className="sr-only mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
                 <p className="text-sm text-green-700 dark:text-green-300">
                   ✅ Pure markdown section - rendering section content only
                 </p>

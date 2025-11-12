@@ -25,7 +25,7 @@ import { SEO } from "./components/SEO";
 import "highlight.js/styles/github.css";
 
 // Helper function to extract TOC from content (H2-H6, excluding H1 since it's the file title)
-const extractTOCFromContent = (content: string) => {
+const extractTOCFromContent = (content: string, fileSlug: string) => {
   // Extract all headings and filter to get H2-H6 (excluding H1 which is the file title)
   const headingRegex = /^(#{1,6})\s+(.+)$/gm;
   const items: any[] = [];
@@ -43,7 +43,7 @@ const extractTOCFromContent = (content: string) => {
         .replace(/^-|-$/g, '');
       
       items.push({
-        id: `heading-${items.length}`,
+        id: `${fileSlug}-heading-${items.length}`, // UNIQUE ID per file
         title,
         level,
         slug,
@@ -226,7 +226,7 @@ function App() {
           
           sortedFolderFiles.forEach(file => {
             // Always extract TOC from file content for proper sidebar navigation
-            const subsections = extractTOCFromContent(file.content);
+            const subsections = extractTOCFromContent(file.content, file.slug);
             
             const isIndex = file.path.includes('index.');
               
@@ -246,7 +246,7 @@ function App() {
             title: currentFileObj.title,
             level: 1,
             slug: currentFileObj.slug,
-            subsections: extractTOCFromContent(currentFileObj.content),
+            subsections: extractTOCFromContent(currentFileObj.content, currentFileObj.slug),
           });
         }
       }

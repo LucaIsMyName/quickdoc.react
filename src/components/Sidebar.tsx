@@ -15,166 +15,43 @@ interface NavigationItem {
   isIndex?: boolean; // Mark index files for special styling
 }
 
-// Generate hierarchical numbering for sidebar items (scientific numbering system)
+// Generate hierarchical numbering for folder-based sidebar items
 const generateSidebarNumbers = (navigation: NavigationItem[], config: AppConfig) => {
   if (!config.navigation.enableNumberedSidebar) return {};
   
   const numbers: Record<string, string> = {};
-  const breakingPointLevel = getBreakingPointLevel(config.navigation.breakingPoint);
   
-  // Filter navigation to only include items that will actually be shown in sidebar
-  const visibleNavigation = navigation.filter(item => {
-    // Hide H1 items if showH1InSidebar is false
-    if (item.level === 1 && !config.navigation.showH1InSidebar) {
-      return false;
-    }
-    return true;
-  });
   
-  // Counters for each level
-  let h1Counter = 0;
-  let h2Counter = 0;
-  let h3Counter = 0;
-  let h4Counter = 0;
-  
-  // Process each VISIBLE navigation item
-  visibleNavigation.forEach((item) => {
-    // Only number items at the breaking point level and below
-    if (item.level >= breakingPointLevel) {
+  // SIMPLE: Just number files 1, 2, 3... and their subsections 1.1, 1.2, 2.1, 2.2...
+  navigation.forEach((item, fileIndex) => {
+    const fileNumber = fileIndex + 1;
+    
+    // File gets number like "1.", "2.", "3."
+    numbers[item.id] = `${fileNumber}.`;
+    
+    // Subsections get numbers like "1.1.", "1.2.", "1.1.1."
+    if (item.subsections) {
+      let h2Counter = 0;
+      let h3Counter = 0;
       
-      // Reset subsection counters when we encounter a new main section
-      if (item.level === breakingPointLevel) {
-        h3Counter = 0;
-        h4Counter = 0;
-      }
-      
-      // Build the number based on level
-      let number = '';
-      
-      if (breakingPointLevel === 1) {
-        // h1 breaking point
-        if (item.level === 1) {
-          h1Counter++;
-          number = `${h1Counter}.`;
-        } else if (item.level === 2) {
+      item.subsections.forEach((sub) => {
+        if (sub.level === 2) {
           h2Counter++;
-          number = `${h2Counter + 1}.`;
-        } else if (item.level === 3) {
+          h3Counter = 0; // Reset H3 when new H2
+          numbers[sub.id] = `${fileNumber}.${h2Counter}.`;
+        } else if (sub.level === 3) {
           h3Counter++;
-          number = `${h2Counter + 1}.${h3Counter}.`;
-        } else if (item.level === 4) {
-          h4Counter++;
-          number = `${h2Counter + 1}.${h3Counter}.${h4Counter}.`;
+          numbers[sub.id] = `${fileNumber}.${h2Counter}.${h3Counter}.`;
         }
-      } else if (breakingPointLevel === 2) {
-        // h2 breaking point
-        if (item.level === 2) {
-          h2Counter++;
-          h3Counter = 0; // Reset H3 counter for new H2 section
-          number = `${h2Counter}.`;
-        } else if (item.level === 3) {
-          h3Counter++;
-          number = `${h2Counter}.${h3Counter}.`;
-        } else if (item.level === 4) {
-          h4Counter++;
-          number = `${h2Counter}.${h3Counter}.${h4Counter}.`;
-        }
-      } else if (breakingPointLevel === 3) {
-        // h3 breaking point
-        if (item.level === 3) {
-          h3Counter++;
-          h4Counter = 0;
-          number = `${h3Counter}.`;
-        } else if (item.level === 4) {
-          h4Counter++;
-          number = `${h3Counter}.${h4Counter}.`;
-        }
-      } else if (breakingPointLevel === 4) {
-        // h4 breaking point
-        if (item.level === 4) {
-          h4Counter++;
-          number = `${h4Counter}.`;
-        }
-      }
-      
-      numbers[item.id] = number;
-      
-      // Recursively number all subsections
-      if (item.subsections && item.subsections.length > 0) {
-        // CRITICAL FIX: Pass a snapshot of counters at this point, not the final values!
-        const counterSnapshot = { 
-          h1Counter, 
-          h2Counter, // Use current h2Counter value for this section
-          h3Counter: 0, // Reset for this section's subsections
-          h4Counter: 0 
-        };
-        numberSubsections(item.subsections, counterSnapshot, breakingPointLevel, numbers);
-      }
+      });
     }
   });
+  
   
   return numbers;
 };
 
-// Recursively number subsections maintaining the counter state
-const numberSubsections = (
-  subsections: NavigationItem[], 
-  counters: { h1Counter: number; h2Counter: number; h3Counter: number; h4Counter: number },
-  breakingPointLevel: number, 
-  numbers: Record<string, string>
-) => {
-  subsections.forEach((sub) => {
-    // Build the number based on level
-    let number = '';
-    
-    if (breakingPointLevel === 1) {
-      // h1 breaking point
-      if (sub.level === 2) {
-        counters.h2Counter++;
-        number = `${counters.h2Counter + 1}.`;
-      } else if (sub.level === 3) {
-        counters.h3Counter++;
-        number = `${counters.h2Counter + 1}.${counters.h3Counter}.`;
-      } else if (sub.level === 4) {
-        counters.h4Counter++;
-        number = `${counters.h2Counter + 1}.${counters.h3Counter}.${counters.h4Counter}.`;
-      }
-    } else if (breakingPointLevel === 2) {
-      // h2 breaking point
-      if (sub.level === 3) {
-        counters.h3Counter++;
-        number = `${counters.h2Counter}.${counters.h3Counter}.`;
-      } else if (sub.level === 4) {
-        counters.h4Counter++;
-        number = `${counters.h2Counter}.${counters.h3Counter}.${counters.h4Counter}.`;
-      }
-    } else if (breakingPointLevel === 3) {
-      // h3 breaking point
-      if (sub.level === 4) {
-        counters.h4Counter++;
-        number = `${counters.h3Counter}.${counters.h4Counter}.`;
-      }
-    }
-    
-    numbers[sub.id] = number;
-    
-    // Recursively number deeper subsections if they exist
-    if (sub.subsections && sub.subsections.length > 0) {
-      numberSubsections(sub.subsections, counters, breakingPointLevel, numbers);
-    }
-  });
-};
 
-// Helper function to get numeric level from breaking point
-const getBreakingPointLevel = (breakingPoint: string): number => {
-  switch (breakingPoint) {
-    case 'h1': return 1;
-    case 'h2': return 2;
-    case 'h3': return 3;
-    case 'h4': return 4;
-    default: return 2;
-  }
-};
 
 interface SidebarProps {
   title: string;
@@ -260,7 +137,7 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
                       ${item.level === 4 ? "text-xs ml-9 px-3" : ""}
                       ${item.level === 5 ? "text-xs ml-12 px-3" : ""}
                       ${item.level === 6 ? "text-xs ml-16 px-3" : ""}
-                      ${item.isIndex ? "font-bold border-b border-gray-200 dark:border-gray-700 mb-2" : ""}
+                      ${item.isIndex ? "font-bold  mb-0" : ""}
                       ${activeId === item.slug 
                         ? "sidebar-item-active" 
                         : "theme-text-secondary hover:theme-text"
