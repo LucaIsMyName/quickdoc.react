@@ -26,12 +26,19 @@ import "highlight.js/styles/github.css";
 
 // Helper function to extract TOC from content (H2-H6, excluding H1 since it's the file title)
 const extractTOCFromContent = (content: string, fileSlug: string) => {
+  // First, remove code blocks to avoid extracting headings from examples
+  const contentWithoutCodeBlocks = content
+    // Remove fenced code blocks (```...```)
+    .replace(/```[\s\S]*?```/g, '')
+    // Remove inline code blocks (`...`)
+    .replace(/`[^`\n]*`/g, '');
+  
   // Extract all headings and filter to get H2-H6 (excluding H1 which is the file title)
   const headingRegex = /^(#{1,6})\s+(.+)$/gm;
   const items: any[] = [];
   let match;
 
-  while ((match = headingRegex.exec(content)) !== null) {
+  while ((match = headingRegex.exec(contentWithoutCodeBlocks)) !== null) {
     const level = match[1]?.length ?? 0;
     const title = match[2]?.trim() ?? '';
     
