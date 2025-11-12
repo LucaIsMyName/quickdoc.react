@@ -106,7 +106,7 @@ export const defaultConfig: AppConfig = {
     breakingPoint: "h2", // Makes all H2 Content a seperate page
     showH1InSidebar: false,
     collapsible: false,
-    expandAllSections: false, // Keep all sidebar sections collapsed by default
+    expandAllSections: true, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
       min: "200px",
       default: "280px",

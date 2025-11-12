@@ -2,8 +2,8 @@ import type { AppState } from '../types';
 
 /**
  * Parse URL path to extract file and section path
- * Format: /filename or /filename/section-slug
- * First segment is ALWAYS the file, second segment (if exists) is the section
+ * Format: /folder or /folder/filename
+ * For folder/file structure: segments[0] is folder, segments[1] is file (if exists)
  */
 export const parseUrlHash = (): Partial<AppState> => {
   const path = window.location.pathname.slice(1); // Remove leading /
@@ -17,25 +17,26 @@ export const parseUrlHash = (): Partial<AppState> => {
     return {};
   }
   
-  // First segment is the file slug
-  const file = segments[0] || null;
-  // Second segment (if exists) is the section slug within that file
-  const section = segments.length > 1 ? segments[1] : null;
+  // For folder/file structure: combine segments to create full file slug
+  const file = segments.length > 1 ? `${segments[0]}/${segments[1]}` : segments[0] || null;
+  // Section is now handled by hash, not URL segments
+  const section = null;
   
   return {
     currentFile: file,
-    currentSection: section || null,
+    currentSection: section,
   };
 };
 
 /**
  * Build URL path from file and section
- * @param file - Current file slug
- * @param headingId - Target heading ID (section slug)
+ * @param file - Current file slug (may include folder/file format)
+ * @param headingId - Target heading ID (section slug) - now handled by hash
  */
 export const buildUrlPath = (file: string, headingId: string): string => {
-  // Simple format: /filename/section-slug
-  return `/${file}/${headingId}`;
+  // For folder/file structure, file already contains the full path
+  // Sections are now handled by hash, not URL segments
+  return `/${file}#${headingId}`;
 };
 
 /**

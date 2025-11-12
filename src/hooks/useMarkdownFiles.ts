@@ -17,15 +17,15 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
         setLoading(true);
         setError(null);
 
-        // Load MD files as raw text
-        const mdModules = import.meta.glob('/src/pages/*.md', { 
+        // Load MD files from both root and folders
+        const mdModules = import.meta.glob(['/src/pages/*.md', '/src/pages/**/*.md'], { 
           query: '?raw',
           import: 'default'
         });
 
-        // Load MDX files as components (only if MDX is enabled)
+        // Load MDX files from both root and folders (only if MDX is enabled)
         const mdxModules = config?.content.enableMDX 
-          ? import.meta.glob('/src/pages/*.mdx')
+          ? import.meta.glob(['/src/pages/*.mdx', '/src/pages/**/*.mdx'])
           : {};
 
         // We'll load raw MDX content using fetch since dynamic imports aren't working
@@ -97,8 +97,28 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
               continue;
             }
             
-            const filename = path.split('/').pop() ?? 'untitled.md';
-            const slug = generateSlug(filename);
+            const pathParts = path.split('/');
+            const filename = pathParts.pop() ?? 'untitled.md';
+            
+            // Check if this is a folder-based file
+            const isInFolder = pathParts.length > 3; // /src/pages/folder/file.md
+            let slug: string;
+            
+            if (isInFolder) {
+              const folderName = pathParts[pathParts.length - 1] ?? 'unknown'; // Get folder name
+              const cleanFilename = filename.replace(/^\d+-/, ''); // Remove numeric prefix
+              
+              // For index files, use just the folder name
+              if (cleanFilename.startsWith('index.')) {
+                slug = generateSlug(folderName);
+              } else {
+                // For chapter files, use folder/chapter format
+                slug = `${generateSlug(folderName)}/${generateSlug(cleanFilename)}`;
+              }
+            } else {
+              slug = generateSlug(filename);
+            }
+            
             const title = extractTitle(content);
 
             loadedFiles.push({
@@ -119,14 +139,30 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
             // Load compiled MDX component
             const module = await loader() as { default: React.ComponentType<any> };
             const MDXComponent = module.default;
-            const filename = path.split('/').pop() ?? 'untitled.mdx';
-            const slug = generateSlug(filename);
+            const pathParts = path.split('/');
+            const filename = pathParts.pop() ?? 'untitled.mdx';
+            
+            // Check if this is a folder-based file
+            const isInFolder = pathParts.length > 3; // /src/pages/folder/file.mdx
+            let slug: string;
+            
+            if (isInFolder) {
+              const folderName = pathParts[pathParts.length - 1] ?? 'unknown'; // Get folder name
+              const cleanFilename = filename.replace(/^\d+-/, ''); // Remove numeric prefix
+              
+              // For index files, use just the folder name
+              if (cleanFilename.startsWith('index.')) {
+                slug = generateSlug(folderName);
+              } else {
+                // For chapter files, use folder/chapter format
+                slug = `${generateSlug(folderName)}/${generateSlug(cleanFilename)}`;
+              }
+            } else {
+              slug = generateSlug(filename);
+            }
             
             // Load raw MDX content
             const rawLoader = mdxRawModules[path];
-            console.log(`[MDX] Looking for raw loader for path: ${path}`);
-            console.log(`[MDX] Raw loader found:`, !!rawLoader);
-            console.log(`[MDX] Available raw paths:`, Object.keys(mdxRawModules));
             let rawContent = '';
             let title = filename
               .replace(/\.mdx$/i, '')
@@ -136,37 +172,19 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
             
             if (rawLoader) {
               try {
-                console.log(`[MDX] Loading raw content for: ${path}`);
                 const module = await rawLoader();
                 const loadedRawContent = module.default;
-                console.log(`[MDX] Type of loaded content:`, typeof loadedRawContent);
-                console.log(`[MDX] Is function?:`, typeof loadedRawContent === 'function');
-                console.log(`[MDX] Raw loaded content preview:`, String(loadedRawContent).substring(0, 200));
-                
                 rawContent = typeof loadedRawContent === 'string' ? loadedRawContent : String(loadedRawContent);
-                
-                console.log(`[MDX] Raw content loaded, length: ${rawContent.length}`);
-                console.log(`[MDX] Preview:`, rawContent.substring(0, 150));
                 
                 // Extract title from raw content
                 const extractedTitle = extractTitle(rawContent);
                 if (extractedTitle && extractedTitle !== 'Untitled') {
                   title = extractedTitle;
                 }
-                console.log(`[MDX] Extracted title: "${title}"`);
               } catch (err) {
                 console.error(`[MDX] Failed to load raw content for ${path}:`, err);
               }
-            } else {
-              console.warn(`[MDX] No raw loader found for: ${path}`);
             }
-
-            console.log(`[MDX] File ${filename}:`, {
-              title,
-              contentLength: rawContent.length,
-              hasH1: rawContent.includes('# '),
-              hasH2: rawContent.includes('## '),
-            });
 
             loadedFiles.push({
               slug,
@@ -181,7 +199,42 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
           }
         }
 
-        // Sort files based on config or alphabetically
+        // Sort files: first by folder, then by numeric prefix, then alphabetically
+        loadedFiles.sort((a, b) => {
+          // Extract folder and order info from paths
+          const getFileInfo = (file: MarkdownFile) => {
+            const pathParts = file.path.split('/');
+            const filename = pathParts[pathParts.length - 1] ?? '';
+            const isInFolder = pathParts.length > 3;
+            const folderName = isInFolder ? pathParts[pathParts.length - 2] ?? '' : '';
+            const numericPrefix = filename.match(/^(\d+)-/)?.[1];
+            const order = numericPrefix ? parseInt(numericPrefix, 10) : 999;
+            
+            return { folderName, order, filename, isInFolder };
+          };
+          
+          const aInfo = getFileInfo(a);
+          const bInfo = getFileInfo(b);
+          
+          // First, sort by folder (root files first, then folders alphabetically)
+          if (aInfo.isInFolder !== bInfo.isInFolder) {
+            return aInfo.isInFolder ? 1 : -1; // Root files first
+          }
+          
+          if (aInfo.isInFolder && bInfo.isInFolder && aInfo.folderName !== bInfo.folderName) {
+            return aInfo.folderName.localeCompare(bInfo.folderName);
+          }
+          
+          // Within same folder (or root), sort by numeric prefix
+          if (aInfo.order !== bInfo.order) {
+            return aInfo.order - bInfo.order;
+          }
+          
+          // Finally, sort alphabetically
+          return aInfo.filename.localeCompare(bInfo.filename);
+        });
+
+        // Apply custom order if specified in config
         if (config?.navigation.fileOrder && config.navigation.fileOrder.length > 0) {
           // Custom order: sort by position in fileOrder array
           loadedFiles.sort((a, b) => {

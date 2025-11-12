@@ -4,7 +4,6 @@ import { defaultConfig } from "./config/app.config";
 import { useMarkdownFiles } from "./hooks/useMarkdownFiles";
 import { useAppState } from "./hooks/useAppState";
 import { useTheme } from "./contexts/ThemeContext";
-import { splitContentBySections } from "./utils/contentSplitter";
 import { applyContentStyles } from "./utils/contentStyles";
 import { applyBorderStyles } from "./utils/borderStyles";
 import { applyFontStyles } from "./utils/fontStyles";
@@ -24,6 +23,37 @@ import { Pagination } from "./components/Pagination";
 // import { ExportButton } from "./components/ExportButton";
 import { SEO } from "./components/SEO";
 import "highlight.js/styles/github.css";
+
+// Helper function to extract TOC from content (H2-H6, excluding H1 since it's the file title)
+const extractTOCFromContent = (content: string) => {
+  // Extract all headings and filter to get H2-H6 (excluding H1 which is the file title)
+  const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+  const items: any[] = [];
+  let match;
+
+  while ((match = headingRegex.exec(content)) !== null) {
+    const level = match[1]?.length ?? 0;
+    const title = match[2]?.trim() ?? '';
+    
+    // Only include H2-H6 headings (exclude H1)
+    if (level >= 2 && level <= 6 && title) {
+      const slug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+      
+      items.push({
+        id: `heading-${items.length}`,
+        title,
+        level,
+        slug,
+        subsections: []
+      });
+    }
+  }
+
+  return items;
+};
 
 function App() {
   const [config] = useState(defaultConfig);
@@ -55,11 +85,12 @@ function App() {
       return;
     }
     
-    // First segment is the file slug
-    const file = segments[0] || null;
-    // Second segment (if exists) is the section slug within that file
-    // Hash is used for scrolling within the section, not as the section itself
-    const section: string | null = segments.length > 1 ? (segments[1] || null) : null;
+    // For folder/file structure: segments[0] is folder, segments[1] is file (if exists)
+    // If only one segment, it's either a root file or a folder index
+    // If two segments, it's folder/file
+    const file = segments.length > 1 ? `${segments[0]}/${segments[1]}` : segments[0] || null;
+    // Section is now handled by hash, not URL segments
+    const section: string | null = null;
     
     // More reliable comparison - check each field individually
     const fileChanged = file !== state.currentFile;
@@ -75,60 +106,157 @@ function App() {
     }
   }, [location.pathname, location.hash, setCurrentFile, setCurrentSection, state.currentFile, state.currentSection]);
 
-  // Check if current path matches any valid file or section
+  // Check if current path is valid (for 404 handling)
   const isValidPath = useMemo(() => {
-    if (loading || files.length === 0) return true; // Don't show 404 while loading
+    if (loading) return true; // Don't show 404 while loading
     
     const path = location.pathname;
+    if (path === '/' || path === '') return true;
     
-    // Root path is always valid
-    if (path === '/') return true;
+    // Check if path matches any file slug (including folder/file structure)
+    const pathSegments = path.slice(1).split('/').filter(Boolean);
+    const fullSlug = pathSegments.length > 1 ? `${pathSegments[0]}/${pathSegments[1]}` : pathSegments[0] || '';
     
-    // Check if path starts with a valid file slug
-    const pathSegments = path.slice(1).split('/');
-    const fileSlug = pathSegments[0];
-    
-    return files.some(file => file.slug === fileSlug);
+    return files.some(file => file.slug === fullSlug);
   }, [location.pathname, files, loading]);
 
   // Get current file content
   const currentFile = useMemo(() => files.find((f) => f.slug === state.currentFile), [files, state.currentFile]);
 
-  // Split content into sections based on breaking points
+  // No content splitting needed - each file is already a separate page
   const contentSections = useMemo(() => {
     if (!currentFile) return [];
-    console.log(`[DEBUG] Splitting content for file: ${currentFile.slug}`);
-    console.log(`[DEBUG] Is MDX: ${currentFile.isMDX}`);
-    console.log(`[DEBUG] Content preview:`, currentFile.content.substring(0, 200));
-    console.log(`[DEBUG] Breaking point:`, config.navigation.breakingPoint);
-    const sections = splitContentBySections(currentFile.content, config.navigation.breakingPoint, currentFile.isMDX);
-    console.log(`[DEBUG] Generated ${sections.length} sections:`);
-    sections.forEach((section, idx) => {
-      console.log(`  ${idx + 1}. Title: "${section.title}", Slug: "${section.slug}", Level: ${section.level}, Subsections: ${section.subsections.length}`);
-    });
-    return sections;
-  }, [currentFile, config.navigation.breakingPoint]);
-
-  // Get main navigation
-  const mainNavigation = useMemo(() => {
-    if (!currentFile) return [];
-    const sections = contentSections;
-
-    const navigation = sections.map((section, idx) => ({
-      id: `section-${idx}`,
-      title: section.title,
-      level: section.level,
-      slug: section.slug,
-      subsections: section.subsections,
-    }));
     
-    console.log(`[DEBUG] Main navigation for ${currentFile.slug}:`);
-    navigation.forEach((item, idx) => {
-      console.log(`  ${idx + 1}. ID: "${item.id}", Title: "${item.title}", Level: ${item.level}, Slug: "${item.slug}"`);
+    // Create a single section from the current file
+    return [{
+      slug: 'content',
+      title: currentFile.title,
+      content: currentFile.content,
+      level: 1,
+      subsections: []
+    }];
+  }, [currentFile]);
+
+  // Get folder-based navigation for tabs and sidebar
+  const { folderNavigation, sidebarNavigation } = useMemo(() => {
+    // Group files by folder
+    const folderGroups = new Map<string, typeof files>();
+    const rootFiles: typeof files = [];
+    
+    files.forEach(file => {
+      const pathParts = file.path.split('/');
+      const isInFolder = pathParts.length > 3;
+      
+      if (isInFolder) {
+        const folderName = pathParts[pathParts.length - 2] ?? 'unknown';
+        if (!folderGroups.has(folderName)) {
+          folderGroups.set(folderName, []);
+        }
+        folderGroups.get(folderName)?.push(file);
+      } else {
+        rootFiles.push(file);
+      }
     });
     
-    return navigation;
-  }, [contentSections, currentFile]);
+    // Create folder navigation for tabs (only folders/root files)
+    const folderNav: any[] = [];
+    
+    // Add root files to folder navigation
+    rootFiles.forEach(file => {
+      folderNav.push({
+        slug: file.slug,
+        title: file.title,
+        isFolder: false,
+      });
+    });
+    
+    // Add folders to folder navigation
+    folderGroups.forEach((folderFiles, folderName) => {
+      const indexFile = folderFiles.find(f => f.path.includes('index.'));
+      const folderTitle = indexFile?.title || folderName.split('-').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ');
+      
+      folderNav.push({
+        slug: indexFile?.slug || folderFiles[0]?.slug || folderName,
+        title: folderTitle,
+        isFolder: true,
+        folderName,
+      });
+    });
+    
+    // Create sidebar navigation (files within current folder)
+    const sidebarNav: any[] = [];
+    
+    if (currentFile) {
+      // Find which folder the current file belongs to
+      const currentFileObj = files.find(f => f.slug === state.currentFile);
+      if (currentFileObj) {
+        const pathParts = currentFileObj.path.split('/');
+        const isInFolder = pathParts.length > 3;
+        
+        if (isInFolder) {
+          const folderName = pathParts[pathParts.length - 2] ?? 'unknown';
+          const folderFiles = folderGroups.get(folderName) || [];
+          
+          // Sort folder files: index first, then by numeric prefix
+          const sortedFolderFiles = [...folderFiles].sort((a, b) => {
+            const aIsIndex = a.path.includes('index.');
+            const bIsIndex = b.path.includes('index.');
+            
+            // Index file always comes first
+            if (aIsIndex && !bIsIndex) return -1;
+            if (!aIsIndex && bIsIndex) return 1;
+            
+            // For non-index files, sort by numeric prefix
+            const aFilename = a.path.split('/').pop() ?? '';
+            const bFilename = b.path.split('/').pop() ?? '';
+            const aPrefix = aFilename.match(/^(\d+)-/)?.[1];
+            const bPrefix = bFilename.match(/^(\d+)-/)?.[1];
+            const aOrder = aPrefix ? parseInt(aPrefix, 10) : 999;
+            const bOrder = bPrefix ? parseInt(bPrefix, 10) : 999;
+            
+            if (aOrder !== bOrder) {
+              return aOrder - bOrder;
+            }
+            
+            // Fallback to alphabetical
+            return aFilename.localeCompare(bFilename);
+          });
+          
+          sortedFolderFiles.forEach(file => {
+            // Always extract TOC from file content for proper sidebar navigation
+            const subsections = extractTOCFromContent(file.content);
+            
+            const isIndex = file.path.includes('index.');
+              
+            sidebarNav.push({
+              id: file.slug,
+              title: file.title,
+              level: 1,
+              slug: file.slug,
+              subsections,
+              isIndex, // Mark index files for special styling
+            });
+          });
+        } else {
+          // Root file - show just this file with TOC
+          sidebarNav.push({
+            id: currentFileObj.slug,
+            title: currentFileObj.title,
+            level: 1,
+            slug: currentFileObj.slug,
+            subsections: extractTOCFromContent(currentFileObj.content),
+          });
+        }
+      }
+    }
+    
+    return { folderNavigation: folderNav, sidebarNavigation: sidebarNav };
+  }, [files, currentFile]);
+
+  // Legacy mainNavigation for compatibility
+  const mainNavigation = sidebarNavigation;
 
   // Get current section content
   const currentSection = useMemo(() => {
@@ -300,7 +428,7 @@ function App() {
               <div className="flex items-center justify-between h-10">
                 <div className="flex items-center flex-1 min-w-0">
                   <TabNavigation
-                    files={files}
+                    folderNavigation={folderNavigation}
                     currentFile={state.currentFile}
                     config={config}
                   />

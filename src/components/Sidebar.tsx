@@ -12,6 +12,7 @@ interface NavigationItem {
   slug: string;
   level: number;
   subsections?: NavigationItem[];
+  isIndex?: boolean; // Mark index files for special styling
 }
 
 // Generate hierarchical numbering for sidebar items (scientific numbering system)
@@ -246,19 +247,20 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
               {navigation.map((item, index) => (
                 <div key={item.id} className={index < navigation.length - 1 ? "mb-1" : "mb-1"}>
                   <Link
-                    to={currentFile ? `/${currentFile}/${item.slug}` : `/${item.slug}`}
+                    to={`/${item.slug}`}
                     onClick={handleClose}
                     aria-label={`Navigate to ${item.title} Chapter`}
                     className={`
                       block w-full text-left py-2 rounded-lg text-sm
                       transition-all duration-200 ease-in-out transform
                       truncate
-                      ${item.level === 1 ? "text-base px-3 font-bold" : ""}
+                      ${item.level === 1 ? "text-base px-3" : ""}
                       ${item.level === 2 ? "px-3" : ""}
                       ${item.level === 3 ? "text-sm ml-6  px-3" : ""}
                       ${item.level === 4 ? "text-xs ml-9 px-3" : ""}
                       ${item.level === 5 ? "text-xs ml-12 px-3" : ""}
                       ${item.level === 6 ? "text-xs ml-16 px-3" : ""}
+                      ${item.isIndex ? "font-bold border-b border-gray-200 dark:border-gray-700 mb-2" : ""}
                       ${activeId === item.slug 
                         ? "sidebar-item-active" 
                         : "theme-text-secondary hover:theme-text"
@@ -274,25 +276,28 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
                     </span>
                   </Link>
 
-                  {/* Show subsections based on config or active state */}
-                  {((config.navigation.expandAllSections) || (activeId === item.slug)) && item.subsections && item.subsections.length > 0 && (
-                    <div className="space-y-1">
-                      {item.subsections.map((sub: NavigationItem) => (
-                        <div key={sub.id}>
-                          <Link
-                            to={currentFile ? `/${currentFile}/${item.slug}#${sub.slug}` : `/${item.slug}#${sub.slug}`}
-                            onClick={handleClose}
-                            aria-label={`Navigate to ${sub.title}`}
-                            className={`
-                              block text-left py-1.5 my-1 rounded text-xs
-                              transition-all duration-200 ease-in-out transform
-                              theme-text-secondary hover:theme-text
-                              truncate min-w-0
-                              ${sub.level === 3 ? "ml-6 mr-3 px-3" : ""}
-                              ${sub.level === 4 ? "ml-9 mr-3 px-3" : ""}
-                              ${sub.level === 5 ? "ml-12 mr-3 px-3" : ""}
-                              ${sub.level === 6 ? "ml-16 mr-3 px-3" : ""}
-                            `}>
+                  {/* Show subsections based on config or current file */}
+                  {((config.navigation.expandAllSections) || (currentFile === item.slug)) && item.subsections && item.subsections.length > 0 && (
+                    <div className="mt-1 space-y-0.5">
+                      {item.subsections.map((sub: NavigationItem) => {
+                        // Calculate indentation based on heading level (H2=level 2, H3=level 3, etc.)
+                        const baseIndent = 16; // Base indentation in pixels
+                        const levelIndent = (sub.level - 2) * 12; // Additional indent per level (H2=0, H3=12, H4=24, etc.)
+                        const totalIndent = baseIndent + levelIndent;
+                        
+                        return (
+                          <div key={sub.id}>
+                            <Link
+                              to={`/${item.slug}#${sub.slug}`}
+                              onClick={handleClose}
+                              aria-label={`Navigate to ${sub.title}`}
+                              className={`
+                                block text-left py-1 px-2 rounded text-xs
+                                transition-all duration-200 ease-in-out transform
+                                theme-text-secondary hover:theme-text hover:bg-gray-100 dark:hover:bg-gray-800
+                                truncate min-w-0
+                              `}
+                              style={{ marginLeft: `${totalIndent}px` }}>
                             <span className="block truncate">
                               {sidebarNumbers[sub.id] && (
                                 <span className="inline-block mr-2 font-mono text-xs opacity-75">
@@ -302,39 +307,9 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
                               {sub.title}
                             </span>
                           </Link>
-                          
-                          {/* Recursively render nested subsections */}
-                          {sub.subsections && sub.subsections.length > 0 && (
-                            <div className="space-y-1">
-                              {sub.subsections.map((nestedSub: NavigationItem) => (
-                                <Link
-                                  key={nestedSub.id}
-                                  to={currentFile ? `/${currentFile}/${item.slug}#${nestedSub.slug}` : `/${item.slug}#${nestedSub.slug}`}
-                                  onClick={handleClose}
-                                  aria-label={`Navigate to ${nestedSub.title}`}
-                                  className={`
-                                    block text-left py-1.5 my-1 rounded text-xs
-                                    transition-all duration-200 ease-in-out transform
-                                    theme-text-secondary hover:theme-text
-                                    truncate min-w-0
-                                    ${nestedSub.level === 4 ? "ml-9 mr-3 px-3" : ""}
-                                    ${nestedSub.level === 5 ? "ml-12 mr-3 px-3" : ""}
-                                    ${nestedSub.level === 6 ? "ml-16 mr-3 px-3" : ""}
-                                  `}>
-                                  <span className="block truncate">
-                                    {sidebarNumbers[nestedSub.id] && (
-                                      <span className="inline-block mr-2 font-mono text-xs opacity-75">
-                                        {sidebarNumbers[nestedSub.id]}
-                                      </span>
-                                    )}
-                                    {nestedSub.title}
-                                  </span>
-                                </Link>
-                              ))}
-                            </div>
-                          )}
                         </div>
-                      ))}
+                      );
+                      })}
                     </div>
                   )}
                 </div>
