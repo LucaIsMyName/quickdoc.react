@@ -141,9 +141,10 @@ button {
   @apply text-gray-700 dark:text-gray-300 leading-7;
 }
 
-.markdown-content code {
+/* Inline code styling now handled by applyCodeBlockStyles utility */
+/* .markdown-content code {
   @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm text-gray-800 dark:text-gray-200;
-}
+} */
 
 /* Inline code borders - applied via CSS variables based on theme config */
 .markdown-content p code,
@@ -156,7 +157,15 @@ button {
   border-color: var(--inline-code-border-color);
 }
 
-.markdown-content pre {
+/* Pre block styling now handled by applyCodeBlockStyles utility */
+/* .markdown-content pre {
+  @apply bg-gray-50 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto my-4 text-sm leading-relaxed;
+  max-width: 100%;
+  box-sizing: border-box;
+} */
+
+/* Additional pre styling - now handled by applyCodeBlockStyles utility */
+/* .markdown-content pre {
   @apply bg-gray-50 dark:bg-gray-800 p-4 rounded-lg mb-4 relative
          border border-gray-200 dark:border-gray-700;
   width: 100% !important;
@@ -165,7 +174,7 @@ button {
   overflow-x: auto;
   white-space: pre;
   box-sizing: border-box;
-}
+} */
 
 /* Override Tailwind prose constraints on code blocks */
 .prose pre {
@@ -177,14 +186,15 @@ button {
   box-sizing: border-box !important;
 }
 
-.markdown-content pre code {
+/* Pre code styling now handled by applyCodeBlockStyles utility */
+/* .markdown-content pre code {
   @apply bg-transparent p-0 text-sm leading-relaxed text-gray-800 dark:text-gray-200;
   white-space: pre;
   word-wrap: normal;
   overflow-wrap: normal;
   min-width: 0;
   display: block;
-}
+} */
 
 /* Override prose code constraints */
 .prose pre code {
@@ -375,8 +385,8 @@ button {
   @apply my-8 border-gray-300 dark:border-gray-700;
 }
 
-/* Copy button for code blocks */
-.copy-button-container {
+/* Copy button styling now handled by applyCopyButtonStyles utility */
+/* .copy-button-container {
   @apply absolute top-2 right-2;
 }
 
@@ -408,7 +418,7 @@ button {
 
 .copy-button svg {
   @apply w-4 h-4;
-}
+} */
 
 /* Search highlighting */
 mark {
@@ -491,7 +501,7 @@ mark {
   border-width: var(--border-size);
 }
 
-button {
+button, a {
   @apply cursor-pointer;
 }
 

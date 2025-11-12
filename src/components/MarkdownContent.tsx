@@ -3,6 +3,7 @@ import hljs from 'highlight.js';
 import { parseMarkdown } from '../utils/markdown';
 import { scrollToHeading } from '../utils/scrollHash';
 import { ExportButton } from './ExportButton';
+import { DocumentFooter } from './DocumentFooter';
 import { MDXProvider } from './MDXProvider';
 import type { AppConfig } from '../config/app.config';
 import type { MarkdownFile } from '../types';
@@ -168,6 +169,12 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
           // Regular Markdown: Parse to HTML
           <div dangerouslySetInnerHTML={{ __html: html }} />
         )}
+        
+        {/* Document Footer */}
+        <DocumentFooter 
+          config={config}
+          fileName={file?.slug}
+        />
       </div>
     </div>
   );

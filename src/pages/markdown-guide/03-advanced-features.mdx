@@ -1,0 +1,202 @@
+import React from 'react';
+
+# Advanced Features
+
+## Task Lists
+
+Create interactive checkboxes:
+
+```markdown
+- [x] Completed task
+- [ ] Incomplete task
+- [ ] Another task
+```
+
+Result:
+- [x] Completed task
+- [ ] Incomplete task
+- [ ] Another task
+
+## Tables
+
+Create tables using pipes:
+
+```markdown
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Row 1    | Data     | More     |
+| Row 2    | Data     | More     |
+```
+
+### Table Alignment
+
+```markdown
+| Left | Center | Right |
+|:-----|:------:|------:|
+| Text | Text   | Text  |
+```
+
+## Blockquotes
+
+```markdown
+> This is a blockquote.
+> It can span multiple lines.
+>
+> > Nested blockquotes are also possible.
+```
+
+## Horizontal Rules
+
+Create dividers with three or more dashes:
+
+```markdown
+---
+```
+
+## HTML Support
+
+You can use HTML when Markdown isn't enough:
+
+```html
+<details>
+<summary>Click to expand</summary>
+Hidden content here.
+</details>
+```
+
+**Note**: Use HTML sparingly. Stick to Markdown when possible for better readability.
+
+## MDX Support
+
+QuickDoc supports MDX (Markdown + JSX), which allows you to embed React components directly in your documentation. This enables interactive content and dynamic examples.
+
+### What is MDX?
+
+MDX is a format that combines the simplicity of Markdown with the power of React components. You can:
+
+- Write standard Markdown content
+- Embed React components directly
+- Create interactive documentation
+- Use JSX syntax
+- Import and use external components
+
+### Interactive Counter Example
+
+Here's a live React component embedded directly in the documentation:
+
+export const Counter = () => {
+  const [count, setCount] = React.useState(0);
+  
+  return (
+    <div style={{ 
+      padding: '20px', 
+      border: '2px solid #3b82f6', 
+      borderRadius: '8px', 
+      textAlign: 'center',
+      margin: '20px 0',
+      backgroundColor: '#f8fafc'
+    }}>
+      <h3 style={{ color: '#1e40af', marginBottom: '15px' }}>Count: {count}</h3>
+      <button 
+        onClick={() => setCount(count + 1)}
+        style={{
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          marginRight: '10px',
+          cursor: 'pointer'
+        }}
+      >
+        Increment
+      </button>
+      <button 
+        onClick={() => setCount(0)}
+        style={{
+          backgroundColor: '#ef4444',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer'
+        }}
+      >
+        Reset
+      </button>
+    </div>
+  );
+};
+
+<Counter />
+
+### MDX Code Example
+
+The counter above is created with this MDX code:
+
+```mdx
+import React from 'react';
+
+export const Counter = () => {
+  const [count, setCount] = React.useState(0);
+  
+  return (
+    <div style={{ 
+      padding: '20px', 
+      border: '2px solid #3b82f6', 
+      borderRadius: '8px', 
+      textAlign: 'center',
+      margin: '20px 0',
+      backgroundColor: '#f8fafc'
+    }}>
+      <h3 style={{ color: '#1e40af', marginBottom: '15px' }}>Count: {count}</h3>
+      <button 
+        onClick={() => setCount(count + 1)}
+        style={{
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          marginRight: '10px',
+          cursor: 'pointer'
+        }}
+      >
+        Increment
+      </button>
+      <button 
+        onClick={() => setCount(0)}
+        style={{
+          backgroundColor: '#ef4444',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer'
+        }}
+      >
+        Reset
+      </button>
+    </div>
+  );
+};
+
+<Counter />
+```
+
+### Usage Notes
+
+- **File Extension**: Use `.mdx` instead of `.md` for files with React components
+- **Imports**: Import React and any other dependencies at the top of the file
+- **Components**: Define components using standard React syntax
+- **Embedding**: Use JSX syntax to embed components in your content
+- **State Management**: Components can maintain their own state using React hooks
+
+### Benefits of MDX
+
+- **Interactive Documentation**: Create live examples and demos
+- **Better Developer Experience**: Show working code alongside explanations
+- **Reusable Components**: Create component libraries for documentation
+- **Dynamic Content**: Generate content based on data or user interaction
+
+MDX is perfect for creating engaging, interactive documentation that goes beyond static text and images.

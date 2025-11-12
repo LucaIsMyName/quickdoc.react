@@ -10,6 +10,9 @@ import { applyFontStyles } from "./utils/fontStyles";
 import { applyInlineCodeStyles } from "./utils/inlineCodeStyles";
 import { applyMetaNavStyles } from "./utils/metaNavStyles";
 import { applyColorStyles } from "./utils/colorStyles";
+import { applyCodeBlockStyles } from "./utils/codeBlockStyles";
+import { applyCopyButtonStyles } from "./utils/copyButtonStyles";
+import { applyFooterStyles } from "./utils/footerStyles";
 import { initScrollHashUpdates, handleInitialHash } from "./utils/scrollHash";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NotFound } from "./components/NotFound";
@@ -26,36 +29,48 @@ import "highlight.js/styles/github.css";
 
 // Helper function to extract TOC from content (H2-H6, excluding H1 since it's the file title)
 const extractTOCFromContent = (content: string, fileSlug: string) => {
-  // First, remove code blocks to avoid extracting headings from examples
-  const contentWithoutCodeBlocks = content
-    // Remove fenced code blocks (```...```)
-    .replace(/```[\s\S]*?```/g, '')
-    // Remove inline code blocks (`...`)
-    .replace(/`[^`\n]*`/g, '');
-  
-  // Extract all headings and filter to get H2-H6 (excluding H1 which is the file title)
-  const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+  const lines = content.split('\n');
   const items: any[] = [];
-  let match;
-
-  while ((match = headingRegex.exec(contentWithoutCodeBlocks)) !== null) {
-    const level = match[1]?.length ?? 0;
-    const title = match[2]?.trim() ?? '';
+  let inCodeBlock = false;
+  
+  for (const line of lines) {
+    // Track fenced code block boundaries
+    if (line.trim().startsWith('```')) {
+      inCodeBlock = !inCodeBlock;
+      continue;
+    }
     
-    // Only include H2-H6 headings (exclude H1)
-    if (level >= 2 && level <= 6 && title) {
-      const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
+    // Skip if inside fenced code block
+    if (inCodeBlock) {
+      continue;
+    }
+    
+    // Skip indented code blocks (4+ spaces at start of line)
+    if (line.match(/^    /)) {
+      continue;
+    }
+    
+    // Extract headings - preserve inline code in headings
+    const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
+    if (headingMatch) {
+      const level = headingMatch[1]?.length ?? 0;
+      const title = headingMatch[2]?.trim() ?? '';
       
-      items.push({
-        id: `${fileSlug}-heading-${items.length}`, // UNIQUE ID per file
-        title,
-        level,
-        slug,
-        subsections: []
-      });
+      // Only include H2-H6 headings (exclude H1)
+      if (level >= 2 && level <= 6 && title) {
+        const slug = title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '');
+        
+        items.push({
+          id: `${fileSlug}-heading-${items.length}`, // UNIQUE ID per file
+          title,
+          level,
+          slug,
+          subsections: []
+        });
+      }
     }
   }
 
@@ -306,6 +321,9 @@ function App() {
     applyInlineCodeStyles(config);
     applyMetaNavStyles(files.length > 1);
     applyColorStyles(config);
+    applyCodeBlockStyles(config);
+    applyCopyButtonStyles(config);
+    applyFooterStyles(config);
   }, [config, files.length]); // Consolidated dependencies
 
   // Initialize scroll-based hash updates
@@ -468,9 +486,16 @@ function App() {
               className="flex-1 min-w-0 flex"
               style={{
                 padding: 'var(--content-margin-y)',
+                justifyContent: 'var(--content-justify)',
               }}
             >
-              <div className="w-full mx-2 md:mx-6 md:max-w-4xl lg:mx-8 xl:mx-12">
+              <div 
+                className="mx-2 md:mx-6 lg:mx-8 xl:mx-12"
+                style={{
+                  width: 'var(--content-max-width)',
+                  maxWidth: '100%',
+                }}
+              >
                 {currentFile && currentSection ? (
                   <>
                     {/* Pagination - Top */}

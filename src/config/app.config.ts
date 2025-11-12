@@ -74,7 +74,7 @@ export interface AppConfig {
 
   // Content settings
   content: {
-    maxWidth: string;
+    maxWidth: string; // Any valid CSS max-width value: "800px", "100%", "80rem", "none", etc.
     enableMDX: boolean;
     syntaxHighlighting: boolean;
     copyCodeButton: boolean;
@@ -104,8 +104,8 @@ export const defaultConfig: AppConfig = {
   pagesPath: "/pages",
   navigation: {
     breakingPoint: "h2", // Makes all H2 Content a seperate page
-    showH1InSidebar: false,
-    collapsible: false,
+    showH1InSidebar: true, // deprecated
+    collapsible: false, // depracated
     expandAllSections: true, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
       min: "200px",
@@ -119,13 +119,13 @@ export const defaultConfig: AppConfig = {
       showOnTop: false,
       showOnBottom: true,
     },
-    fileOrder: ["quick-start", "quickdoc", "markdown-guide", "license", "changelog"],
+    fileOrder: ["quickstart", "quickdoc", "markdown-guide", "license", "changelog"],
   },
   theme: {
     isSidebarTransparent: false,
     colors: {
       accent: "sky",
-      light: "neutral",
+      light: "gray",
       dark: "gray",
     },
     fonts: {
@@ -144,7 +144,7 @@ export const defaultConfig: AppConfig = {
     },
     border: {
       radius: "sm",
-      size: "none"
+      size: 1
     },
   },
   content: {

@@ -12,6 +12,18 @@ export const applyContentStyles = (config: AppConfig, mainContentElement: HTMLEl
   
   root.style.setProperty('--content-margin-y', spacingMap[config.content.spacing]);
   
+  // Set content max-width from config
+  root.style.setProperty('--content-max-width', config.content.maxWidth);
+  
+  // Set content alignment from config
+  const alignmentMap = {
+    left: 'flex-start',
+    center: 'center', 
+    right: 'flex-end'
+  };
+  
+  root.style.setProperty('--content-justify', alignmentMap[config.content.align]);
+  
   // Apply desktop-only alignment classes to the main content container
   if (mainContentElement) {
     // Remove existing alignment classes

@@ -113,18 +113,14 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/^-|-$/g, '');
         
-        console.log('Found heading outside code block:', { level, title, slug, inCodeBlock });
-        
         // Track H2 sections as potential parents
         if (level === 2) {
           currentH2 = { title, slug, level };
-          console.log('Set current H2:', currentH2);
         }
         
         // Check if we found our target section
         if (slug === section.slug && level === section.level) {
           foundTargetSection = true;
-          console.log('Found target section, current H2:', currentH2);
           break;
         }
         
@@ -136,9 +132,7 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
     }
     
     // Only return H2 if we actually found the target section and have a valid H2 parent
-    const result = foundTargetSection && currentH2 ? currentH2 : null;
-    console.log('findParentH2Section result:', result);
-    return result;
+    return foundTargetSection && currentH2 ? currentH2 : null;
   };
 
   if (!isOpen) return null;
