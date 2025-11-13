@@ -104,7 +104,7 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
           width: `${width}px`,
         }}
         className={`
-          fixed md:sticky top-[40px] left-0 h-[calc(100vh-40px)]
+          fixed md:sticky top-[40px] left-0 h-[calc(100vh-40px)] relative
           w-0 md:w-auto
           ${config.theme.isSidebarTransparent ? 'bg-transparent' : 'theme-bg'}
           ${config.theme.isSidebarTransparent ? '' : 'sidebar-container'}

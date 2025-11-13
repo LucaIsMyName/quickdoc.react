@@ -465,7 +465,7 @@ function App() {
           </ErrorBoundary>
         )}
 
-        <div  data-buggy-container className="flex">
+        <div className="md:flex">
           {/* Sidebar */}
           <ErrorBoundary>
             <Sidebar
@@ -483,17 +483,16 @@ function App() {
           <ErrorBoundary>
             <main 
               ref={mainContentRef}
-              className="flex-1 min-w-0 flex"
+              className="w-full md:flex-1 min-w-0 flex"
               style={{
                 padding: 'var(--content-margin-y)',
                 justifyContent: 'var(--content-justify)',
               }}
             >
               <div 
-                className="mx-2 md:mx-6 lg:mx-8 xl:mx-12"
+                className="w-full px-4 md:mx-6 lg:mx-8 xl:mx-12 md:w-auto md:px-0"
                 style={{
-                  width: 'var(--content-max-width)',
-                  maxWidth: '100%',
+                  maxWidth: 'min(100%, var(--content-max-width))',
                 }}
               >
                 {currentFile && currentSection ? (

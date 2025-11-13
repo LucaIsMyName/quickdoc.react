@@ -108,9 +108,9 @@ export const defaultConfig: AppConfig = {
     collapsible: false, // depracated
     expandAllSections: true, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
-      min: "200px",
+      min: "160px",
       default: "280px",
-      max: "350px",
+      max: "480px",
     },
     enableUserSidebarWidthChange: true,
     enableNumberedSidebar: true, // Enable numbered sidebar items

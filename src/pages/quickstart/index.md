@@ -7,7 +7,7 @@ Get up and running with QuickDoc in minutes and start creating beautiful, intera
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/yourusername/quickdoc.react.git
+git clone https://github.com/LucaIsMyName/quickdoc.react.git
 cd quickdoc.react
 npm install
 ```

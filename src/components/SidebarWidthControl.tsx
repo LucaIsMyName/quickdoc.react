@@ -63,10 +63,14 @@ export const SidebarWidthControl = ({
   return (
     <div
       className={`
-        hidden md:flex absolute top-0 right-0 h-full cursor-col-resize
+        hidden md:flex absolute top-0 right-0 cursor-col-resize
         transition-all duration-200 z-50
-        ${isHovered || isDragging ? 'bg-blue-500 dark:bg-blue-400 w-2' : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 w-1'}
+        ${isHovered || isDragging ? 'theme-accent-bg w-2' : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 w-1'}
       `}
+      style={{
+        height: '100%',
+        marginRight: '0px' // Offset to align with sidebar edge
+      }}
       onMouseDown={handleMouseDown}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
