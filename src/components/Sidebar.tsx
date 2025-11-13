@@ -104,11 +104,10 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
           width: `${width}px`,
         }}
         className={`
-          fixed md:sticky top-[40px] left-0 h-[calc(100vh-40px)] relative
-          w-0 md:w-auto
+          fixed md:sticky top-[40px] left-0 md:left-auto h-[calc(100vh-40px)] md:h-[calc(100vh-40px)]
           ${config.theme.isSidebarTransparent ? 'bg-transparent' : 'theme-bg'}
           ${config.theme.isSidebarTransparent ? '' : 'sidebar-container'}
-          overflow-y-auto overflow-x-hidden z-40 transition-all duration-300 ease-in-out
+          overflow-y-auto overflow-x-hidden z-40 md:z-auto transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0 shadow-xl" : "-translate-x-full md:translate-x-0 shadow-none"}
           ${config.theme.isSidebarTransparent ? 'hover:sidebar-container' : ''}
         `}>

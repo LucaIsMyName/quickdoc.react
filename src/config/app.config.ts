@@ -95,7 +95,7 @@ export const defaultConfig: AppConfig = {
   site: {
     title: "QuickDoc",
     description: "Fast and beautiful documentation",
-    author: "Your Name",
+    author: "LucaIsMyName",
     url: "https://lucamack.at",
   },
   search: {
@@ -119,12 +119,19 @@ export const defaultConfig: AppConfig = {
       showOnTop: false,
       showOnBottom: true,
     },
-    fileOrder: ["quickstart", "quickdoc", "markdown-guide", "license", "changelog"],
+    fileOrder: [
+      //
+      "quickstart",
+      "quickdoc",
+      "markdown-guide",
+      "changelog",
+      "license",
+    ],
   },
   theme: {
     isSidebarTransparent: false,
     colors: {
-      accent: "sky",
+      accent: "blue",
       light: "gray",
       dark: "gray",
     },
@@ -143,8 +150,8 @@ export const defaultConfig: AppConfig = {
       compact: false,
     },
     border: {
-      radius: "sm",
-      size: 1
+      radius: "none",
+      size: 1,
     },
   },
   content: {

@@ -120,27 +120,27 @@ Each folder becomes a **tab** in the navigation, and files within folders become
 
 ## Key Features Overview
 
-### 🎨 **Theme System**
+### Theme System
 - **Simplified colors**: Use Tailwind color names (`emerald`, `blue`, `purple`)
 - **Auto dark mode**: Automatic light/dark theme switching
 - **Consistent styling**: All components respect your theme
 
-### 🧭 **Smart Navigation**
+### Smart Navigation
 - **Hierarchical numbering**: Optional 1., 1.1., 1.2. sidebar numbering
 - **Breaking points**: Split long content into manageable pages
 - **Cross-page linking**: Link directly to any section with `[text](/page#section)`
 
-### 🔍 **Enhanced Search**
-- **Fuzzy search**: Find content even with typos
+### Enhanced Search
+- **Fuzzy search**: Find content even with typos, beta feature
 - **Smart navigation**: Search results link directly to sections
 - **Keyboard shortcuts**: Quick access with `/` key
 
-### 📱 **Modern UI**
+### Modern UI
 - **Floating toolbar**: Clean, modern action buttons
 - **Responsive design**: Perfect on desktop and mobile
 - **Resizable sidebar**: Users can adjust sidebar width
 
-### ⚡ **Interactive Content**
+### Interactive Content
 - **MDX support**: Embed React components in documentation
 - **Live examples**: Show working code alongside explanations
 - **Theme-aware components**: Everything matches your color scheme

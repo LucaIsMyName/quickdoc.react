@@ -18,7 +18,6 @@ quickdoc.react/
 │   │   └── TabNavigation.tsx
 │   ├── config/             # Configuration files
 │   │   ├── app.config.ts          # Main configuration
-│   │   └── example.google-fonts.config.ts
 │   ├── contexts/           # React contexts
 │   │   └── ThemeContext.tsx
 │   ├── hooks/              # Custom React hooks
@@ -69,7 +68,6 @@ Place your Markdown and MDX files here. Each folder becomes a documentation sect
 ### `/src/config/`
 Configuration files for customizing QuickDoc behavior.
 - `app.config.ts`: Main application configuration
-- `example.google-fonts.config.ts`: Google Fonts configuration example
 
 ### `/src/components/`
 React components that make up the QuickDoc interface.

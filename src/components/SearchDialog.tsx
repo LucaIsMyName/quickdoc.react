@@ -22,7 +22,7 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
     }
   }, [isOpen]);
 
-  // Generate proper URL for navigation with breaking point support
+  // Generate proper URL for navigation - all sections use anchor links
   const getResultUrl = (result: any) => {
     const baseUrl = `/${result.file.slug}`;
     
@@ -40,33 +40,10 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
       return baseUrl;
     }
     
-    // For sections, consider breaking points
+    // For all sections (H2-H6), use anchor links: /file#section
     if (result.section.slug && result.section.slug !== result.file.slug) {
-      if (config.navigation.breakingPoint === 'h2') {
-        if (result.section.level === 2) {
-          // H2 sections get their own route segment: /file/breakpoint
-          const url = `${baseUrl}/${result.section.slug}`;
-          console.log('-> H2 breakpoint, returning:', url);
-          return url;
-        } else if (result.section.level > 2) {
-          // H3+ sections need parent H2 + anchor: /file/breakpoint#headline
-          const parentH2 = findParentH2Section(result.file, result.section);
-          console.log('-> H3+ section, parent H2 found:', parentH2);
-          
-          if (parentH2) {
-            const url = `${baseUrl}/${parentH2.slug}#${result.section.slug}`;
-            console.log('-> H3+ with parent, returning:', url);
-            return url;
-          } else {
-            // Fallback if no parent H2 found
-            const url = `${baseUrl}#${result.section.slug}`;
-            console.log('-> H3+ no parent, fallback:', url);
-            return url;
-          }
-        }
-      }
       const url = `${baseUrl}#${result.section.slug}`;
-      console.log('-> Default anchor, returning:', url);
+      console.log('-> Section anchor, returning:', url);
       return url;
     }
     
@@ -74,66 +51,6 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
     return baseUrl;
   };
 
-  // Helper function to find the parent H2 section for H3+ sections
-  const findParentH2Section = (file: any, section: any) => {
-    // Don't try to find parent for file-level sections
-    if (section.level <= 2 || section.slug === file.slug) {
-      return null;
-    }
-    
-    const lines = file.content.split('\n');
-    let currentH2: any = null;
-    let foundTargetSection = false;
-    let inCodeBlock = false;
-    
-    for (const line of lines) {
-      // Track code block boundaries to ignore headings inside them
-      if (line.trim().startsWith('```')) {
-        inCodeBlock = !inCodeBlock;
-        continue;
-      }
-      
-      // Skip processing if we're inside a code block
-      if (inCodeBlock) {
-        continue;
-      }
-      
-      // Also skip indented code blocks (4+ spaces)
-      if (line.match(/^    /)) {
-        continue;
-      }
-      
-      const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
-      
-      if (headingMatch) {
-        const level = headingMatch[1].length;
-        const title = headingMatch[2].trim();
-        const slug = title
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-|-$/g, '');
-        
-        // Track H2 sections as potential parents
-        if (level === 2) {
-          currentH2 = { title, slug, level };
-        }
-        
-        // Check if we found our target section
-        if (slug === section.slug && level === section.level) {
-          foundTargetSection = true;
-          break;
-        }
-        
-        // Reset H2 if we encounter another H1 (shouldn't happen in well-formed markdown)
-        if (level === 1) {
-          currentH2 = null;
-        }
-      }
-    }
-    
-    // Only return H2 if we actually found the target section and have a valid H2 parent
-    return foundTargetSection && currentH2 ? currentH2 : null;
-  };
 
   if (!isOpen) return null;
 
