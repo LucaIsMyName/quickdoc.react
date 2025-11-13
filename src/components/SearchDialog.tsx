@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import type { MarkdownFile } from '../types';
 import type { AppConfig } from '../config/app.config';
 import { useDocumentSearch } from '../hooks/useDocumentSearch';
+import { sanitizeSearchHighlight } from '../utils/security';
 
 interface SearchDialogProps {
   files: MarkdownFile[];
@@ -127,7 +128,7 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
                     <div 
                       key={matchIndex}
                       className="text-xs theme-text-secondary opacity-75 leading-relaxed text-left"
-                      dangerouslySetInnerHTML={{ __html: match.highlight }}
+                      dangerouslySetInnerHTML={{ __html: sanitizeSearchHighlight(match.highlight) }}
                     />
                   ))}
                 </div>

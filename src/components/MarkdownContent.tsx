@@ -2,6 +2,7 @@ import { useEffect, useRef, memo } from 'react';
 import hljs from 'highlight.js';
 import { parseMarkdown } from '../utils/markdown';
 import { scrollToHeading } from '../utils/scrollHash';
+import { sanitizeHTML } from '../utils/security';
 import { ExportButton } from './ExportButton';
 import { DocumentFooter } from './DocumentFooter';
 import { MDXProvider } from './MDXProvider';
@@ -162,12 +163,12 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
                   ✅ Pure markdown section - rendering section content only
                 </p>
               </div>
-              <div dangerouslySetInnerHTML={{ __html: parseMarkdown(content) }} />
+              <div dangerouslySetInnerHTML={{ __html: sanitizeHTML(parseMarkdown(content)) }} />
             </div>
           )
         ) : (
           // Regular Markdown: Parse to HTML
-          <div dangerouslySetInnerHTML={{ __html: html }} />
+          <div dangerouslySetInnerHTML={{ __html: sanitizeHTML(html) }} />
         )}
         
         {/* Document Footer */}

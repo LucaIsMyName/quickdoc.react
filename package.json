@@ -1,6 +1,6 @@
 {
   "name": "quickdoc.react",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -18,6 +18,7 @@
     "@mdx-js/rollup": "^3.1.1",
     "@types/mdx": "^2.0.13",
     "cmdk": "^1.1.1",
+    "dompurify": "^3.3.0",
     "fuzzyfindjs": "^1.0.51",
     "highlight.js": "^11.10.0",
     "lucide-react": "^0.454.0",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
+    "@types/dompurify": "^3.0.5",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",

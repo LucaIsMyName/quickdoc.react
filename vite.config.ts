@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import mdx from '@mdx-js/rollup';
 import path from 'path';
 import fs from 'fs';
+import { validateFilePath } from './src/utils/security';
 
 // Custom plugin to handle raw MDX content loading
 // This runs BEFORE the MDX plugin to intercept .mdx?raw requests
@@ -27,6 +28,14 @@ const rawMdxPlugin = () => ({
       // Extract the file path without query
       let filePath = id.split('?')[0];
       console.log('[raw-mdx plugin] Original file path:', filePath);
+      
+      try {
+        // Validate file path to prevent path traversal attacks
+        validateFilePath(filePath, ['/pages/', '/src/pages/']);
+      } catch (error) {
+        console.error('[raw-mdx plugin] ❌ Path validation failed:', error);
+        return `export default ""`;
+      }
       
       // Convert Vite's virtual path to actual file system path
       // Vite transforms /src/pages/file.mdx to /pages/file.mdx
@@ -66,6 +75,14 @@ const rawMdxPlugin = () => ({
       // Extract the file path without query
       let filePath = id.split('?')[0];
       console.log('[raw-mdx plugin] Transform original file path:', filePath);
+      
+      try {
+        // Validate file path to prevent path traversal attacks
+        validateFilePath(filePath, ['/pages/', '/src/pages/']);
+      } catch (error) {
+        console.error('[raw-mdx plugin] ❌ Transform path validation failed:', error);
+        return null;
+      }
       
       // Convert Vite's virtual path to actual file system path
       // Vite transforms /src/pages/file.mdx to /pages/file.mdx
