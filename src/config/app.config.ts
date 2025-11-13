@@ -112,7 +112,7 @@ export const defaultConfig: AppConfig = {
       default: "280px",
       max: "480px",
     },
-    enableUserSidebarWidthChange: true,
+    enableUserSidebarWidthChange: false,
     enableNumberedSidebar: true, // Enable numbered sidebar items
     pagination: {
       enabled: false,
@@ -131,9 +131,9 @@ export const defaultConfig: AppConfig = {
   theme: {
     isSidebarTransparent: false,
     colors: {
-      accent: "blue",
-      light: "gray",
-      dark: "gray",
+      accent: "indigo",
+      light: "slate",
+      dark: "slate",
     },
     fonts: {
       sans: "'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
@@ -150,7 +150,7 @@ export const defaultConfig: AppConfig = {
       compact: false,
     },
     border: {
-      radius: "none",
+      radius: "sm",
       size: 1,
     },
   },

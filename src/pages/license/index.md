@@ -28,21 +28,21 @@ SOFTWARE.
 
 ### You Can
 
-✅ **Use** QuickDoc for personal or commercial projects  
-✅ **Modify** the source code to fit your needs  
-✅ **Distribute** your modified or unmodified versions  
-✅ **Sublicense** the software under different terms  
-✅ **Sell** products that include QuickDoc  
+**Use** QuickDoc for personal or commercial projects  
+**Modify** the source code to fit your needs  
+**Distribute** your modified or unmodified versions  
+**Sublicense** the software under different terms  
+**Sell** products that include QuickDoc  
 
 ### You Must
 
-📋 **Include** the copyright notice and license text in all copies  
-📋 **Preserve** the license and copyright notices  
+**Include** the copyright notice and license text in all copies  
+**Preserve** the license and copyright notices  
 
 ### You Cannot
 
-❌ **Hold liable** the authors or copyright holders for any damages  
-❌ **Use** the authors' names to promote your products without permission  
+**Hold liable** the authors or copyright holders for any damages  
+**Use** the authors' names to promote your products without permission  
 
 ## Third-Party Licenses
 

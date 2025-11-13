@@ -445,7 +445,7 @@ function App() {
         author={config.site.author}
       />
 
-      <div className="min-h-screen theme-bg-secondary transition-colors duration-200">
+      <div className="min-h-screen theme-bg transition-colors duration-200">
         {/* Meta Navigation */}
         {files.length > 1 && (
           <ErrorBoundary>
@@ -469,9 +469,7 @@ function App() {
           {/* Sidebar */}
           <ErrorBoundary>
             <Sidebar
-              title={currentFile?.title ?? "Documentation"}
               navigation={mainNavigation}
-              currentSection={state.currentSection || contentSections[0]?.slug || null}
               isOpen={isMobileMenuOpen}
               onClose={handleMobileMenuClose}
               config={config}
@@ -490,7 +488,7 @@ function App() {
               }}
             >
               <div 
-                className="w-full px-4 md:mx-6 lg:mx-8 xl:mx-12 md:w-auto md:px-0"
+                className="w-full flex-1 px-4 md:mx-6 lg:mx-8 xl:mx-12 md:w-auto md:px-0"
                 style={{
                   maxWidth: 'min(100%, var(--content-max-width))',
                 }}

@@ -34,7 +34,7 @@ const TabNavigationComponent = ({ folderNavigation, currentFile, config }: TabNa
                 flex-shrink-0 px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 border-b-2 border-transparent tab-item
                 ${currentFile === item.slug || (item.isFolder && currentFile?.startsWith(item.folderName || ''))
                   ? 'tab-active'
-                  : 'theme-text-secondary hover:theme-text'
+                  : 'neutral-text-secondary hover:neutral-text'
                 }
               `}
             >

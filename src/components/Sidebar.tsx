@@ -1,4 +1,4 @@
-import { memo, useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import type { AppConfig } from '../config/app.config';
 import { ScrollFade } from './ScrollFade';
@@ -54,22 +54,19 @@ const generateSidebarNumbers = (navigation: NavigationItem[], config: AppConfig)
 
 
 interface SidebarProps {
-  title: string;
   navigation: NavigationItem[];
-  currentSection: string | null;
   isOpen: boolean;
   onClose: () => void;
   config: AppConfig;
   currentFile?: string | null; // Current file slug for building URLs
 }
 
-const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, config, currentFile }: SidebarProps) => {
+const SidebarComponent = memo(({ navigation, isOpen, onClose, config, currentFile }: SidebarProps) => {
   console.log(`[DEBUG] Sidebar received navigation for ${currentFile}:`, navigation.length, 'items');
   navigation.forEach((item, idx) => {
     console.log(`  Sidebar ${idx + 1}: "${item.title}" (Level ${item.level}, Slug: ${item.slug})`);
   });
   
-  const [activeId, setActiveId] = useState<string | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { width, setWidth, resetWidth, canResize } = useSidebarWidth(config);
   
@@ -77,10 +74,6 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
   const sidebarNumbers = useMemo(() => {
     return generateSidebarNumbers(navigation, config);
   }, [navigation, config.navigation.enableNumberedSidebar, config.navigation.breakingPoint, config.navigation.showH1InSidebar]);
-
-  useEffect(() => {
-    setActiveId(currentSection);
-  }, [currentSection]);
 
   // Memoize the close handler to prevent unnecessary re-renders
   const handleClose = useCallback(() => {
@@ -105,7 +98,7 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
         }}
         className={`
           fixed md:sticky top-[40px] left-0 md:left-auto h-[calc(100vh-40px)] md:h-[calc(100vh-40px)]
-          ${config.theme.isSidebarTransparent ? 'bg-transparent' : 'theme-bg'}
+          ${config.theme.isSidebarTransparent ? 'bg-transparent' : 'theme-bg-secondary'}
           ${config.theme.isSidebarTransparent ? '' : 'sidebar-container'}
           overflow-y-auto overflow-x-hidden z-40 md:z-auto transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0 shadow-xl" : "-translate-x-full md:translate-x-0 shadow-none"}
@@ -137,9 +130,9 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
                       ${item.level === 5 ? "text-xs ml-12 px-3" : ""}
                       ${item.level === 6 ? "text-xs ml-16 px-3" : ""}
                       ${item.isIndex ? "font-bold  mb-0" : ""}
-                      ${activeId === item.slug 
+                      ${currentFile === item.slug 
                         ? "sidebar-item-active" 
-                        : "theme-text-secondary hover:theme-text"
+                        : `neutral-text-secondary hover:neutral-text ${item.level === 1 ? "hover:theme-bg-secondary" : ""}`
                       }
                     `}>
                     <span className="block truncate">
@@ -170,7 +163,7 @@ const SidebarComponent = memo(({ navigation, currentSection, isOpen, onClose, co
                               className={`
                                 block text-left py-1 px-2 rounded text-xs
                                 transition-all duration-200 ease-in-out transform
-                                theme-text-secondary hover:theme-text hover:bg-gray-100 dark:hover:bg-gray-800
+                                neutral-text-secondary hover:neutral-text
                                 truncate min-w-0
                               `}
                               style={{ marginLeft: `${totalIndent}px` }}>

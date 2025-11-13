@@ -212,6 +212,13 @@ const updateDynamicColorStyles = () => {
       --current-accent: var(--color-accent);
       --current-active-bg: var(--color-active-bg);
       --current-active-text: var(--color-active-text);
+      
+      /* Neutral colors for sidebar/topnav (not theme-dependent) */
+      --neutral-bg: #f9fafb;
+      --neutral-bg-secondary: #f3f4f6;
+      --neutral-text: #111827;
+      --neutral-text-secondary: #6b7280;
+      --neutral-border: #e5e7eb;
     }
 
     .dark {
@@ -224,6 +231,13 @@ const updateDynamicColorStyles = () => {
       --current-accent: var(--color-accent-dark);
       --current-active-bg: var(--color-active-bg-dark);
       --current-active-text: var(--color-active-text-dark);
+      
+      /* Neutral colors for sidebar/topnav in dark mode */
+      --neutral-bg: #1f2937;
+      --neutral-bg-secondary: #374151;
+      --neutral-text: #f9fafb;
+      --neutral-text-secondary: #9ca3af;
+      --neutral-border: #4b5563;
     }
 
     /* Apply colors to elements using CSS variables */
@@ -237,6 +251,13 @@ const updateDynamicColorStyles = () => {
     .theme-accent-border { border-color: var(--current-accent) !important; }
     .theme-active-bg { background-color: var(--current-active-bg) !important; }
     .theme-active-text { color: var(--current-active-text) !important; }
+    
+    /* Neutral colors for sidebar/topnav (not theme-dependent) */
+    .neutral-bg { background-color: var(--neutral-bg) !important; }
+    .neutral-bg-secondary { background-color: var(--neutral-bg-secondary) !important; }
+    .neutral-text { color: var(--neutral-text) !important; }
+    .neutral-text-secondary { color: var(--neutral-text-secondary) !important; }
+    .neutral-border { border-color: var(--neutral-border) !important; }
 
     /* Markdown content links */
     .markdown-content a {

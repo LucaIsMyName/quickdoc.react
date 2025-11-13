@@ -9,6 +9,23 @@ import { getTailwindColor, type TailwindColorName } from './colorStyles';
 export const applyCodeBlockStyles = (config: AppConfig) => {
   const root = document.documentElement;
   
+  // Get border radius and size from config
+  const borderRadius = config.theme.border.radius;
+  const borderSize = config.theme.border.size;
+  
+  // Convert border radius to CSS values
+  const radiusMap = {
+    'none': '0',
+    'sm': '0.125rem',
+    'md': '0.375rem', 
+    'lg': '0.5rem'
+  };
+  
+  const inlineCodeRadius = radiusMap[borderRadius] || '0';
+  const codeBlockRadius = borderRadius === 'none' ? '0' : 
+                         borderRadius === 'sm' ? '0.25rem' :
+                         borderRadius === 'md' ? '0.5rem' : '0.75rem';
+  
   // Determine if we're using the new simplified color system or legacy
   const isNewColorSystem = 'accent' in config.theme.colors;
   
@@ -23,12 +40,12 @@ export const applyCodeBlockStyles = (config: AppConfig) => {
     const lightColor = colors.light;
     const darkColor = colors.dark;
     
-    // Use a noticeably darker shade for code blocks to create clear contrast
-    // Light mode: use 200 weight (much darker than 50 which is used for secondary bg)
-    lightCodeBg = getTailwindColor(lightColor, 50);
+    // Use same background as sidebar (theme-bg-secondary) for visual consistency
+    // Light mode: use 100 weight (same as sidebar secondary bg)
+    lightCodeBg = getTailwindColor(lightColor, 100);
     
-    // Dark mode: use 800 weight (slightly lighter than 900 which is used for secondary bg)
-    darkCodeBg = getTailwindColor(darkColor, 800);
+    // Dark mode: use 900 weight (same as sidebar secondary bg)
+    darkCodeBg = getTailwindColor(darkColor, 900);
   } else {
     // Legacy color system - use backgroundSecondary as base and make it slightly darker
     const colors = config.theme.colors as {
@@ -65,9 +82,10 @@ export const applyCodeBlockStyles = (config: AppConfig) => {
     .markdown-content code:not(pre code) {
       background-color: var(--code-block-bg, ${lightCodeBg}) !important;
       padding: 0.125rem 0.375rem !important;
-      border-radius: 0.25rem !important;
+      border-radius: ${inlineCodeRadius} !important;
       font-size: 0.875rem !important;
       color: var(--current-text) !important;
+      ${Number(borderSize) > 0 ? `border: ${borderSize}px solid var(--theme-border-color, #e5e7eb);` : ''}
     }
     
     /* Dark mode inline code fallback */
@@ -80,7 +98,7 @@ export const applyCodeBlockStyles = (config: AppConfig) => {
     .prose pre {
       background-color: var(--code-block-bg, ${lightCodeBg}) !important;
       padding: 1rem !important;
-      border-radius: 0.5rem !important;
+      border-radius: ${codeBlockRadius} !important;
       overflow-x: auto !important;
       margin: 1rem 0 !important;
       width: 100% !important;
@@ -88,6 +106,7 @@ export const applyCodeBlockStyles = (config: AppConfig) => {
       min-width: 0 !important;
       box-sizing: border-box !important;
       position: relative !important;
+      ${Number(borderSize) > 0 ? `border: ${borderSize}px solid var(--theme-border-color, #e5e7eb);` : ''}
     }
     
     /* Dark mode fallback */
