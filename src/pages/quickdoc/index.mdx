@@ -1,3 +1,5 @@
+import React from "react";
+
 # QuickDoc
 
 Complete developer documentation for customizing and deploying QuickDoc.
@@ -29,3 +31,49 @@ QuickDoc is a documentation framework built with React, TypeScript, and Tailwind
 ## Getting Started
 
 This documentation is organized into chapters covering all aspects of QuickDoc development and deployment. Use the sidebar to navigate between different topics.
+
+export const MyComponent = () => {
+  const [count, setCount] = React.useState(0);
+  
+  return (
+    <div style={{ 
+      padding: '20px', 
+      border: '2px solid #3b82f6', 
+      borderRadius: '8px', 
+      textAlign: 'center',
+      margin: '20px 0',
+      backgroundColor: '#f8fafc'
+    }}>
+      <h3 style={{ color: '#1e40af', marginBottom: '15px' }}>Count: {count}</h3>
+      <button 
+        onClick={() => setCount(count + 1)}
+        style={{
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          marginRight: '10px',
+          cursor: 'pointer'
+        }}
+      >
+        Increment
+      </button>
+      <button 
+        onClick={() => setCount(0)}
+        style={{
+          backgroundColor: '#ef4444',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer'
+        }}
+      >
+        Reset
+      </button>
+    </div>
+  );
+};
+
+<MyComponent />

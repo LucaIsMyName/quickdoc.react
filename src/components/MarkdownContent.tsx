@@ -1,13 +1,13 @@
-import { useEffect, useRef, memo } from 'react';
-import hljs from 'highlight.js';
-import { parseMarkdown } from '../utils/markdown';
-import { scrollToHeading } from '../utils/scrollHash';
-import { sanitizeHTML } from '../utils/security';
-import { ExportButton } from './ExportButton';
-import { DocumentFooter } from './DocumentFooter';
-import { MDXProvider } from './MDXProvider';
-import type { AppConfig } from '../config/app.config';
-import type { MarkdownFile } from '../types';
+import { useEffect, useRef, memo } from "react";
+import hljs from "highlight.js";
+import { parseMarkdown } from "../utils/markdown";
+import { scrollToHeading } from "../utils/scrollHash";
+import { sanitizeHTML } from "../utils/security";
+import { ExportButton } from "./ExportButton";
+import { DocumentFooter } from "./DocumentFooter";
+import { MDXProvider } from "./MDXProvider";
+import type { AppConfig } from "../config/app.config";
+import type { MarkdownFile } from "../types";
 
 interface ExportProps {
   content: string;
@@ -28,7 +28,7 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
 
   // Check if this is an MDX file
   const isMDXSection = file?.isMDX === true;
-  
+
   // Debug logging
   console.log(`[MarkdownContent] Rendering - isMDXSection: ${isMDXSection}, content length: ${content.length}`);
   if (isMDXSection) {
@@ -39,12 +39,12 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
     if (!contentRef.current) return;
 
     const container = contentRef.current;
-    
+
     // Batch DOM queries to avoid multiple reflows
-    const codeBlocks = config.content.syntaxHighlighting ? container.querySelectorAll('pre code') : [];
-    const preElements = config.content.copyCodeButton ? container.querySelectorAll('pre:not([data-copy-added])') : [];
-    const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    
+    const codeBlocks = config.content.syntaxHighlighting ? container.querySelectorAll("pre code") : [];
+    const preElements = config.content.copyCodeButton ? container.querySelectorAll("pre:not([data-copy-added])") : [];
+    const headings = container.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
     // Apply syntax highlighting
     if (config.content.syntaxHighlighting && codeBlocks.length > 0) {
       // Use requestAnimationFrame to avoid blocking main thread
@@ -58,30 +58,30 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
     // Add copy buttons to code blocks (batch DOM mutations)
     if (config.content.copyCodeButton && preElements.length > 0) {
       preElements.forEach((pre) => {
-        pre.setAttribute('data-copy-added', 'true'); // Mark as processed
-        
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'copy-button-container';
-        
-        const button = document.createElement('button');
-        button.className = 'copy-button';
-        button.setAttribute('aria-label', 'Copy code to clipboard');
-        
+        pre.setAttribute("data-copy-added", "true"); // Mark as processed
+
+        const buttonContainer = document.createElement("div");
+        buttonContainer.className = "copy-button-container";
+
+        const button = document.createElement("button");
+        button.className = "copy-button";
+        button.setAttribute("aria-label", "Copy code to clipboard");
+
         button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
-        
+
         button.onclick = () => {
-          const code = pre.querySelector('code');
+          const code = pre.querySelector("code");
           if (code) {
-            navigator.clipboard.writeText(code.textContent ?? '');
+            navigator.clipboard.writeText(code.textContent ?? "");
             button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
-            button.classList.add('copied');
+            button.classList.add("copied");
             setTimeout(() => {
               button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
-              button.classList.remove('copied');
+              button.classList.remove("copied");
             }, 2000);
           }
         };
-        
+
         buttonContainer.appendChild(button);
         pre.appendChild(buttonContainer);
       });
@@ -95,24 +95,24 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
 
     // Process headings for anchor links (batch style updates)
     if (headings.length > 0) {
-      const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--meta-nav-height')) || 40;
-      
+      const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--meta-nav-height")) || 40;
+
       headings.forEach((heading) => {
         // Skip headings that are inside code blocks
-        if (heading.closest('pre, code')) return;
-        
-        const text = heading.textContent ?? '';
+        if (heading.closest("pre, code")) return;
+
+        const text = heading.textContent ?? "";
         const id = text
           .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-|-$/g, '');
-        
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
+
         const htmlHeading = heading as HTMLElement;
-        
+
         // Batch style updates
         htmlHeading.id = id;
         htmlHeading.style.cssText = `scroll-margin-top: ${headerHeight}px; cursor: pointer;`;
-        
+
         // Add click handler
         htmlHeading.onclick = () => {
           scrollToHeading(id);
@@ -122,7 +122,7 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
   }, [content, config, onNavigationExtracted]);
 
   // Parse regular markdown if not MDX
-  const html = !isMDXSection ? parseMarkdown(content) : '';
+  const html = !isMDXSection ? parseMarkdown(content) : "";
 
   return (
     <div className="relative w-full">
@@ -136,43 +136,20 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
           />
         </div>
       )}
-      
+
       <div
         ref={contentRef}
-        className="markdown-content prose prose-gray dark:prose-invert max-w-none w-full"
-      >
+        className="markdown-content prose prose-gray dark:prose-invert max-w-none w-full">
         {isMDXSection ? (
           // MDX Section: Check if this section has React components
-          content.includes('<') && (content.includes('Counter') || content.includes('Alert')) ? (
-            // This section has React components - use full MDX component (temporary)
-            <div>
-              <div className="sr-only mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded">
-                <p className="text-sm text-blue-700 dark:text-blue-300">
-                  ⚠️ This section contains React components. Showing full MDX for now.
-                </p>
-              </div>
-              <MDXProvider>
-                {file?.MDXComponent && <file.MDXComponent />}
-              </MDXProvider>
-            </div>
-          ) : (
-            // This section is just markdown - render as HTML
-            <div>
-              <div className="sr-only mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
-                <p className="text-sm text-green-700 dark:text-green-300">
-                  ✅ Pure markdown section - rendering section content only
-                </p>
-              </div>
-              <div dangerouslySetInnerHTML={{ __html: sanitizeHTML(parseMarkdown(content)) }} />
-            </div>
-          )
+          <MDXProvider>{file?.MDXComponent && <file.MDXComponent />}</MDXProvider>
         ) : (
           // Regular Markdown: Parse to HTML
           <div dangerouslySetInnerHTML={{ __html: sanitizeHTML(html) }} />
         )}
-        
+
         {/* Document Footer */}
-        <DocumentFooter 
+        <DocumentFooter
           config={config}
           fileName={file?.slug}
         />
