@@ -14,6 +14,8 @@ interface SearchResult {
   matches: {
     text: string;
     highlight: string;
+    type: 'title' | 'content';
+    level?: number;
   }[];
   score?: number;
 }
@@ -104,6 +106,13 @@ export const useDocumentSearch = (files: MarkdownFile[], config: AppConfig) => {
     return { searchableItems: items, fuzzySearch: fuzzySearchInstance };
   }, [files]);
 
+  // Calculate weighted score based on match type and heading level
+  const calculateScore = (matchType: 'title' | 'content', level: number, baseScore: number = 1): number => {
+    // Weight multipliers: H1 = 6, H2 = 5, H3 = 4, H4 = 3, H5 = 2, H6 = 1, content = 0.5
+    const levelWeight = matchType === 'title' ? (7 - level) : 0.5;
+    return baseScore * levelWeight;
+  };
+
   // Fallback basic search function (moved before searchResults to avoid hoisting issues)
   const basicSearch = (query: string, items: SearchableItem[]): SearchResult[] => {
     const lowerQuery = query.toLowerCase();
@@ -113,17 +122,21 @@ export const useDocumentSearch = (files: MarkdownFile[], config: AppConfig) => {
       const searchableText = item.searchableText.toLowerCase();
       
       if (searchableText.includes(lowerQuery)) {
-        const matches: { text: string; highlight: string }[] = [];
+        const matches: { text: string; highlight: string; type: 'title' | 'content'; level?: number }[] = [];
+        let totalScore = 0;
         
-        // Search in title
+        // Search in title (higher weight)
         if (item.section.title.toLowerCase().includes(lowerQuery)) {
           matches.push({
             text: item.section.title,
-            highlight: highlightText(item.section.title, query)
+            highlight: highlightText(item.section.title, query),
+            type: 'title',
+            level: item.section.level
           });
+          totalScore += calculateScore('title', item.section.level);
         }
 
-        // Search in content
+        // Search in content (lower weight)
         const contentLines = item.section.content.split('\n');
         contentLines.forEach((line, index) => {
           if (line.toLowerCase().includes(lowerQuery) && line.trim() && matches.length < 3) {
@@ -133,8 +146,10 @@ export const useDocumentSearch = (files: MarkdownFile[], config: AppConfig) => {
             
             matches.push({
               text: context,
-              highlight: highlightText(context, query)
+              highlight: highlightText(context, query),
+              type: 'content'
             });
+            totalScore += calculateScore('content', item.section.level);
           }
         });
 
@@ -143,13 +158,14 @@ export const useDocumentSearch = (files: MarkdownFile[], config: AppConfig) => {
             file: item.file,
             section: item.section,
             matches: matches.slice(0, 3),
-            score: 0.8 // Default score for basic search
+            score: totalScore
           });
         }
       }
     });
 
-    return results.slice(0, 20);
+    // Sort by score (higher is better)
+    return results.sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 20);
   };
 
   // Search functionality (fuzzy or basic based on config)
@@ -171,15 +187,19 @@ export const useDocumentSearch = (files: MarkdownFile[], config: AppConfig) => {
           return null;
         }
 
-        const matches: { text: string; highlight: string }[] = [];
+        const matches: { text: string; highlight: string; type: 'title' | 'content'; level?: number }[] = [];
+        let weightedScore = result.score || 0;
 
         // Create matches from the search result
         // Check if title contains the query
         if (item.section.title.toLowerCase().includes(searchQuery.toLowerCase())) {
           matches.push({
             text: item.section.title,
-            highlight: highlightText(item.section.title, searchQuery)
+            highlight: highlightText(item.section.title, searchQuery),
+            type: 'title',
+            level: item.section.level
           });
+          weightedScore += calculateScore('title', item.section.level, result.score || 1);
         }
 
         // Extract context from content that matches the query
@@ -194,8 +214,10 @@ export const useDocumentSearch = (files: MarkdownFile[], config: AppConfig) => {
             if (context && matches.length < 3) { // Limit to 3 matches per section
               matches.push({
                 text: context,
-                highlight: highlightText(context, searchQuery)
+                highlight: highlightText(context, searchQuery),
+                type: 'content'
               });
+              weightedScore += calculateScore('content', item.section.level, result.score || 1);
             }
           }
         });
@@ -204,7 +226,9 @@ export const useDocumentSearch = (files: MarkdownFile[], config: AppConfig) => {
         if (matches.length === 0) {
           matches.push({
             text: item.section.title,
-            highlight: highlightText(item.section.title, searchQuery)
+            highlight: highlightText(item.section.title, searchQuery),
+            type: 'title',
+            level: item.section.level
           });
         }
 
@@ -212,7 +236,7 @@ export const useDocumentSearch = (files: MarkdownFile[], config: AppConfig) => {
           file: item.file,
           section: item.section,
           matches: matches.slice(0, 3), // Limit to 3 matches per section
-          score: result.score
+          score: weightedScore
         };
       }).filter(Boolean) as SearchResult[];
 

@@ -309,6 +309,15 @@ const updateDynamicColorStyles = () => {
     .theme-border-size {
       border-width: var(--theme-border-size) !important;
     }
+    
+    /* Search result highlights - use accent color instead of yellow */
+    .search-result-title mark,
+    .search-result-content mark {
+      background-color: transparent !important;
+      color: var(--current-accent) !important;
+      font-weight: 600;
+      padding: 0;
+    }
   `;
 
   // Remove existing dynamic color style if it exists

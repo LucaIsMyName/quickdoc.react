@@ -117,20 +117,28 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
                 onClick={onClose}
                 className="block px-3 py-2 cursor-pointer hover:theme-active-bg transition-colors theme-radius-base mx-2 text-left"
               >
-                {/* Main title/heading - Make this bigger */}
-                <div className="text-base font-medium theme-text mb-1 text-left">
-                  {result.section.level > 1 ? result.section.title : result.file.title}
-                </div>
+                {/* Main title/heading with highlighted matches */}
+                <div 
+                  className="text-base font-medium theme-text mb-1 text-left search-result-title"
+                  dangerouslySetInnerHTML={{ 
+                    __html: sanitizeSearchHighlight(
+                      result.matches.find(m => m.type === 'title')?.highlight || 
+                      (result.section.level > 1 ? result.section.title : result.file.title)
+                    )
+                  }}
+                />
                 
-                {/* Search content - Make this smaller and less prominent */}
+                {/* Search content - Only show content matches, not title matches */}
                 <div className="space-y-1 text-left">
-                  {result.matches.map((match, matchIndex) => (
-                    <div 
-                      key={matchIndex}
-                      className="text-xs theme-text-secondary opacity-75 leading-relaxed text-left"
-                      dangerouslySetInnerHTML={{ __html: sanitizeSearchHighlight(match.highlight) }}
-                    />
-                  ))}
+                  {result.matches
+                    .filter(match => match.type === 'content')
+                    .map((match, matchIndex) => (
+                      <div 
+                        key={matchIndex}
+                        className="text-xs theme-text-secondary opacity-75 leading-relaxed text-left search-result-content"
+                        dangerouslySetInnerHTML={{ __html: sanitizeSearchHighlight(match.highlight) }}
+                      />
+                    ))}
                 </div>
               </Link>
             </div>
