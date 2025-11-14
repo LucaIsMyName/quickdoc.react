@@ -6,7 +6,7 @@ import fs from 'fs';
 import { validateFilePath } from './src/utils/security';
 
 // Custom plugin to handle raw MDX content loading
-// This runs BEFORE the MDX plugin to intercept .mdx?raw requests
+// This runs BEFORE the MDX plugin to intercept .mdx?mdx-raw requests
 const rawMdxPlugin = () => ({
   name: 'raw-mdx',
   enforce: 'pre' as const,
@@ -15,9 +15,45 @@ const rawMdxPlugin = () => ({
   resolveId(id: string) {
     if (id.includes('.mdx?mdx-raw')) {
       console.log('[raw-mdx plugin] resolveId intercepted:', id);
-      return id; // Let Vite know we'll handle this
+      // Return a resolved ID that Vite will recognize
+      return id;
     }
     return null;
+  },
+  
+  // Add configureServer to handle HTTP requests in dev mode
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      if (req.url?.includes('.mdx?mdx-raw')) {
+        console.log('[raw-mdx plugin] HTTP request intercepted:', req.url);
+        
+        // Extract file path
+        let filePath = req.url.split('?')[0] ?? '';
+        
+        // Convert to absolute path
+        if (filePath.startsWith('/src/pages/')) {
+          filePath = path.resolve(__dirname, '.' + filePath);
+        } else if (filePath.startsWith('/pages/')) {
+          filePath = path.resolve(__dirname, 'src' + filePath);
+        } else {
+          return next();
+        }
+        
+        try {
+          const content = fs.readFileSync(filePath, 'utf-8');
+          console.log('[raw-mdx plugin] ✅ HTTP: Raw content loaded, length:', content.length);
+          
+          // Return as JavaScript module
+          res.setHeader('Content-Type', 'application/javascript');
+          res.end(`export default ${JSON.stringify(content)}`);
+          return;
+        } catch (err) {
+          console.error('[raw-mdx plugin] ❌ HTTP failed:', err);
+          return next();
+        }
+      }
+      next();
+    });
   },
   
   // Use load to provide the content

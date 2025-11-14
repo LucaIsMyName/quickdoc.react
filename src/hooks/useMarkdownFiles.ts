@@ -41,28 +41,22 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
               console.log(`[MDX] Fetched content length: ${content.length}`);
               console.log(`[MDX] Fetched content preview:`, content.substring(0, 200));
               
-              // Extract the raw MDX source from the compiled JavaScript
-              // The source is stored as: const MDXLayout = "escaped_mdx_source";
-              const mdxLayoutMatch = content.match(/const MDXLayout = "(.*?)";/s);
-              if (mdxLayoutMatch && mdxLayoutMatch[1]) {
-                // Properly unescape the JSON-escaped string content
+              // The middleware now returns: export default "raw content"
+              // Extract the string from the module format
+              const moduleMatch = content.match(/export default "(.*)"/s);
+              if (moduleMatch && moduleMatch[1]) {
                 try {
-                  let rawMdxSource = JSON.parse(`"${mdxLayoutMatch[1]}"`);
+                  // Unescape the JSON string
+                  const rawMdxSource = JSON.parse(`"${moduleMatch[1]}"`);
                   console.log(`[MDX] Extracted raw MDX source, length: ${rawMdxSource.length}`);
                   console.log(`[MDX] Raw MDX preview:`, rawMdxSource.substring(0, 200));
-                  
-                  // Remove React import since the compiler provides React as a parameter
-                  rawMdxSource = rawMdxSource.replace(/^import\s+React\s+from\s+['"]react['"];\s*\n?/m, '');
-                  console.log(`[MDX] Cleaned MDX source, length: ${rawMdxSource.length}`);
-                  console.log(`[MDX] Cleaned preview:`, rawMdxSource.substring(0, 200));
-                  
                   content = rawMdxSource;
                 } catch (parseError) {
-                  console.error(`[MDX] Failed to parse extracted MDX source:`, parseError);
-                  console.log(`[MDX] Raw extracted string:`, mdxLayoutMatch[1].substring(0, 200));
+                  console.error(`[MDX] Failed to parse module export:`, parseError);
+                  console.log(`[MDX] Match content:`, moduleMatch[1].substring(0, 200));
                 }
               } else {
-                console.warn(`[MDX] Could not extract raw MDX source from compiled content`);
+                console.warn(`[MDX] Could not extract from module format for ${path}`);
                 console.log(`[MDX] Content structure:`, content.substring(0, 500));
               }
               
