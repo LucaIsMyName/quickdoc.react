@@ -130,17 +130,18 @@ export default defineConfig({
       exclude: /\.md$/,
     }),
     react({
-      // React Compiler disabled temporarily due to build issues
-      // babel: {
-      //   plugins: [
-      //     ['babel-plugin-react-compiler', {}],
-      //   ],
-      // },
+     // React Compiler disabled temporarily due to build issues
+      babel: {
+        plugins: [
+          ['babel-plugin-react-compiler', {}],
+        ],
+      },
     }),
   ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      'react/compiler-runtime': 'react-compiler-runtime',
     },
   },
   // Development optimizations
