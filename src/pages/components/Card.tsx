@@ -12,9 +12,9 @@ export const Card: React.FC<CardProps> = ({
   variant = 'default',
 }) => {
   const variants = {
-    default: 'theme-bg-secondary',
-    bordered: 'theme-border theme-border-size',
-    elevated: 'shadow-lg theme-bg',
+    default: 'theme-bg-secondary theme-border-medium',
+    bordered: 'theme-border-medium theme-border-size',
+    elevated: 'shadow-lg theme-bg theme-border-medium',
   };
 
   return (

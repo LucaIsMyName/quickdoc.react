@@ -12,6 +12,8 @@ export const defaultConfig: AppConfig = {
     description: 'Fast and beautiful documentation',
     author: 'Your Name',
     url: 'https://yourdomain.com',
+    language: 'en',        // Language code for SEO (en, de, fr, etc.)
+    indexable: true,       // Allow search engines to index (true/false)
   },
   
   // Navigation settings
@@ -112,6 +114,28 @@ The new simplified color system uses Tailwind color names:
 - **Available colors**: `slate`, `gray`, `zinc`, `neutral`, `stone`, `red`, `orange`, `amber`, `yellow`, `lime`, `green`, `emerald`, `teal`, `cyan`, `sky`, `blue`, `indigo`, `violet`, `purple`, `fuchsia`, `pink`, `rose`
 - **Automatic weight mapping**: Light/dark backgrounds and text colors are automatically calculated
 - **Theme-aware components**: All UI elements including code blocks, copy buttons, and borders respect the theme
+
+## SEO Configuration
+
+### Language Setting
+- **Purpose**: Sets the HTML `lang` attribute and language meta tags
+- **Format**: ISO 639-1 language codes (e.g., `en`, `de`, `fr`, `es`, `ja`)
+- **Impact**: Improves accessibility and search engine understanding
+
+### Indexability Control
+- **`indexable: true`**: Allows search engines to index your documentation
+  - Sets `robots` meta tag to `"index, follow"`
+  - Recommended for public documentation
+- **`indexable: false`**: Prevents search engine indexing
+  - Sets `robots` meta tag to `"noindex, nofollow"`
+  - Useful for internal/private documentation
+
+### SEO Features
+- **Dynamic meta tags**: Title, description, author automatically set
+- **Open Graph tags**: Social media preview support
+- **Twitter Card tags**: Enhanced Twitter sharing
+- **Canonical URLs**: Proper URL canonicalization
+- **Language declaration**: HTML lang attribute for accessibility
 
 ## Navigation Options
 

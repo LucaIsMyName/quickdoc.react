@@ -7,6 +7,8 @@ export interface AppConfig {
     description: string;
     author: string;
     url: string;
+    language?: string;
+    indexable?: boolean;
   };
 
   // Navigation settings
@@ -97,6 +99,8 @@ export const defaultConfig: AppConfig = {
     description: "Fast and beautiful documentation",
     author: "LucaIsMyName",
     url: "https://lucamack.at",
+    language: "en",
+    indexable: true,
   },
   search: {
     enableFuzzySearch: false, // Default to plain search
@@ -155,7 +159,7 @@ export const defaultConfig: AppConfig = {
     },
   },
   content: {
-    maxWidth: "800px",
+    maxWidth: "768px",
     enableMDX: true,
     syntaxHighlighting: true,
     copyCodeButton: true,

@@ -43,7 +43,7 @@ export const Callout: React.FC<CalloutProps> = ({
   const IconComponent = style.Icon;
 
   return (
-    <div className={`my-4 p-4 border-l-4 theme-border-radius ${style.container}`}>
+    <div className={`theme-border-medium my-4 p-4 border-l-4 theme-border-radius ${style.container}`}>
       <div className="flex gap-3">
         <IconComponent className={`w-5 h-5 flex-shrink-0 mt-0.5 ${style.icon}`} />
         <div className="flex-1">

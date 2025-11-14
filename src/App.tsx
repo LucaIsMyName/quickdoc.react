@@ -474,6 +474,8 @@ function App() {
         title={currentFile?.title ? `${currentFile.title} - ${config.site.title}` : config.site.title}
         description={config.site.description}
         author={config.site.author}
+        language={config.site.language || "en"}
+        isIndex={config.site.indexable !== false}
       />
 
       <div className="min-h-screen theme-bg transition-colors duration-200">
