@@ -333,6 +333,23 @@ function App() {
     return cleanup;
   }, []);
 
+  // Scroll to top when navigating to a different file
+  const previousFileRef = useRef<string | null>(null);
+  
+  useEffect(() => {
+    // Check if the file has actually changed
+    if (previousFileRef.current !== null && previousFileRef.current !== state.currentFile) {
+      // File changed - scroll to top
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+    
+    // Update the ref for next comparison
+    previousFileRef.current = state.currentFile;
+  }, [state.currentFile]);
+
   // Handle hash scrolling when currentFile or currentSection changes
   useEffect(() => {
     const hash = window.location.hash.slice(1);
@@ -397,6 +414,20 @@ function App() {
       }, 150);
     }
   }, [location]);
+
+  // Handle keyboard shortcuts (Cmd+K / Ctrl+K to open search)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+      if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+        event.preventDefault(); // Prevent browser's default search
+        handleSearchOpen();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleSearchOpen]);
 
   // Early returns for loading and error states - now after all hooks are called
   if (loading) {

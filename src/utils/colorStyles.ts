@@ -103,11 +103,29 @@ export const getTailwindColor = (colorName: TailwindColorName, weight: TailwindC
 };
 
 /**
- * Apply color styles from the simplified color configuration
+ * Apply color styles and theme settings from configuration
  */
 export const applyColorStyles = (config: AppConfig) => {
   const root = document.documentElement;
-  const { colors } = config.theme;
+  const { colors, border } = config.theme;
+  
+  // Set border radius CSS variable
+  const borderRadiusMap = {
+    none: '0',
+    sm: '0.25rem',
+    md: '0.5rem',
+    lg: '1rem',
+  };
+  root.style.setProperty('--theme-border-radius', borderRadiusMap[border.radius]);
+  
+  // Set border size CSS variable
+  const borderSizeMap = {
+    none: '0',
+    1: '1px',
+    2: '2px',
+    3: '3px',
+  };
+  root.style.setProperty('--theme-border-size', borderSizeMap[border.size]);
 
   // Check if using new simplified color system
   if ('accent' in colors && 'light' in colors && 'dark' in colors) {
@@ -281,6 +299,15 @@ const updateDynamicColorStyles = () => {
       color: var(--current-accent) !important;
       border-bottom-color: var(--current-accent) !important;
       font-weight: 500;
+    }
+    
+    /* Theme border radius and size */
+    .theme-border-radius {
+      border-radius: var(--theme-border-radius) !important;
+    }
+    
+    .theme-border-size {
+      border-width: var(--theme-border-size) !important;
     }
   `;
 

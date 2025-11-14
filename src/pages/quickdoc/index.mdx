@@ -32,13 +32,8 @@ QuickDoc is a documentation framework built with React, TypeScript, and Tailwind
 
 This documentation is organized into chapters covering all aspects of QuickDoc development and deployment. Use the sidebar to navigate between different topics.
 
-export const MyComponent = () => {
-  return (
-    <div>
-      <h1>My Component</h1>
-      <p>This is a simple component.</p>
-    </div>
-  );
-};
+export function MyComponent({ ...props }) {
+  return <span className="text-7xl">{props.content}</span>;
+}
 
-<MyComponent />
+<MyComponent content="Hello, World!" />

@@ -1,0 +1,155 @@
+import { IFrame, Callout, Tabs, CodeBlock, Steps, Card, Badge } from '../components';
+
+# MDX Components
+
+QuickDoc supports custom React components that can be embedded directly in your MDX documentation. These components enhance your documentation with interactive and visually appealing elements.
+
+## Callout Component
+
+Use callouts to highlight important information, warnings, or tips.
+
+<Callout type="info" title="Information">
+This is an informational callout. Use it to provide helpful context or additional details.
+</Callout>
+
+<Callout type="warning" title="Warning">
+This is a warning callout. Use it to alert users about potential issues or important considerations.
+</Callout>
+
+<Callout type="success" title="Success">
+This is a success callout. Use it to confirm successful operations or highlight positive outcomes.
+</Callout>
+
+<Callout type="error" title="Error">
+This is an error callout. Use it to display error messages or critical issues.
+</Callout>
+
+## Badge Component
+
+Badges are perfect for labels, status indicators, or version tags.
+
+<div className="flex gap-2 flex-wrap my-4">
+  <Badge>Default</Badge>
+  <Badge variant="success">Success</Badge>
+  <Badge variant="warning">Warning</Badge>
+  <Badge variant="error">Error</Badge>
+  <Badge variant="info">Info</Badge>
+</div>
+
+Different sizes:
+
+<div className="flex gap-2 items-center my-4">
+  <Badge size="sm">Small</Badge>
+  <Badge size="md">Medium</Badge>
+  <Badge size="lg">Large</Badge>
+</div>
+
+## Card Component
+
+Cards help organize content into distinct sections.
+
+<Card title="Default Card">
+This is a default card with a title. Cards are great for grouping related content.
+</Card>
+
+<Card title="Bordered Card" variant="bordered">
+This card has a visible border for more emphasis.
+</Card>
+
+<Card title="Elevated Card" variant="elevated">
+This card has a shadow for a floating effect.
+</Card>
+
+## Steps Component
+
+Perfect for tutorials, guides, or any sequential process.
+
+<Steps
+  steps={[
+    {
+      title: "Install Dependencies",
+      description: "Run npm install to install all required packages for your project."
+    },
+    {
+      title: "Configure Settings",
+      description: "Update your configuration file with the necessary settings and API keys."
+    },
+    {
+      title: "Start Development",
+      description: "Run npm run dev to start the development server and begin coding."
+    }
+  ]}
+/>
+
+## Tabs Component
+
+Organize related content in tabs for better space utilization.
+
+<Tabs
+  tabs={[
+    {
+      label: "JavaScript",
+      content: <CodeBlock code={`const greeting = 'Hello, World!';
+console.log(greeting);`} language="javascript" />
+    },
+    {
+      label: "TypeScript",
+      content: <CodeBlock code={`const greeting: string = 'Hello, World!';
+console.log(greeting);`} language="typescript" />
+    },
+    {
+      label: "Python",
+      content: <CodeBlock code={`greeting = 'Hello, World!'
+print(greeting)`} language="python" />
+    }
+  ]}
+/>
+
+## CodeBlock Component
+
+Enhanced code blocks with copy functionality and optional line numbers.
+
+<CodeBlock
+  code={`function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+console.log(fibonacci(10));`}
+  language="javascript"
+  title="fibonacci.js"
+  showLineNumbers={true}
+/>
+
+## IFrame Component
+
+Embed external content like YouTube videos, Google Maps, or any other embeddable content.
+
+<IFrame 
+  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+  aspect="16/9"
+  loading="lazy"
+  title="YouTube video example"
+/>
+
+### IFrame Props
+
+- **src** (required): The URL of the content to embed
+- **aspect**: Aspect ratio (`16/9`, `4/3`, `1/1`, `21/9`). Default: `16/9`
+- **loading**: Loading strategy (`lazy` or `eager`). Default: `lazy`
+- **title**: Accessible title for the iframe
+- **allow**: Permissions policy for the iframe
+
+## Summary
+
+These components provide a rich set of tools for creating engaging documentation:
+
+- **Callout**: Highlight important information with visual emphasis
+- **Badge**: Label and categorize content with colored tags
+- **Card**: Group related content in styled containers
+- **Steps**: Guide users through sequential processes
+- **Tabs**: Organize multiple related examples or options
+- **CodeBlock**: Display code with syntax highlighting and copy functionality
+- **IFrame**: Embed external content seamlessly
+
+All components are fully responsive, support dark mode, and follow accessibility best practices.
