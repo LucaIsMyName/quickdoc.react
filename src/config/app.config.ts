@@ -162,6 +162,6 @@ export const defaultConfig: AppConfig = {
     syntaxHighlighting: true,
     copyCodeButton: true,
     align: "left",
-    spacing: "compact",
+    spacing: "normal",
   },
 };
