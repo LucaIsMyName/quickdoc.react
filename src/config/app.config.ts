@@ -13,7 +13,6 @@ export interface AppConfig {
 
   // Navigation settings
   navigation: {
-    breakingPoint: "h1" | "h2" | "h3" | "h4";
     showH1InSidebar: boolean;
     collapsible: boolean;
     expandAllSections: boolean; // Keep all sidebar sections expanded (h2-h6)
@@ -100,14 +99,13 @@ export const defaultConfig: AppConfig = {
     author: "LucaIsMyName",
     url: "https://lucamack.at",
     language: "en",
-    indexable: true,
+    indexable: false,
   },
   search: {
     enableFuzzySearch: false, // Default to plain search
   },
   pagesPath: "/pages",
   navigation: {
-    breakingPoint: "h2", // Makes all H2 Content a seperate page
     showH1InSidebar: true, // deprecated
     collapsible: false, // depracated
     expandAllSections: true, // Keep all sidebar sections collapsed by default
@@ -135,17 +133,17 @@ export const defaultConfig: AppConfig = {
   theme: {
     isSidebarTransparent: false,
     colors: {
-      accent: "indigo",
+      accent: "teal",
       light: "slate",
       dark: "slate",
     },
     fonts: {
-      sans: "'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+      sans: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
       mono: "'Geist Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace",
       size: "medium",
       // Google Fonts: Work Sans + JetBrains Mono
       googleFonts: {
-        sans: "Geist:300,400,500,600,700",
+        sans: "Work Sans:300,400,500,600,700",
         mono: "Geist Mono:400,500,600,700",
         preconnect: true,
       },
