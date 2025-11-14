@@ -1,5 +1,7 @@
 # Markdown Features
 
+QuickDoc supports standard Markdown, MDX, and Mermaid diagrams with full theme integration.
+
 ## Code Blocks
 
 QuickDoc supports syntax highlighting with theme-aware styling:
@@ -60,6 +62,9 @@ Link to other pages and sections with enhanced navigation:
 ```
 
 ### Search Integration
+- **Weighted search**: Results prioritized by H1-H6 matches over content
+- **Smart highlighting**: Matches highlighted in accent color with bold weight
+- **Keyboard shortcuts**: Cmd+K / Ctrl+K to open search
 - **Enhanced search**: Optional fuzzy search with typo tolerance
 - **Proper navigation**: Search results link directly to sections with URL anchors
 - **Context awareness**: Search finds parent headings for paragraph matches
@@ -79,7 +84,9 @@ Standard markdown links work as expected and use theme accent colors:
 | Syntax highlighting | ✅ | ✅ |
 | Copy buttons | ✅ | ✅ |
 | MDX components | ✅ | ✅ |
-| Fuzzy search | ✅ | ✅ |
+| Mermaid diagrams | ✅ | ✅ |
+| Weighted search | ✅ | ✅ |
+| Component library | ✅ | ✅ |
 
 ## Lists and Formatting
 
@@ -89,10 +96,44 @@ Standard markdown links work as expected and use theme accent colors:
 - ~~Strikethrough~~
 - Links with accent colors
 
+## Mermaid Diagrams
+
+Create diagrams directly in your markdown files:
+
+```mermaid
+graph TD
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Success]
+    B -->|No| D[Try Again]
+    D --> B
+```
+
+### Mermaid Features
+- **Live theme switching**: Diagrams automatically re-render when toggling dark/light mode
+- **All diagram types**: Flowcharts, sequence, class, state, ER, git graphs, and more
+- **Error handling**: Invalid syntax shows helpful error messages
+- **Responsive**: Diagrams scale appropriately on all devices
+
+See the [Mermaid Diagrams guide](/markdown-guide/mermaid-diagrams) for detailed examples.
+
+## MDX Component Library
+
+QuickDoc includes 7+ reusable components for enhanced documentation:
+
+- **IFrame**: Embed YouTube videos, maps, and external content
+- **Callout**: Highlight info, warnings, success, and error messages
+- **Tabs**: Organize related content in tabbed interfaces
+- **CodeBlock**: Enhanced code display with copy button and line numbers
+- **Steps**: Visual step-by-step guides
+- **Card**: Content containers with multiple variants
+- **Badge**: Labels and tags with multiple colors and sizes
+
+See the [Components guide](/quickdoc/components) for usage examples.
+
 ## Floating Toolbar
 
-The new floating toolbar provides quick access to:
+The floating toolbar provides quick access to:
 - **Export functions**: PDF and Markdown export
-- **Search**: Global search with keyboard shortcuts
+- **Search**: Global search with Cmd+K / Ctrl+K keyboard shortcut
 - **Dark mode toggle**: Theme switching
 - **Responsive design**: Different layouts for desktop and mobile

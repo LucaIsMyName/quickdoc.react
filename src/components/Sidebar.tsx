@@ -1,9 +1,9 @@
-import { memo, useCallback, useMemo, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import type { AppConfig } from '../config/app.config';
-import { ScrollFade } from './ScrollFade';
+import { memo, useCallback, useMemo, useRef } from "react";
+import { Link } from "react-router-dom";
+import type { AppConfig } from "../config/app.config";
+import { ScrollFade } from "./ScrollFade";
 import { SidebarWidthControl } from "./SidebarWidthControl";
-import { useSidebarWidth } from '../hooks/useSidebarWidth';
+import { useSidebarWidth } from "../hooks/useSidebarWidth";
 
 // Define NavigationItem interface
 interface NavigationItem {
@@ -18,22 +18,21 @@ interface NavigationItem {
 // Generate hierarchical numbering for folder-based sidebar items
 const generateSidebarNumbers = (navigation: NavigationItem[], config: AppConfig) => {
   if (!config.navigation.enableNumberedSidebar) return {};
-  
+
   const numbers: Record<string, string> = {};
-  
-  
+
   // SIMPLE: Just number files 1, 2, 3... and their subsections 1.1, 1.2, 2.1, 2.2...
   navigation.forEach((item, fileIndex) => {
     const fileNumber = fileIndex + 1;
-    
+
     // File gets number like "1.", "2.", "3."
     numbers[item.id] = `${fileNumber}.`;
-    
+
     // Subsections get numbers like "1.1.", "1.2.", "1.1.1."
     if (item.subsections) {
       let h2Counter = 0;
       let h3Counter = 0;
-      
+
       item.subsections.forEach((sub) => {
         if (sub.level === 2) {
           h2Counter++;
@@ -46,12 +45,9 @@ const generateSidebarNumbers = (navigation: NavigationItem[], config: AppConfig)
       });
     }
   });
-  
-  
+
   return numbers;
 };
-
-
 
 interface SidebarProps {
   navigation: NavigationItem[];
@@ -62,14 +58,14 @@ interface SidebarProps {
 }
 
 const SidebarComponent = memo(({ navigation, isOpen, onClose, config, currentFile }: SidebarProps) => {
-  console.log(`[DEBUG] Sidebar received navigation for ${currentFile}:`, navigation.length, 'items');
+  console.log(`[DEBUG] Sidebar received navigation for ${currentFile}:`, navigation.length, "items");
   navigation.forEach((item, idx) => {
     console.log(`  Sidebar ${idx + 1}: "${item.title}" (Level ${item.level}, Slug: ${item.slug})`);
   });
-  
+
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { width, setWidth, resetWidth, canResize } = useSidebarWidth(config);
-  
+
   // Generate sidebar numbers with proper dependencies
   const sidebarNumbers = useMemo(() => {
     return generateSidebarNumbers(navigation, config);
@@ -84,37 +80,36 @@ const SidebarComponent = memo(({ navigation, isOpen, onClose, config, currentFil
     <>
       {/* Mobile overlay */}
       <div
-        className={`fixed inset-0 bg-black/50 z-30 md:hidden transition-opacity duration-300 ease-in-out ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black/50 z-30 md:hidden transition-opacity duration-300 ease-in-out ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
         onClick={onClose}
       />
 
       {/* Sidebar */}
-      <aside 
+      <aside
         ref={sidebarRef}
-        style={{ 
+        style={{
           width: `${width}px`,
         }}
         className={`
           fixed md:sticky top-[40px] left-0 md:left-auto h-[calc(100vh-40px)] md:h-[calc(100vh-40px)]
-          ${config.theme.isSidebarTransparent ? 'bg-transparent' : 'theme-bg-secondary'}
-          ${config.theme.isSidebarTransparent ? '' : 'sidebar-container'}
+          ${config.theme.isSidebarTransparent ? "bg-transparent" : "theme-bg-secondary"}
+          ${config.theme.isSidebarTransparent ? "" : "sidebar-container"}
           overflow-y-auto overflow-x-hidden z-40 md:z-auto transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0 shadow-xl" : "-translate-x-full md:translate-x-0 shadow-none"}
-          ${config.theme.isSidebarTransparent ? 'hover:sidebar-container' : ''}
+          ${config.theme.isSidebarTransparent ? "hover:sidebar-container" : ""}
         `}>
         <div className="p-2 h-full flex flex-col">
-          <ScrollFade 
-            direction="vertical" 
+          <ScrollFade
+            direction="vertical"
             size={40}
             intensity={0.8}
-            className="flex-1"
-          >
+            className="flex-1">
             {/* Navigation */}
-            <nav>
+            <nav className="mb-24 md:mb-6">
               {navigation.map((item, index) => (
-                <div key={item.id} className={index < navigation.length - 1 ? "mb-1" : "mb-1"}>
+                <div
+                  key={item.id}
+                  className={index < navigation.length - 1 ? "mb-1" : "mb-1"}>
                   <Link
                     to={`/${item.slug}`}
                     onClick={handleClose}
@@ -130,30 +125,23 @@ const SidebarComponent = memo(({ navigation, isOpen, onClose, config, currentFil
                       ${item.level === 5 ? "text-xs ml-12 px-3" : ""}
                       ${item.level === 6 ? "text-xs ml-16 px-3" : ""}
                       ${item.isIndex ? "font-bold  mb-0" : ""}
-                      ${currentFile === item.slug 
-                        ? "sidebar-item-active" 
-                        : `neutral-text-secondary hover:neutral-text ${item.level === 1 ? "hover:theme-bg-secondary" : ""}`
-                      }
+                      ${currentFile === item.slug ? "sidebar-item-active" : `neutral-text-secondary hover:neutral-text ${item.level === 1 ? "hover:theme-bg-secondary" : ""}`}
                     `}>
                     <span className="block truncate">
-                      {sidebarNumbers[item.id] && (
-                        <span className="inline-block mr-2 font-mono text-xs opacity-75">
-                          {sidebarNumbers[item.id]}
-                        </span>
-                      )}
+                      {sidebarNumbers[item.id] && <span className="inline-block mr-2 font-mono text-xs opacity-75">{sidebarNumbers[item.id]}</span>}
                       {item.title}
                     </span>
                   </Link>
 
                   {/* Show subsections based on config or current file */}
-                  {((config.navigation.expandAllSections) || (currentFile === item.slug)) && item.subsections && item.subsections.length > 0 && (
+                  {(config.navigation.expandAllSections || currentFile === item.slug) && item.subsections && item.subsections.length > 0 && (
                     <div className="mt-1 space-y-0.5">
                       {item.subsections.map((sub: NavigationItem) => {
                         // Calculate indentation based on heading level (H2=level 2, H3=level 3, etc.)
                         const baseIndent = 16; // Base indentation in pixels
                         const levelIndent = (sub.level - 2) * 12; // Additional indent per level (H2=0, H3=12, H4=24, etc.)
                         const totalIndent = baseIndent + levelIndent;
-                        
+
                         return (
                           <div key={sub.id}>
                             <Link
@@ -167,17 +155,13 @@ const SidebarComponent = memo(({ navigation, isOpen, onClose, config, currentFil
                                 truncate min-w-0
                               `}
                               style={{ marginLeft: `${totalIndent}px` }}>
-                            <span className="block truncate">
-                              {sidebarNumbers[sub.id] && (
-                                <span className="inline-block mr-2 font-mono text-xs opacity-75">
-                                  {sidebarNumbers[sub.id]}
-                                </span>
-                              )}
-                              {sub.title}
-                            </span>
-                          </Link>
-                        </div>
-                      );
+                              <span className="block truncate">
+                                {sidebarNumbers[sub.id] && <span className="inline-block mr-2 font-mono text-xs opacity-75">{sidebarNumbers[sub.id]}</span>}
+                                {sub.title}
+                              </span>
+                            </Link>
+                          </div>
+                        );
                       })}
                     </div>
                   )}

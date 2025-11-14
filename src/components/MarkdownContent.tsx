@@ -6,6 +6,7 @@ import { sanitizeHTML } from "../utils/security";
 import { ExportButton } from "./ExportButton";
 import { DocumentFooter } from "./DocumentFooter";
 import { MDXProvider } from "./MDXProvider";
+import { useTheme } from "../contexts/ThemeContext";
 import type { AppConfig } from "../config/app.config";
 import type { MarkdownFile } from "../types";
 
@@ -25,6 +26,7 @@ interface MarkdownContentProps {
 
 export const MarkdownContent = memo(({ content, config, onNavigationExtracted, exportProps, file }: MarkdownContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const { isDark } = useTheme();
 
   // Check if this is an MDX file
   const isMDXSection = file?.isMDX === true;
@@ -45,11 +47,71 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
     const preElements = config.content.copyCodeButton ? container.querySelectorAll("pre:not([data-copy-added])") : [];
     const headings = container.querySelectorAll("h1, h2, h3, h4, h5, h6");
 
-    // Apply syntax highlighting
+    // Render Mermaid diagrams
+    const mermaidBlocks = container.querySelectorAll("pre code.language-mermaid, .mermaid-diagram[data-mermaid-code]");
+    if (mermaidBlocks.length > 0) {
+      import('mermaid').then(({ default: mermaid }) => {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: isDark ? 'dark' : 'default',
+          securityLevel: 'loose',
+          fontFamily: 'inherit',
+        });
+
+        mermaidBlocks.forEach((block, index) => {
+          let code = '';
+          let targetElement: HTMLElement | null = null;
+          
+          // Check if it's a code block or already rendered diagram
+          if (block.classList.contains('mermaid-diagram')) {
+            // Already rendered, get code from data attribute
+            code = block.getAttribute('data-mermaid-code') || '';
+            targetElement = block as HTMLElement;
+          } else {
+            // New code block
+            const pre = block.parentElement;
+            if (!pre) return;
+            code = block.textContent || '';
+            targetElement = pre;
+          }
+          
+          if (!code || !targetElement) return;
+
+          const id = `mermaid-${Date.now()}-${index}`;
+          
+          // Create container for mermaid diagram
+          const diagramContainer = document.createElement('div');
+          diagramContainer.className = 'my-6 flex justify-center items-center mermaid-diagram';
+          diagramContainer.style.minHeight = '100px';
+          diagramContainer.setAttribute('data-mermaid-code', code); // Store code for re-rendering
+          
+          // Render diagram
+          mermaid.render(id, code).then(({ svg }) => {
+            diagramContainer.innerHTML = svg;
+            targetElement?.replaceWith(diagramContainer);
+          }).catch((error) => {
+            console.error('Mermaid rendering error:', error);
+            diagramContainer.innerHTML = `
+              <div class="p-4 theme-border theme-border-size theme-border-radius bg-red-50 dark:bg-red-900/20 w-full">
+                <div class="text-sm font-semibold text-red-800 dark:text-red-200 mb-2">
+                  Mermaid Diagram Error
+                </div>
+                <pre class="text-xs text-red-600 dark:text-red-300 whitespace-pre-wrap">${error.message || 'Failed to render diagram'}</pre>
+              </div>
+            `;
+            targetElement?.replaceWith(diagramContainer);
+          });
+        });
+      });
+    }
+
+    // Apply syntax highlighting (skip mermaid blocks)
     if (config.content.syntaxHighlighting && codeBlocks.length > 0) {
       // Use requestAnimationFrame to avoid blocking main thread
       requestAnimationFrame(() => {
         codeBlocks.forEach((block) => {
+          // Skip mermaid blocks
+          if (block.classList.contains('language-mermaid')) return;
           hljs.highlightElement(block as HTMLElement);
         });
       });
@@ -119,7 +181,7 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
         };
       });
     }
-  }, [content, config, onNavigationExtracted]);
+  }, [content, config, onNavigationExtracted, isDark]);
 
   // Parse regular markdown if not MDX
   const html = !isMDXSection ? parseMarkdown(content) : "";

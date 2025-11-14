@@ -99,6 +99,12 @@ search: {
 }
 ```
 
+**Search Features:**
+- **Weighted results**: H1 matches weighted 6x, H2-H6 progressively lower, content 0.5x
+- **Smart highlighting**: Matches shown in accent color with bold weight
+- **Keyboard shortcut**: Cmd+K / Ctrl+K to open search
+- **No duplicate text**: Title matches appear in heading only, not repeated below
+
 ## Color System
 
 The new simplified color system uses Tailwind color names:

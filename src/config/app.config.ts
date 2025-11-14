@@ -131,9 +131,9 @@ export const defaultConfig: AppConfig = {
   theme: {
     isSidebarTransparent: false,
     colors: {
-      accent: "red",
+      accent: "indigo",
       light: "slate",
-      dark: "stone",
+      dark: "slate",
     },
     fonts: {
       sans: "'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
