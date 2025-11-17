@@ -108,14 +108,14 @@ export const defaultConfig: AppConfig = {
   navigation: {
     showH1InSidebar: true, // deprecated
     collapsible: false, // depracated
-    expandAllSections: true, // Keep all sidebar sections collapsed by default
+    expandAllSections: false, // Keep all sidebar sections collapsed by default
     sidebarWidth: {
       min: "160px",
       default: "280px",
       max: "480px",
     },
-    enableUserSidebarWidthChange: false,
-    enableNumberedSidebar: true, // Enable numbered sidebar items
+    enableUserSidebarWidthChange: true,
+    enableNumberedSidebar: false, // Enable numbered sidebar items
     pagination: {
       enabled: false,
       showOnTop: false,
@@ -138,12 +138,12 @@ export const defaultConfig: AppConfig = {
       dark: "slate",
     },
     fonts: {
-      sans: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+      sans: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
       mono: "'Geist Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace",
       size: "medium",
       // Google Fonts: Work Sans + JetBrains Mono
       googleFonts: {
-        sans: "Work Sans:300,400,500,600,700",
+        // sans: "Work Sans:300,400,500,600,700",
         mono: "Geist Mono:400,500,600,700",
         preconnect: true,
       },

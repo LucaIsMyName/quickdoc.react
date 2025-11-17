@@ -288,6 +288,19 @@ function App() {
     return contentSections.find((s) => s.slug === state.currentSection) || contentSections[0] || null;
   }, [contentSections, state.currentSection]);
 
+  // Memoize export props for FloatingToolbar to avoid recreating the object on every render
+  const floatingExportProps = useMemo(
+    () =>
+      currentFile && currentSection
+        ? {
+            content: currentSection.content,
+            title: currentSection.title,
+            filename: `${currentFile.title || "section"}-${currentSection.title}`,
+          }
+        : undefined,
+    [currentFile, currentSection]
+  );
+
   // Memoize the available files for 404 page to prevent unnecessary re-renders
   const availableFiles = useMemo(() => 
     files.map(f => ({ slug: f.slug, title: f.title })), 
@@ -603,11 +616,7 @@ function App() {
           isDark={isDark}
           onToggleDarkMode={toggleDarkMode}
           onSearchOpen={handleSearchOpen}
-          exportProps={currentFile && currentSection ? {
-            content: currentSection.content,
-            title: currentSection.title,
-            filename: `${currentFile.title || 'section'}-${currentSection.title}`
-          } : undefined}
+          exportProps={floatingExportProps}
         />
       </div>
     </>
