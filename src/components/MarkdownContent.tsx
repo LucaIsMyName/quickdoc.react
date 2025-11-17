@@ -32,9 +32,9 @@ export const MarkdownContent = memo(({ content, config, onNavigationExtracted, e
   const isMDXSection = file?.isMDX === true;
 
   // Debug logging
-  console.log(`[MarkdownContent] Rendering - isMDXSection: ${isMDXSection}, content length: ${content.length}`);
+  // console.log(`[MarkdownContent] Rendering - isMDXSection: ${isMDXSection}, content length: ${content.length}`);
   if (isMDXSection) {
-    console.log(`[MarkdownContent] MDX section content preview:`, content.substring(0, 200));
+    // console.log(`[MarkdownContent] MDX section content preview:`, content.substring(0, 200));
   }
 
   useEffect(() => {

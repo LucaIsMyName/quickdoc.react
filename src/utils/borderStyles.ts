@@ -15,22 +15,22 @@ export const applyBorderStyles = (config: AppConfig) => {
       large: '0px'
     },
     sm: {
-      base: '0.25rem',    // 4px - buttons, small elements
-      small: '0.125rem',  // 2px - child elements
-      medium: '0.375rem', // 6px - containers
-      large: '0.5rem'     // 8px - dialogs
+      base: '0.3rem',    
+      small: '0.25rem',  
+      medium: '0.375rem', 
+      large: '0.5rem'     
     },
     md: {
-      base: '0.5rem',     // 8px - buttons, small elements
-      small: '0.25rem',   // 4px - child elements
-      medium: '0.75rem',  // 12px - containers
-      large: '1rem'       // 16px - dialogs
+      base: '0.5rem',     
+      small: '0.25rem',   
+      medium: '0.75rem',  
+      large: '1rem'       
     },
     lg: {
-      base: '0.75rem',    // 12px - buttons, small elements
-      small: '0.5rem',    // 8px - child elements
-      medium: '1rem',     // 16px - containers
-      large: '1.5rem'     // 24px - dialogs
+      base: '0.75rem',    
+      small: '0.5rem',    
+      medium: '1rem',     
+      large: '1.5rem'     
     }
   };
 

@@ -28,27 +28,27 @@ const SearchDialogComponent = ({ files, isOpen, onClose, config }: SearchDialogP
     const baseUrl = `/${result.file.slug}`;
     
     // Debug logging
-    console.log('URL Generation Debug:', {
-      fileSlug: result.file.slug,
-      sectionSlug: result.section.slug,
-      sectionLevel: result.section.level,
-      sectionTitle: result.section.title
-    });
+    // // console.log('URL Generation Debug:', {
+    //   fileSlug: result.file.slug,
+    //   sectionSlug: result.section.slug,
+    //   sectionLevel: result.section.level,
+    //   sectionTitle: result.section.title
+    // });
     
     // If it's just the file (level 1), link to file only
     if (result.section.level === 1 || result.section.slug === result.file.slug) {
-      console.log('-> File level, returning:', baseUrl);
+      // console.log('-> File level, returning:', baseUrl);
       return baseUrl;
     }
     
     // For all sections (H2-H6), use anchor links: /file#section
     if (result.section.slug && result.section.slug !== result.file.slug) {
       const url = `${baseUrl}#${result.section.slug}`;
-      console.log('-> Section anchor, returning:', url);
+      // console.log('-> Section anchor, returning:', url);
       return url;
     }
     
-    console.log('-> Final fallback, returning:', baseUrl);
+    // console.log('-> Final fallback, returning:', baseUrl);
     return baseUrl;
   };
 

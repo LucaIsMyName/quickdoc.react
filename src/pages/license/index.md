@@ -99,5 +99,5 @@ While not required by the MIT License, we appreciate attribution when you use Qu
 Example attribution:
 
 ```markdown
-Documentation powered by [QuickDoc](https://github.com/yourusername/quickdoc.react)
+Documentation powered by [QuickDoc](https://github.com/LucaIsMyName/quickdoc.react)
 ```

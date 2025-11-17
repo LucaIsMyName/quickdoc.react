@@ -35,11 +35,11 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
           // Create fetch-based loaders for each MDX file
           for (const path of Object.keys(mdxModules)) {
             mdxRawModules[path] = async () => {
-              console.log(`[MDX] Fetching raw content from: ${path}?mdx-raw`);
+              // console.log(`[MDX] Fetching raw content from: ${path}?mdx-raw`);
               const response = await fetch(path + '?mdx-raw');
               let content = await response.text();
-              console.log(`[MDX] Fetched content length: ${content.length}`);
-              console.log(`[MDX] Fetched content preview:`, content.substring(0, 200));
+              // console.log(`[MDX] Fetched content length: ${content.length}`);
+              // console.log(`[MDX] Fetched content preview:`, content.substring(0, 200));
               
               // The middleware now returns: export default "raw content"
               // Extract the string from the module format
@@ -48,16 +48,16 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
                 try {
                   // Unescape the JSON string
                   const rawMdxSource = JSON.parse(`"${moduleMatch[1]}"`);
-                  console.log(`[MDX] Extracted raw MDX source, length: ${rawMdxSource.length}`);
-                  console.log(`[MDX] Raw MDX preview:`, rawMdxSource.substring(0, 200));
+                  // console.log(`[MDX] Extracted raw MDX source, length: ${rawMdxSource.length}`);
+                  // console.log(`[MDX] Raw MDX preview:`, rawMdxSource.substring(0, 200));
                   content = rawMdxSource;
                 } catch (parseError) {
                   console.error(`[MDX] Failed to parse module export:`, parseError);
-                  console.log(`[MDX] Match content:`, moduleMatch[1].substring(0, 200));
+                  // console.log(`[MDX] Match content:`, moduleMatch[1].substring(0, 200));
                 }
               } else {
                 console.warn(`[MDX] Could not extract from module format for ${path}`);
-                console.log(`[MDX] Content structure:`, content.substring(0, 500));
+                // console.log(`[MDX] Content structure:`, content.substring(0, 500));
               }
               
               return { default: content };
@@ -65,14 +65,14 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
           }
         }
 
-        console.log('=== MDX Debug ===');
-        console.log('Config MDX enabled:', config?.content.enableMDX);
-        console.log('MD modules found:', Object.keys(mdModules).length);
-        console.log('MDX modules found:', Object.keys(mdxModules).length);
-        console.log('MDX raw modules found:', Object.keys(mdxRawModules).length);
-        console.log('All MDX paths:', Object.keys(mdxModules));
-        console.log('All MDX RAW paths:', Object.keys(mdxRawModules));
-        console.log('Raw modules object:', mdxRawModules);
+        // console.log('=== MDX Debug ===');
+        // console.log('Config MDX enabled:', config?.content.enableMDX);
+        // console.log('MD modules found:', Object.keys(mdModules).length);
+        // console.log('MDX modules found:', Object.keys(mdxModules).length);
+        // console.log('MDX raw modules found:', Object.keys(mdxRawModules).length);
+        // console.log('All MDX paths:', Object.keys(mdxModules));
+        // console.log('All MDX RAW paths:', Object.keys(mdxRawModules));
+        // console.log('Raw modules object:', mdxRawModules);
 
         const loadedFiles: MarkdownFile[] = [];
 
@@ -83,7 +83,7 @@ export const useMarkdownFiles = (pagesPath: string, config?: AppConfig) => {
             const loadedContent = await (loader as () => Promise<string>)();
             const content = typeof loadedContent === 'string' ? loadedContent : String(loadedContent);
             
-            console.log(`Loaded ${path}:`, typeof content, content.substring(0, 50));
+            // console.log(`Loaded ${path}:`, typeof content, content.substring(0, 50));
             
             // Ensure content is a string
             if (typeof content !== 'string') {

@@ -58,18 +58,15 @@ interface SidebarProps {
 }
 
 const SidebarComponent = memo(({ navigation, isOpen, onClose, config, currentFile }: SidebarProps) => {
-  console.log(`[DEBUG] Sidebar received navigation for ${currentFile}:`, navigation.length, "items");
-  navigation.forEach((item, idx) => {
-    console.log(`  Sidebar ${idx + 1}: "${item.title}" (Level ${item.level}, Slug: ${item.slug})`);
-  });
-
+  // console.log(`[DEBUG] Sidebar received navigation for ${currentFile}:`, navigation.length, "items");
+ 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { width, setWidth, resetWidth, canResize } = useSidebarWidth(config);
 
   // Generate sidebar numbers with proper dependencies
   const sidebarNumbers = useMemo(() => {
     return generateSidebarNumbers(navigation, config);
-  }, [navigation, config.navigation.enableNumberedSidebar, config.navigation.breakingPoint, config.navigation.showH1InSidebar]);
+  }, [navigation, config.navigation.enableNumberedSidebar, config.navigation.showH1InSidebar]);
 
   // Memoize the close handler to prevent unnecessary re-renders
   const handleClose = useCallback(() => {

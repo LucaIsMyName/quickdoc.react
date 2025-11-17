@@ -21,13 +21,13 @@ export const compileMDX = async (
   if (compilationCache.has(cacheKey)) {
     const cached = compilationCache.get(cacheKey);
     if (cached) {
-      console.log(`[MDX Compiler] Using cached component for: ${cacheKey}`);
+      // // console.log(`[MDX Compiler] Using cached component for: ${cacheKey}`);
       return cached;
     }
   }
 
-  console.log(`[MDX Compiler] Compiling MDX for: ${cacheKey}`);
-  console.log(`[MDX Compiler] Source length: ${mdxSource.length} chars`);
+  // c  onsole.log(`[MDX Compiler] Compiling MDX for: ${cacheKey}`);
+  // // console.log(`[MDX Compiler] Source length: ${mdxSource.length} chars`);
 
   try {
     // Compile MDX to JavaScript
@@ -41,8 +41,8 @@ export const compileMDX = async (
     });
 
     const compiledCode = String(compiled);
-    console.log(`[MDX Compiler] Compiled code length: ${compiledCode.length} chars`);
-    console.log(`[MDX Compiler] Compiled code preview:`, compiledCode.substring(0, 500));
+    // console.log(`[MDX Compiler] Compiled code length: ${compiledCode.length} chars`);
+    // console.log(`[MDX Compiler] Compiled code preview:`, compiledCode.substring(0, 500));
 
     // With automatic JSX runtime and function-body format, 
     // we can execute the compiled code directly
@@ -56,7 +56,7 @@ export const compileMDX = async (
 
     // Cache the compiled component
     compilationCache.set(cacheKey, Component);
-    console.log(`[MDX Compiler] Successfully compiled and cached: ${cacheKey}`);
+    // console.log(`[MDX Compiler] Successfully compiled and cached: ${cacheKey}`);
 
     return Component;
   } catch (error) {
@@ -85,7 +85,7 @@ export const compileMDX = async (
  */
 export const clearCompilationCache = () => {
   compilationCache.clear();
-  console.log('[MDX Compiler] Cache cleared');
+  // console.log('[MDX Compiler] Cache cleared');
 };
 
 /**

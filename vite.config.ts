@@ -14,7 +14,7 @@ const rawMdxPlugin = () => ({
   // Use resolveId to intercept early
   resolveId(id: string) {
     if (id.includes('.mdx?mdx-raw')) {
-      console.log('[raw-mdx plugin] resolveId intercepted:', id);
+      // console.log('[raw-mdx plugin] resolveId intercepted:', id);
       // Return a resolved ID that Vite will recognize
       return id;
     }
@@ -25,7 +25,7 @@ const rawMdxPlugin = () => ({
   configureServer(server) {
     server.middlewares.use((req, res, next) => {
       if (req.url?.includes('.mdx?mdx-raw')) {
-        console.log('[raw-mdx plugin] HTTP request intercepted:', req.url);
+        // console.log('[raw-mdx plugin] HTTP request intercepted:', req.url);
         
         // Extract file path
         let filePath = req.url.split('?')[0] ?? '';
@@ -41,7 +41,7 @@ const rawMdxPlugin = () => ({
         
         try {
           const content = fs.readFileSync(filePath, 'utf-8');
-          console.log('[raw-mdx plugin] ✅ HTTP: Raw content loaded, length:', content.length);
+          // console.log('[raw-mdx plugin] ✅ HTTP: Raw content loaded, length:', content.length);
           
           // Return as JavaScript module
           res.setHeader('Content-Type', 'application/javascript');
@@ -59,11 +59,11 @@ const rawMdxPlugin = () => ({
   // Use load to provide the content
   load(id: string) {
     if (id.includes('.mdx?mdx-raw')) {
-      console.log('[raw-mdx plugin] load intercepted:', id);
+      // console.log('[raw-mdx plugin] load intercepted:', id);
       
       // Extract the file path without query
       let filePath = id.split('?')[0];
-      console.log('[raw-mdx plugin] Original file path:', filePath);
+      // console.log('[raw-mdx plugin] Original file path:', filePath);
       
       try {
         // Validate file path to prevent path traversal attacks
@@ -86,12 +86,12 @@ const rawMdxPlugin = () => ({
         filePath = path.resolve(__dirname, filePath);
       }
       
-      console.log('[raw-mdx plugin] Resolved file path:', filePath);
+      // console.log('[raw-mdx plugin] Resolved file path:', filePath);
       
       try {
         const content = fs.readFileSync(filePath, 'utf-8');
-        console.log('[raw-mdx plugin] ✅ Raw content loaded, length:', content.length);
-        console.log('[raw-mdx plugin] Content preview:', content.substring(0, 100));
+        // console.log('[raw-mdx plugin] ✅ Raw content loaded, length:', content.length);
+        // console.log('[raw-mdx plugin] Content preview:', content.substring(0, 100));
         
         // Return the raw content as a module export
         return `export default ${JSON.stringify(content)}`;
@@ -106,11 +106,11 @@ const rawMdxPlugin = () => ({
   // Also intercept in transform as backup
   transform(code: string, id: string) {
     if (id.includes('.mdx?mdx-raw')) {
-      console.log('[raw-mdx plugin] transform intercepted:', id);
+      // console.log('[raw-mdx plugin] transform intercepted:', id);
       
       // Extract the file path without query
       let filePath = id.split('?')[0];
-      console.log('[raw-mdx plugin] Transform original file path:', filePath);
+      // console.log('[raw-mdx plugin] Transform original file path:', filePath);
       
       try {
         // Validate file path to prevent path traversal attacks
@@ -133,11 +133,11 @@ const rawMdxPlugin = () => ({
         filePath = path.resolve(__dirname, filePath);
       }
       
-      console.log('[raw-mdx plugin] Transform resolved file path:', filePath);
+      // console.log('[raw-mdx plugin] Transform resolved file path:', filePath);
       
       try {
         const content = fs.readFileSync(filePath, 'utf-8');
-        console.log('[raw-mdx plugin] ✅ Transform: Raw content loaded, length:', content.length);
+        // console.log('[raw-mdx plugin] ✅ Transform: Raw content loaded, length:', content.length);
         
         // Return the raw content as a module export
         return {

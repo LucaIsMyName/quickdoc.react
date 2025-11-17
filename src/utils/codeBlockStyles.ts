@@ -61,7 +61,7 @@ export const applyCodeBlockStyles = (config: AppConfig) => {
   }
   
   // Debug: Log the colors being applied
-  console.log('[CodeBlockStyles] Applying colors:', { lightCodeBg, darkCodeBg });
+  // console.log('[CodeBlockStyles] Applying colors:', { lightCodeBg, darkCodeBg });
   
   // Set CSS variables for code block backgrounds
   root.style.setProperty('--code-block-bg-light', lightCodeBg);
