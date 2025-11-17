@@ -133,7 +133,7 @@ export const defaultConfig: AppConfig = {
   theme: {
     isSidebarTransparent: false,
     colors: {
-      accent: "teal",
+      accent: "indigo",
       light: "slate",
       dark: "slate",
     },
@@ -152,8 +152,8 @@ export const defaultConfig: AppConfig = {
       compact: false,
     },
     border: {
-      radius: "sm",
-      size: 1,
+      radius: "none",
+      size: "none",
     },
   },
   content: {
