@@ -1,5 +1,5 @@
-import { Calendar, User, Clock } from 'lucide-react';
-import type { AppConfig } from '../config/app.config';
+import { Calendar, User, Clock } from "lucide-react";
+import type { AppConfig } from "../config/app.config";
 
 interface DocumentFooterProps {
   config: AppConfig;
@@ -8,10 +8,10 @@ interface DocumentFooterProps {
 
 export const DocumentFooter = ({ config, fileName }: DocumentFooterProps) => {
   // Get current date for created/updated (in a real app, this would come from file metadata)
-  const currentDate = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const currentDate = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   return (
@@ -22,30 +22,29 @@ export const DocumentFooter = ({ config, fileName }: DocumentFooterProps) => {
           <Calendar className="w-3.5 h-3.5 theme-accent" />
           <span>{currentDate}</span>
         </div>
-        
+
         {/* Last Updated */}
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 theme-accent" />
           <span>{currentDate}</span>
         </div>
-        
+
         {/* Author (linked to website if URL exists) */}
         <div className="flex items-center gap-1.5 flex-1">
           <User className="w-3.5 h-3.5 theme-accent" />
           {config.site.url ? (
-            <a 
+            <a
               href={config.site.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="theme-accent hover:underline transition-colors duration-200"
-            >
+              className="theme-accent hover:underline transition-colors duration-200">
               {config.site.author}
             </a>
           ) : (
             <span>{config.site.author}</span>
           )}
         </div>
-        
+
         {/* File Name */}
         {fileName && (
           <div className="flex items-center gap-1.5">
@@ -55,9 +54,8 @@ export const DocumentFooter = ({ config, fileName }: DocumentFooterProps) => {
             <code className="text-[10px] px-1 py-0.5 rounded theme-bg-secondary opacity-60 font-mono">{fileName}</code>
           </div>
         )}
-        
+
         {/* Powered by QuickDoc */}
-        
       </div>
     </footer>
   );

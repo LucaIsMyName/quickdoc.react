@@ -152,8 +152,8 @@ export const defaultConfig: AppConfig = {
       compact: false,
     },
     border: {
-      radius: "none",
-      size: "none",
+      radius: "sm",
+      size: 1,
     },
   },
   content: {
