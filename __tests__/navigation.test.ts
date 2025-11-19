@@ -20,7 +20,7 @@ describe('Navigation Logic', () => {
     });
 
     it('parses file with section URL', () => {
-      window.history.replaceState(null, '', '/quick-start/installation');
+      window.history.replaceState(null, '', '/quick-start#installation');
       const result = parseUrlHash();
       
       expect(result.currentFile).toBe('quick-start');
@@ -36,7 +36,7 @@ describe('Navigation Logic', () => {
     });
 
     it('ignores extra path segments', () => {
-      window.history.replaceState(null, '', '/quick-start/installation/extra/segments');
+      window.history.replaceState(null, '', '/quick-start#installation');
       const result = parseUrlHash();
       
       expect(result.currentFile).toBe('quick-start');
@@ -47,18 +47,18 @@ describe('Navigation Logic', () => {
   describe('URL Building', () => {
     it('builds file with section URL', () => {
       const url = buildUrlPath('quick-start', 'installation');
-      expect(url).toBe('/quick-start/installation');
+      expect(url).toBe('/quick-start#installation');
     });
 
     it('builds simple URLs', () => {
       const url = buildUrlPath('readme', 'features');
-      expect(url).toBe('/readme/features');
+      expect(url).toBe('/readme#features');
     });
   });
 
   describe('Initial State', () => {
     it('prioritizes URL over localStorage', () => {
-      window.history.replaceState(null, '', '/quick-start/installation');
+      window.history.replaceState(null, '', '/quick-start#installation');
       const localStorageState: AppState = {
         currentFile: 'readme',
         currentSection: 'features',
@@ -163,21 +163,21 @@ Content for section 3`;
       expect(state.currentSection).toBeNull();
     });
 
-    it('navigating to /file/section should load file and scroll to section', () => {
-      window.history.replaceState(null, '', '/quick-start/installation');
+    it('navigating to /file#section should load file and scroll to section', () => {
+      window.history.replaceState(null, '', '/quick-start#installation');
       const state = parseUrlHash();
       
       expect(state.currentFile).toBe('quick-start');
       expect(state.currentSection).toBe('installation');
     });
 
-    it('clicking sidebar item should update section only', () => {
+    it('clicking sidebar item should update URL hash for section', () => {
       // Start at /quick-start
       window.history.replaceState(null, '', '/quick-start');
       let state = parseUrlHash();
       expect(state.currentFile).toBe('quick-start');
       
-      // Click sidebar item -> /quick-start/installation
+      // Click sidebar item -> /quick-start#installation
       const newUrl = buildUrlPath('quick-start', 'installation');
       window.history.replaceState(null, '', newUrl);
       state = parseUrlHash();

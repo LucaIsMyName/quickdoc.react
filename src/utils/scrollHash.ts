@@ -115,6 +115,19 @@ export const scrollToHeading = (headingId: string): void => {
   const baseUrl = currentUrl.split('#')[0];
   window.history.replaceState(null, '', `${baseUrl}#${headingId}`);
 
+  // Apply a temporary highlight class to indicate navigation happened
+  const highlightClass = 'heading-flash';
+  element.classList.remove(highlightClass);
+  // Force reflow so re-adding the class retriggers the animation even for same target
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  (element as HTMLElement).offsetWidth;
+  element.classList.add(highlightClass);
+
+  // Remove the class after the animation duration to keep DOM clean
+  window.setTimeout(() => {
+    element.classList.remove(highlightClass);
+  }, 1200);
+
   // Scroll to position
   window.scrollTo({
     top: offsetPosition,

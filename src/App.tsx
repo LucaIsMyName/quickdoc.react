@@ -13,7 +13,7 @@ import { applyColorStyles } from "./utils/colorStyles";
 import { applyCodeBlockStyles } from "./utils/codeBlockStyles";
 import { applyCopyButtonStyles } from "./utils/copyButtonStyles";
 import { applyFooterStyles } from "./utils/footerStyles";
-import { initScrollHashUpdates, handleInitialHash } from "./utils/scrollHash";
+import { initScrollHashUpdates, handleInitialHash, scrollToHeading } from "./utils/scrollHash";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NotFound } from "./components/NotFound";
 import { TabNavigation } from "./components/TabNavigation";
@@ -368,17 +368,7 @@ function App() {
     const hash = window.location.hash.slice(1);
     if (hash) {
       setTimeout(() => {
-        const element = document.getElementById(hash);
-        if (element) {
-          const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--meta-nav-height')) || 40;
-          const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-          const offsetPosition = elementPosition - headerHeight;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth"
-          });
-        }
+        scrollToHeading(hash);
       }, 200);
     }
   }, [state.currentFile, state.currentSection]);
@@ -389,17 +379,7 @@ function App() {
       const hash = window.location.hash.slice(1);
       if (hash) {
         setTimeout(() => {
-          const element = document.getElementById(hash);
-          if (element) {
-            const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--meta-nav-height')) || 40;
-            const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-            const offsetPosition = elementPosition - headerHeight;
-
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: "smooth"
-            });
-          }
+          scrollToHeading(hash);
         }, 100);
       }
     };
@@ -413,17 +393,7 @@ function App() {
     const hash = location.hash.slice(1);
     if (hash) {
       setTimeout(() => {
-        const element = document.getElementById(hash);
-        if (element) {
-          const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--meta-nav-height')) || 40;
-          const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-          const offsetPosition = elementPosition - headerHeight;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth"
-          });
-        }
+        scrollToHeading(hash);
       }, 150);
     }
   }, [location]);

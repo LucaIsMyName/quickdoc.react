@@ -53,6 +53,7 @@ export interface AppConfig {
           activeText: string;
         };
     isSidebarTransparent: boolean;
+    sidebarFont?: "sans" | "mono";
     fonts: {
       sans: string;
       mono: string;
@@ -114,7 +115,7 @@ export const defaultConfig: AppConfig = {
       default: "280px",
       max: "480px",
     },
-    enableUserSidebarWidthChange: true,
+    enableUserSidebarWidthChange: false,
     enableNumberedSidebar: false, // Enable numbered sidebar items
     pagination: {
       enabled: false,
@@ -131,7 +132,8 @@ export const defaultConfig: AppConfig = {
     ],
   },
   theme: {
-    isSidebarTransparent: false,
+    isSidebarTransparent: true,
+    sidebarFont: "sans",
     colors: {
       accent: "indigo",
       light: "slate",

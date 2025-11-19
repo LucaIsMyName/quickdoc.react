@@ -73,6 +73,6 @@ describe('IFrame Component', () => {
   it('applies responsive styling classes', () => {
     render(<IFrame src="https://example.com" />);
     const iframe = screen.getByTitle('Embedded content');
-    expect(iframe).toHaveClass('absolute', 'top-0', 'left-0', 'w-full', 'h-full', 'border-0', 'rounded-lg', 'shadow-lg');
+    expect(iframe).toHaveClass('absolute', 'top-0', 'left-0', 'w-full', 'h-full', 'border-0', 'theme-border-radius', 'shadow-lg');
   });
 });

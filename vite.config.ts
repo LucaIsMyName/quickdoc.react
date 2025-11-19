@@ -22,8 +22,8 @@ const rawMdxPlugin = () => ({
   },
   
   // Add configureServer to handle HTTP requests in dev mode
-  configureServer(server) {
-    server.middlewares.use((req, res, next) => {
+  configureServer(server: any) {
+    server.middlewares.use((req: any, res: any, next: any) => {
       if (req.url?.includes('.mdx?mdx-raw')) {
         // console.log('[raw-mdx plugin] HTTP request intercepted:', req.url);
         

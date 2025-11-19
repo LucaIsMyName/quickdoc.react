@@ -86,6 +86,7 @@ const SidebarComponent = memo(({ navigation, isOpen, onClose, config, currentFil
         ref={sidebarRef}
         style={{
           width: `${width}px`,
+          fontFamily: 'var(--sidebar-font-family)',
         }}
         className={`
           fixed md:sticky top-[40px] left-0 md:left-auto h-[calc(100vh-40px)] md:h-[calc(100vh-40px)]

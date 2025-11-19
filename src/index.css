@@ -116,6 +116,33 @@ button {
   @apply text-base font-medium mt-4 mb-2 text-gray-700 dark:text-gray-200;
 }
 
+/* Heading highlight when navigating via hash */
+@keyframes heading-flash-bg {
+  0% {
+    background-color: transparent;
+  }
+  25% {
+    background-color: rgba(100, 100, 100, 0.1);
+  }
+  50% {
+    background-color: transparent;
+  }
+  75% {
+    background-color: rgba(100, 100, 100, 0.1); /* amber-300 */
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.markdown-content .heading-flash {
+  animation: heading-flash-bg 3s ease-out;
+}
+
+.dark .markdown-content .heading-flash {
+  animation: heading-flash-bg 3s ease-out;
+}
+
 .markdown-content p {
   @apply mb-4 leading-7 text-gray-700 dark:text-gray-300;
 }
@@ -525,6 +552,12 @@ mark {
 button,
 a {
   @apply cursor-pointer;
+}
+
+/* Ensure Base UI portals (export popover, etc.) render above page-level overlays */
+[data-base-ui-portal] {
+  position: relative;
+  z-index: 9999;
 }
 
 /* ScrollFade component styles */

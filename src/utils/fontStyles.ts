@@ -31,6 +31,11 @@ export const applyFontStyles = (config: AppConfig) => {
   };
   
   root.style.setProperty('--font-size-base', fontSizeMap[fonts.size]);
+
+  // Sidebar font family (defaults to sans if not specified)
+  const sidebarFontChoice = config.theme.sidebarFont ?? 'sans';
+  const sidebarFontVar = sidebarFontChoice === 'mono' ? 'var(--font-mono)' : 'var(--font-sans)';
+  root.style.setProperty('--sidebar-font-family', sidebarFontVar);
 };
 
 /**
