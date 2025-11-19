@@ -13,7 +13,6 @@ const mockConfig: AppConfig = {
     url: 'https://test.com',
   },
   navigation: {
-    breakingPoint: 'h2',
     showH1InSidebar: true,
     collapsible: false,
     expandAllSections: false,
@@ -107,9 +106,7 @@ describe('Sidebar', () => {
     render(
       <BrowserRouter>
         <Sidebar
-          title="Test Documentation"
           navigation={mockNavigation}
-          currentSection="overview"
           isOpen={true}
           onClose={() => {}}
           config={mockConfig}
@@ -143,9 +140,7 @@ describe('Sidebar', () => {
     render(
       <BrowserRouter>
         <Sidebar
-          title="Test Documentation"
           navigation={mockNavigation}
-          currentSection="configuration"
           isOpen={true}
           onClose={() => {}}
           config={mockConfig}
@@ -309,9 +304,7 @@ describe('Sidebar', () => {
       render(
         <BrowserRouter>
           <Sidebar
-            title="Test Documentation"
             navigation={complexNavigation}
-            currentSection="basic-syntax"
             isOpen={true}
             onClose={() => {}}
             config={numberedConfig}
@@ -348,9 +341,7 @@ describe('Sidebar', () => {
       render(
         <BrowserRouter>
           <Sidebar
-            title="Test Documentation"
             navigation={complexNavigation}
-            currentSection="best-practices"
             isOpen={true}
             onClose={() => {}}
             config={numberedConfig}
@@ -429,9 +420,7 @@ describe('Sidebar', () => {
       render(
         <BrowserRouter>
           <Sidebar
-            title="Test Documentation"
             navigation={complexNavigation}
-            currentSection="advanced-features"
             isOpen={true}
             onClose={() => {}}
             config={numberedConfig}
@@ -515,9 +504,7 @@ describe('Sidebar', () => {
       const { container } = render(
         <BrowserRouter>
           <Sidebar
-            title="Test Documentation"
             navigation={mockNavigation}
-            currentSection="overview"
             isOpen={true}
             onClose={() => {}}
             config={mockConfig}
@@ -537,9 +524,7 @@ describe('Sidebar', () => {
       const { container } = render(
         <BrowserRouter>
           <Sidebar
-            title="Test Documentation"
             navigation={mockNavigation}
-            currentSection="overview"
             isOpen={false}
             onClose={() => {}}
             config={mockConfig}
@@ -636,6 +621,26 @@ describe('Sidebar', () => {
       expect(overlay).toBeTruthy();
       expect(overlay?.className).toContain('opacity-0');
       expect(overlay?.className).toContain('pointer-events-none');
+    });
+
+    it('renders navigation landmark with accessible label', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Sidebar
+            title="Test Documentation"
+            navigation={mockNavigation}
+            currentSection="overview"
+            isOpen={true}
+            onClose={() => {}}
+            config={mockConfig}
+          />
+        </BrowserRouter>
+      );
+
+      const nav = container.querySelector('nav');
+      expect(nav).toBeTruthy();
+      expect(nav?.getAttribute('role')).toBe('navigation');
+      expect(nav?.getAttribute('aria-label')).toBe('Documentation sidebar');
     });
   });
 });

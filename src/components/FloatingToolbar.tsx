@@ -25,6 +25,7 @@ const FloatingToolbarComponent = ({
   exportProps 
 }: FloatingToolbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const menuId = 'floating-toolbar-menu';
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -66,6 +67,9 @@ const FloatingToolbarComponent = ({
           onClick={toggleMobileMenu}
           className="w-12 h-12 theme-bg theme-border-base shadow-lg flex items-center justify-center theme-radius-medium"
           aria-label="Open toolbar menu"
+          aria-haspopup="dialog"
+          aria-expanded={isMobileMenuOpen}
+          aria-controls={menuId}
         >
           {isMobileMenuOpen ? (
             <X className="w-5 h-5 theme-text" />
@@ -84,10 +88,16 @@ const FloatingToolbarComponent = ({
             />
             
             {/* Menu Content */}
-            <div className="absolute bottom-16 right-0 w-64 theme-bg theme-border-large shadow-xl overflow-hidden">
+            <div
+              id={menuId}
+              className="absolute bottom-16 right-0 w-64 theme-bg theme-border-large shadow-xl overflow-hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="floating-toolbar-title"
+            >
               {/* Header */}
               <div className="px-4 py-3 border-b theme-border">
-                <h3 className="text-sm font-medium theme-text">Toolbar</h3>
+                <h3 id="floating-toolbar-title" className="text-sm font-medium theme-text">Toolbar</h3>
               </div>
 
               {/* Local Actions Section */}

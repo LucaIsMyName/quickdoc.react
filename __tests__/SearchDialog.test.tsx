@@ -3,13 +3,15 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import { SearchDialog } from '../src/components/SearchDialog';
 import { defaultConfig } from '../src/config/app.config';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 // Mock the document search hook
+const setSearchQueryMock = vi.fn();
+
 vi.mock('../src/hooks/useDocumentSearch', () => ({
   useDocumentSearch: () => ({
     searchQuery: 'next',
-    setSearchQuery: vi.fn(),
+    setSearchQuery: setSearchQueryMock,
     searchResults: [
       {
         file: {
@@ -25,6 +27,24 @@ vi.mock('../src/hooks/useDocumentSearch', () => ({
         matches: [
           {
             highlight: 'This is the <mark>next</mark> section.'
+          }
+        ]
+      },
+      // Second result for keyboard navigation tests
+      {
+        file: {
+          slug: 'quickdoc',
+          title: 'QuickDoc Overview',
+          content: '# QuickDoc Overview\n\n## Getting Started\n\nSome content.'
+        },
+        section: {
+          slug: 'getting-started',
+          title: 'Getting Started',
+          level: 2
+        },
+        matches: [
+          {
+            highlight: 'Some <mark>content</mark> about getting started.'
           }
         ]
       }
@@ -116,6 +136,33 @@ describe('SearchDialog URL Generation', () => {
     const searchLink = screen.getByRole('link');
     fireEvent.click(searchLink);
     
+    expect(mockOnClose).toHaveBeenCalled();
+  });
+
+  test('supports keyboard navigation with arrow keys and enter', () => {
+    const mockOnClose = vi.fn();
+
+    renderWithProviders(
+      <SearchDialog
+        files={mockFiles}
+        isOpen={true}
+        onClose={mockOnClose}
+        config={defaultConfig}
+      />
+    );
+
+    const input = screen.getByPlaceholderText('Search documentation...');
+
+    // ArrowDown should move active index from first to second result
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+
+    const links = screen.getAllByRole('link');
+
+    // Second link should have active background class
+    expect(links[1].className).toContain('theme-active-bg');
+
+    // Press Enter should activate the current item and close dialog
+    fireEvent.keyDown(input, { key: 'Enter' });
     expect(mockOnClose).toHaveBeenCalled();
   });
 });

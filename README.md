@@ -430,6 +430,11 @@ theme: {
 - Touch-friendly navigation
 - Optimized for all screen sizes
 
+### Search and Toolbar UX
+
+- Search dialog supports keyboard navigation: use arrow keys to move between results, Enter to open, and Escape to close.
+- The floating toolbar groups current-page actions (export) and global actions (search, dark mode), and exposes them via an accessible dialog on mobile.
+
 ## 🔗 URL & State Management
 
 ### Priority System

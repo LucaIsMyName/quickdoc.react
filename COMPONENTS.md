@@ -150,3 +150,10 @@ Use these classes in your custom components:
 - `theme-accent`: Accent color
 - `theme-accent-bg`: Accent background
 - `theme-accent-border`: Accent border color
+
+## Navigation and Search UX
+
+The built-in sidebar and search dialog also use the same theme classes and now support keyboard navigation:
+
+- Sidebar navigation is exposed as a `navigation` landmark with an accessible label for screen readers.
+- The search dialog allows moving between results with arrow keys and activating a result with Enter.

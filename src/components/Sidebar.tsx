@@ -102,7 +102,7 @@ const SidebarComponent = memo(({ navigation, isOpen, onClose, config, currentFil
             intensity={0.8}
             className="flex-1">
             {/* Navigation */}
-            <nav className="mb-24 md:mb-6">
+            <nav className="mb-24 md:mb-6" role="navigation" aria-label="Documentation sidebar">
               {navigation.map((item, index) => (
                 <div
                   key={item.id}
