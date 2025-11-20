@@ -1,6 +1,6 @@
-import type { AppConfig } from '../config/app.config';
-import { getTailwindColor } from './colorStyles';
-import type { TailwindColorName } from './colorStyles';
+import type { AppConfig } from "../config/app.config";
+import { getTailwindColor } from "./colorStyles";
+import type { TailwindColorName } from "./colorStyles";
 
 export const applyBorderStyles = (config: AppConfig) => {
   const root = document.documentElement;
@@ -9,34 +9,34 @@ export const applyBorderStyles = (config: AppConfig) => {
   // Progressive border radius mapping
   const radiusMap = {
     none: {
-      base: '0px',
-      small: '0px',
-      medium: '0px',
-      large: '0px'
+      base: "0px",
+      small: "0px",
+      medium: "0px",
+      large: "0px",
     },
     sm: {
-      base: '0.3rem',    
-      small: '0.25rem',  
-      medium: '0.375rem', 
-      large: '0.5rem'     
+      base: "0.3rem",
+      small: "0.25rem",
+      medium: "0.375rem",
+      large: "0.5rem",
     },
     md: {
-      base: '0.5rem',     
-      small: '0.25rem',   
-      medium: '0.75rem',  
-      large: '1rem'       
+      base: "0.5rem",
+      small: "0.25rem",
+      medium: "0.75rem",
+      large: "1rem",
     },
     lg: {
-      base: '0.75rem',    
-      small: '0.5rem',    
-      medium: '1rem',     
-      large: '1.5rem'     
-    }
+      base: "0.75rem",
+      small: "0.5rem",
+      medium: "1rem",
+      large: "1.5rem",
+    },
   };
 
   // Get border colors based on theme and contrast level
   const getBorderColors = () => {
-    if ('accent' in colors && 'light' in colors && 'dark' in colors) {
+    if ("accent" in colors && "light" in colors && "dark" in colors) {
       const { light, dark } = colors as {
         accent: TailwindColorName;
         light: TailwindColorName;
@@ -45,23 +45,23 @@ export const applyBorderStyles = (config: AppConfig) => {
 
       return {
         // Light mode border colors with increasing contrast
-        light1: getTailwindColor(light, 200),  // Very subtle
-        light2: getTailwindColor(light, 300),  // Medium contrast
-        light3: getTailwindColor(dark, 400),   // High contrast
+        light1: getTailwindColor(light, 200), // Very subtle
+        light2: getTailwindColor(light, 300), // Medium contrast
+        light3: getTailwindColor(dark, 400), // High contrast
         // Dark mode border colors with increasing contrast
-        dark1: getTailwindColor(dark, 800),    // Very subtle
-        dark2: getTailwindColor(dark, 700),    // Medium contrast
-        dark3: getTailwindColor(light, 600),   // High contrast
+        dark1: getTailwindColor(dark, 800), // Very subtle
+        dark2: getTailwindColor(dark, 700), // Medium contrast
+        dark3: getTailwindColor(light, 600), // High contrast
       };
     } else {
       // Fallback for legacy colors
       return {
-        light1: '#e5e7eb',
-        light2: '#d1d5db',
-        light3: '#9ca3af',
-        dark1: '#374151',
-        dark2: '#4b5563',
-        dark3: '#6b7280'
+        light1: "#e5e7eb",
+        light2: "#d1d5db",
+        light3: "#9ca3af",
+        dark1: "#374151",
+        dark2: "#4b5563",
+        dark3: "#6b7280",
       };
     }
   };
@@ -70,45 +70,41 @@ export const applyBorderStyles = (config: AppConfig) => {
 
   // Set CSS custom properties for border radius
   const currentRadius = radiusMap[border.radius];
-  root.style.setProperty('--border-radius-base', currentRadius.base);
-  root.style.setProperty('--border-radius-small', currentRadius.small);
-  root.style.setProperty('--border-radius-medium', currentRadius.medium);
-  root.style.setProperty('--border-radius-large', currentRadius.large);
+  root.style.setProperty("--border-radius-base", currentRadius.base);
+  root.style.setProperty("--border-radius-small", currentRadius.small);
+  root.style.setProperty("--border-radius-medium", currentRadius.medium);
+  root.style.setProperty("--border-radius-large", currentRadius.large);
 
   // Set border width (always 1px, but can be disabled)
-  const borderWidth = border.size === 'none' ? '0px' : '1px';
-  root.style.setProperty('--border-width', borderWidth);
+  const borderWidth = border.size === "none" ? "0px" : "1px";
+  root.style.setProperty("--border-width", borderWidth);
 
   // Set border colors for different contrast levels
-  if (border.size !== 'none') {
-    const level = typeof border.size === 'number' ? border.size : 1;
-    
-    // Light mode colors
-    const lightColor = level === 1 ? borderColors.light1 : 
-                      level === 2 ? borderColors.light2 : 
-                      borderColors.light3;
-    
-    // Dark mode colors
-    const darkColor = level === 1 ? borderColors.dark1 : 
-                     level === 2 ? borderColors.dark2 : 
-                     borderColors.dark3;
+  if (border.size !== "none") {
+    const level = typeof border.size === "number" ? border.size : 1;
 
-    root.style.setProperty('--border-color-light', lightColor);
-    root.style.setProperty('--border-color-dark', darkColor);
+    // Light mode colors
+    const lightColor = level === 1 ? borderColors.light1 : level === 2 ? borderColors.light2 : borderColors.light3;
+
+    // Dark mode colors
+    const darkColor = level === 1 ? borderColors.dark1 : level === 2 ? borderColors.dark2 : borderColors.dark3;
+
+    root.style.setProperty("--border-color-light", lightColor);
+    root.style.setProperty("--border-color-dark", darkColor);
   } else {
-    root.style.setProperty('--border-color-light', 'transparent');
-    root.style.setProperty('--border-color-dark', 'transparent');
+    root.style.setProperty("--border-color-light", "transparent");
+    root.style.setProperty("--border-color-dark", "transparent");
   }
 
   // Apply dynamic border styles
-  updateDynamicBorderStyles(border.size !== 'none');
+  updateDynamicBorderStyles(border.size !== "none");
 };
 
 /**
  * Update dynamic border styles in the DOM
  */
 const updateDynamicBorderStyles = (hasBorders: boolean) => {
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.textContent = `
     :root {
       /* Current border properties */
@@ -148,7 +144,9 @@ const updateDynamicBorderStyles = (hasBorders: boolean) => {
     .theme-radius-large { border-radius: var(--border-radius-large); }
 
     /* Specific component styling */
-    ${hasBorders ? `
+    ${
+      hasBorders
+        ? `
     /* SearchDialog */
     .search-dialog {
       border: var(--current-border-width) solid var(--current-border-color);
@@ -177,7 +175,8 @@ const updateDynamicBorderStyles = (hasBorders: boolean) => {
       border: var(--current-border-width) solid var(--current-border-color);
       border-radius: var(--border-radius-base);
     }
-    ` : `
+    `
+        : `
     /* No borders mode */
     .search-dialog {
       border: none;
@@ -203,7 +202,8 @@ const updateDynamicBorderStyles = (hasBorders: boolean) => {
       border: none;
       border-radius: var(--border-radius-base);
     }
-    `}
+    `
+    }
 
     /* Sidebar always has border (as requested) */
     .sidebar-container {
@@ -225,11 +225,11 @@ const updateDynamicBorderStyles = (hasBorders: boolean) => {
   `;
 
   // Remove existing dynamic border style if it exists
-  const existingStyle = document.getElementById('dynamic-border-style');
+  const existingStyle = document.getElementById("dynamic-border-style");
   if (existingStyle) {
     existingStyle.remove();
   }
 
-  style.id = 'dynamic-border-style';
+  style.id = "dynamic-border-style";
   document.head.appendChild(style);
 };

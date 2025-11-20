@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { Settings, X, Search, Sun, Moon } from 'lucide-react';
+import { Tooltip } from '@base-ui-components/react/tooltip';
 import { DarkModeToggle } from './DarkModeToggle';
 import { SearchButton } from './SearchButton';
 import { ExportButton } from './ExportButton';
@@ -39,11 +40,24 @@ const FloatingToolbarComponent = ({
           {/* Local Actions */}
           <div className="flex items-center gap-1">
             {exportProps && (
-              <ExportButton
-                content={exportProps.content}
-                title={exportProps.title}
-                filename={exportProps.filename}
-              />
+              <Tooltip.Root>
+                <Tooltip.Trigger>
+                  <span className="inline-flex">
+                    <ExportButton
+                      content={exportProps.content}
+                      title={exportProps.title}
+                      filename={exportProps.filename}
+                    />
+                  </span>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Positioner side="top" align="end" sideOffset={8}>
+                    <Tooltip.Popup className="px-2 py-1 text-xs theme-bg theme-border-medium shadow-md theme-text whitespace-nowrap">
+                      Export options
+                    </Tooltip.Popup>
+                  </Tooltip.Positioner>
+                </Tooltip.Portal>
+              </Tooltip.Root>
             )}
           </div>
 
@@ -54,8 +68,35 @@ const FloatingToolbarComponent = ({
 
           {/* Global Actions */}
           <div className="flex items-center gap-1">
-            <SearchButton onClick={onSearchOpen} />
-            <DarkModeToggle isDark={isDark} onToggle={onToggleDarkMode} />
+            <Tooltip.Root>
+              <Tooltip.Trigger>
+                <span className="inline-flex">
+                  <SearchButton onClick={onSearchOpen} />
+                </span>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Positioner side="top" align="end" sideOffset={8}>
+                  <Tooltip.Popup className="px-2 py-1 text-xs theme-bg theme-border-medium shadow-md theme-text whitespace-nowrap">
+                    Search documentation
+                  </Tooltip.Popup>
+                </Tooltip.Positioner>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+
+            <Tooltip.Root>
+              <Tooltip.Trigger>
+                <span className="inline-flex">
+                  <DarkModeToggle isDark={isDark} onToggle={onToggleDarkMode} />
+                </span>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Positioner side="top" align="end" sideOffset={8}>
+                  <Tooltip.Popup className="px-2 py-1 text-xs theme-bg theme-border-medium shadow-md theme-text whitespace-nowrap">
+                    {isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                  </Tooltip.Popup>
+                </Tooltip.Positioner>
+              </Tooltip.Portal>
+            </Tooltip.Root>
           </div>
         </div>
       </div>
