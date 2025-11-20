@@ -259,27 +259,27 @@ const updateDynamicColorStyles = () => {
     }
 
     /* Apply colors to elements using CSS variables */
-    .theme-bg { background-color: var(--current-bg) !important; }
-    .theme-bg-secondary { background-color: var(--current-bg-secondary) !important; }
-    .theme-text { color: var(--current-text) !important; }
-    .theme-text-secondary { color: var(--current-text-secondary) !important; }
-    .theme-border { border-color: var(--current-border) !important; }
-    .theme-accent { color: var(--current-accent) !important; }
-    .theme-accent-bg { background-color: var(--current-accent) !important; }
-    .theme-accent-border { border-color: var(--current-accent) !important; }
-    .theme-active-bg { background-color: var(--current-active-bg) !important; }
-    .theme-active-text { color: var(--current-active-text) !important; }
+    .theme-bg { background-color: var(--current-bg); }
+    .theme-bg-secondary { background-color: var(--current-bg-secondary); }
+    .theme-text { color: var(--current-text); }
+    .theme-text-secondary { color: var(--current-text-secondary); }
+    .theme-border { border-color: var(--current-border); }
+    .theme-accent { color: var(--current-accent); }
+    .theme-accent-bg { background-color: var(--current-accent); }
+    .theme-accent-border { border-color: var(--current-accent); }
+    .theme-active-bg { background-color: var(--current-active-bg); }
+    .theme-active-text { color: var(--current-active-text); }
     
     /* Neutral colors for sidebar/topnav (not theme-dependent) */
-    .neutral-bg { background-color: var(--neutral-bg) !important; }
-    .neutral-bg-secondary { background-color: var(--neutral-bg-secondary) !important; }
-    .neutral-text { color: var(--neutral-text) !important; }
-    .neutral-text-secondary { color: var(--neutral-text-secondary) !important; }
-    .neutral-border { border-color: var(--neutral-border) !important; }
+    .neutral-bg { background-color: var(--neutral-bg); }
+    .neutral-bg-secondary { background-color: var(--neutral-bg-secondary); }
+    .neutral-text { color: var(--neutral-text); }
+    .neutral-text-secondary { color: var(--neutral-text-secondary); }
+    .neutral-border { border-color: var(--neutral-border); }
 
     /* Markdown content links */
     .markdown-content a {
-      color: var(--current-accent) !important;
+      color: var(--current-accent);
       text-decoration: underline;
       text-decoration-color: var(--current-accent);
     }

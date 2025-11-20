@@ -67,13 +67,15 @@ export const updateUrlHash = (state: AppState): void => {
  */
 export const getInitialState = (
   localStorageState: AppState | null,
-  defaultFile: string | null
+  defaultFile: string | null,
+  defaultFontSize: AppState['fontSize']
 ): AppState => {
   const urlState = parseUrlHash();
   
   return {
     currentFile: urlState.currentFile ?? localStorageState?.currentFile ?? defaultFile,
     currentSection: urlState.currentSection ?? localStorageState?.currentSection ?? null,
+    fontSize: localStorageState?.fontSize ?? defaultFontSize,
   };
 };
 

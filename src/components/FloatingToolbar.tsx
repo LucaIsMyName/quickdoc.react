@@ -1,16 +1,18 @@
-import { memo, useState } from 'react';
-import { Settings, X, Search, Sun, Moon } from 'lucide-react';
-import { Tooltip } from '@base-ui-components/react/tooltip';
-import { DarkModeToggle } from './DarkModeToggle';
-import { SearchButton } from './SearchButton';
-import { ExportButton } from './ExportButton';
+import { memo, useState, useCallback } from "react";
+import { Settings, X, Search, Sun, Moon, Type } from "lucide-react";
+import { Tooltip } from "@base-ui-components/react/tooltip";
+import { DarkModeToggle } from "./DarkModeToggle";
+import { SearchButton } from "./SearchButton";
+import { ExportButton } from "./ExportButton";
 
 interface FloatingToolbarProps {
   // Global actions
   isDark: boolean;
   onToggleDarkMode: () => void;
   onSearchOpen: () => void;
-  
+  fontSize: "small" | "medium" | "large";
+  onFontSizeChange: (next: "small" | "medium" | "large") => void;
+
   // Local actions (current page)
   exportProps?: {
     content: string;
@@ -19,14 +21,17 @@ interface FloatingToolbarProps {
   };
 }
 
-const FloatingToolbarComponent = ({ 
-  isDark, 
-  onToggleDarkMode, 
-  onSearchOpen, 
-  exportProps 
-}: FloatingToolbarProps) => {
+const FloatingToolbarComponent = ({ isDark, onToggleDarkMode, onSearchOpen, fontSize, onFontSizeChange, exportProps }: FloatingToolbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const menuId = 'floating-toolbar-menu';
+  const menuId = "floating-toolbar-menu";
+
+  const handleCycleFontSize = useCallback(() => {
+    const order: Array<"small" | "medium" | "large"> = ["small", "medium", "large"];
+    const current = fontSize ?? "medium";
+    const currentIndex = order.indexOf(current);
+    const next = order[(currentIndex + 1) % order.length];
+    onFontSizeChange(next as "small" | "medium" | "large");
+  }, [fontSize, onFontSizeChange]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -51,10 +56,11 @@ const FloatingToolbarComponent = ({
                   </span>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
-                  <Tooltip.Positioner side="top" align="end" sideOffset={8}>
-                    <Tooltip.Popup className="px-2 py-1 text-xs theme-bg theme-border-medium shadow-md theme-text whitespace-nowrap">
-                      Export options
-                    </Tooltip.Popup>
+                  <Tooltip.Positioner
+                    side="top"
+                    align="end"
+                    sideOffset={8}>
+                    <Tooltip.Popup className="px-2 py-1 text-xs theme-bg theme-border-medium shadow-md theme-text whitespace-nowrap">Export options</Tooltip.Popup>
                   </Tooltip.Positioner>
                 </Tooltip.Portal>
               </Tooltip.Root>
@@ -62,9 +68,7 @@ const FloatingToolbarComponent = ({
           </div>
 
           {/* Separator */}
-          {exportProps && (
-            <div className="w-px h-6 theme-border bg-current opacity-20 mx-1" />
-          )}
+          {exportProps && <div className="w-px h-6 theme-border bg-current opacity-20 mx-1" />}
 
           {/* Global Actions */}
           <div className="flex items-center gap-1">
@@ -75,9 +79,37 @@ const FloatingToolbarComponent = ({
                 </span>
               </Tooltip.Trigger>
               <Tooltip.Portal>
-                <Tooltip.Positioner side="top" align="end" sideOffset={8}>
+                <Tooltip.Positioner
+                  side="top"
+                  align="end"
+                  sideOffset={8}>
+                  <Tooltip.Popup className="px-2 py-1 text-xs theme-bg theme-border-medium shadow-md theme-text whitespace-nowrap">Search documentation</Tooltip.Popup>
+                </Tooltip.Positioner>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+
+            {/* Font size toggle */}
+            <Tooltip.Root>
+              <Tooltip.Trigger>
+                <span className="inline-flex">
+                  <button
+                    type="button"
+                    onClick={handleCycleFontSize}
+                    className="p-2 transition-colors theme-radius-base"
+                    aria-label="Toggle font size">
+                    <Type className="w-4 h-4 theme-text-secondary" />
+                  </button>
+                </span>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Positioner
+                  side="top"
+                  align="center"
+                  sideOffset={8}>
                   <Tooltip.Popup className="px-2 py-1 text-xs theme-bg theme-border-medium shadow-md theme-text whitespace-nowrap">
-                    Search documentation
+                    {fontSize === "small" && "Font size: small"}
+                    {fontSize === "medium" && "Font size: medium"}
+                    {fontSize === "large" && "Font size: large"}
                   </Tooltip.Popup>
                 </Tooltip.Positioner>
               </Tooltip.Portal>
@@ -86,14 +118,18 @@ const FloatingToolbarComponent = ({
             <Tooltip.Root>
               <Tooltip.Trigger>
                 <span className="inline-flex">
-                  <DarkModeToggle isDark={isDark} onToggle={onToggleDarkMode} />
+                  <DarkModeToggle
+                    isDark={isDark}
+                    onToggle={onToggleDarkMode}
+                  />
                 </span>
               </Tooltip.Trigger>
               <Tooltip.Portal>
-                <Tooltip.Positioner side="top" align="end" sideOffset={8}>
-                  <Tooltip.Popup className="px-2 py-1 text-xs theme-bg theme-border-medium shadow-md theme-text whitespace-nowrap">
-                    {isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-                  </Tooltip.Popup>
+                <Tooltip.Positioner
+                  side="top"
+                  align="end"
+                  sideOffset={8}>
+                  <Tooltip.Popup className="px-2 py-1 text-xs theme-bg theme-border-medium shadow-md theme-text whitespace-nowrap">{isDark ? "Switch to light mode" : "Switch to dark mode"}</Tooltip.Popup>
                 </Tooltip.Positioner>
               </Tooltip.Portal>
             </Tooltip.Root>
@@ -110,43 +146,39 @@ const FloatingToolbarComponent = ({
           aria-label="Open toolbar menu"
           aria-haspopup="dialog"
           aria-expanded={isMobileMenuOpen}
-          aria-controls={menuId}
-        >
-          {isMobileMenuOpen ? (
-            <X className="w-5 h-5 theme-text" />
-          ) : (
-            <Settings className="w-5 h-5 theme-text" />
-          )}
+          aria-controls={menuId}>
+          {isMobileMenuOpen ? <X className="w-5 h-5 theme-text" /> : <Settings className="w-5 h-5 theme-text" />}
         </button>
 
         {/* Mobile Popover Menu */}
         {isMobileMenuOpen && (
           <>
             {/* Backdrop */}
-            <div 
+            <div
               className="fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            
+
             {/* Menu Content */}
             <div
               id={menuId}
               className="absolute bottom-16 right-0 w-64 theme-bg theme-border-large shadow-xl overflow-hidden"
               role="dialog"
               aria-modal="true"
-              aria-labelledby="floating-toolbar-title"
-            >
+              aria-labelledby="floating-toolbar-title">
               {/* Header */}
               <div className="px-4 py-3 border-b theme-border">
-                <h3 id="floating-toolbar-title" className="text-sm font-medium theme-text">Toolbar</h3>
+                <h3
+                  id="floating-toolbar-title"
+                  className="text-sm font-medium theme-text">
+                  Toolbar
+                </h3>
               </div>
 
               {/* Local Actions Section */}
               {exportProps && (
                 <div className="p-2">
-                  <div className="px-2 py-1 text-xs font-medium theme-text-secondary uppercase tracking-wide">
-                    Current Page
-                  </div>
+                  <div className="px-2 py-1 text-xs font-medium theme-text-secondary uppercase tracking-wide">Current Page</div>
                   <div className="mt-1">
                     <ExportButton
                       content={exportProps.content}
@@ -158,15 +190,11 @@ const FloatingToolbarComponent = ({
               )}
 
               {/* Separator */}
-              {exportProps && (
-                <div className="border-t theme-border mx-2" />
-              )}
+              {exportProps && <div className="border-t theme-border mx-2" />}
 
               {/* Global Actions Section */}
               <div className="p-2">
-                <div className="px-2 py-1 text-xs font-medium theme-text-secondary uppercase tracking-wide">
-                  Global
-                </div>
+                <div className="px-2 py-1 text-xs font-medium theme-text-secondary uppercase tracking-wide">Global</div>
                 <div className="mt-1 space-y-1">
                   {/* Search */}
                   <button
@@ -174,8 +202,7 @@ const FloatingToolbarComponent = ({
                       onSearchOpen();
                       setIsMobileMenuOpen(false);
                     }}
-                    className="flex items-center gap-3 w-full px-3 py-2 text-sm theme-text-secondary hover:theme-text hover:theme-active-bg theme-radius-base transition-colors"
-                  >
+                    className="flex items-center gap-3 w-full px-3 py-2 text-sm theme-text-secondary hover:theme-text hover:theme-active-bg theme-radius-base transition-colors">
                     <Search className="w-4 h-4" />
                     <span>Search Documentation</span>
                   </button>
@@ -186,14 +213,9 @@ const FloatingToolbarComponent = ({
                       onToggleDarkMode();
                       setIsMobileMenuOpen(false);
                     }}
-                    className="flex items-center gap-3 w-full px-3 py-2 text-sm theme-text-secondary hover:theme-text hover:theme-active-bg theme-radius-base transition-colors"
-                  >
-                    {isDark ? (
-                      <Sun className="w-4 h-4" />
-                    ) : (
-                      <Moon className="w-4 h-4" />
-                    )}
-                    <span>{isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</span>
+                    className="flex items-center gap-3 w-full px-3 py-2 text-sm theme-text-secondary hover:theme-text hover:theme-active-bg theme-radius-base transition-colors">
+                    {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                    <span>{isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}</span>
                   </button>
                 </div>
               </div>

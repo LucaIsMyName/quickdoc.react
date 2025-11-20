@@ -62,9 +62,10 @@ describe('Navigation Logic', () => {
       const localStorageState: AppState = {
         currentFile: 'readme',
         currentSection: 'features',
+        fontSize: 'medium',
       };
       
-      const state = getInitialState(localStorageState, 'default-file');
+      const state = getInitialState(localStorageState, 'default-file', 'medium');
       
       expect(state.currentFile).toBe('quick-start');
       expect(state.currentSection).toBe('installation');
@@ -75,9 +76,10 @@ describe('Navigation Logic', () => {
       const localStorageState: AppState = {
         currentFile: 'readme',
         currentSection: 'features',
+        fontSize: 'medium',
       };
       
-      const state = getInitialState(localStorageState, 'default-file');
+      const state = getInitialState(localStorageState, 'default-file', 'medium');
       
       expect(state.currentFile).toBe('readme');
       expect(state.currentSection).toBe('features');
@@ -86,7 +88,7 @@ describe('Navigation Logic', () => {
     it('falls back to default when no URL or localStorage', () => {
       window.history.replaceState(null, '', '/');
       
-      const state = getInitialState(null, 'default-file');
+      const state = getInitialState(null, 'default-file', 'medium');
       
       expect(state.currentFile).toBe('default-file');
       expect(state.currentSection).toBeNull();

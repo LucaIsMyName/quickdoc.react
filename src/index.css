@@ -12,7 +12,15 @@
   /* Font variables - system fonts by default */
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
-  --font-size-base: 16px;
+  /* Base sizes are configured at runtime by applyFontStyles */
+  --font-size-root: 16px;
+  --font-size-body: 16px;
+  --font-size-ui: 15px;
+  --font-size-code: 15px;
+  --icon-size-base: 1rem;
+
+  /* Backward compatibility alias */
+  --font-size-base: var(--font-size-body);
 }
 
 /* Desktop-only content alignment */
@@ -32,13 +40,14 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: var(--font-size-root);
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: var(--font-sans);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
 }
 
 code,

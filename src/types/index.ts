@@ -28,4 +28,5 @@ export interface NavigationItem {
 export interface AppState {
   currentFile: string | null;
   currentSection: string | null;
+  fontSize: 'small' | 'medium' | 'large';
 }

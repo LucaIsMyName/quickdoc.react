@@ -7,10 +7,10 @@ import { updateUrlHash, getInitialState, parseUrlHash } from '../utils/url';
  * Hook to manage app state with URL and localStorage sync
  * Priority: URL > localStorage > defaults
  */
-export const useAppState = (defaultFile: string | null) => {
+export const useAppState = (defaultFile: string | null, defaultFontSize: AppState['fontSize']) => {
   const [state, setState] = useState<AppState>(() => {
     const localStorageState = loadState();
-    return getInitialState(localStorageState, defaultFile);
+    return getInitialState(localStorageState, defaultFile, defaultFontSize);
   });
 
   // Sync state to URL and localStorage whenever it changes
@@ -25,6 +25,7 @@ export const useAppState = (defaultFile: string | null) => {
       const urlState = parseUrlHash();
       if (urlState.currentFile || urlState.currentSection) {
         setState((prev) => ({
+          ...prev,
           currentFile: urlState.currentFile ?? prev.currentFile,
           currentSection: urlState.currentSection ?? null,
         }));
@@ -48,6 +49,7 @@ export const useAppState = (defaultFile: string | null) => {
     const handlePopState = () => {
       const urlState = parseUrlHash();
       setState((prev) => ({
+        ...prev,
         currentFile: urlState.currentFile ?? prev.currentFile,
         currentSection: urlState.currentSection ?? prev.currentSection,
       }));
@@ -62,6 +64,7 @@ export const useAppState = (defaultFile: string | null) => {
     const handleHashChange = () => {
       const urlState = parseUrlHash();
       setState((prev) => ({
+        ...prev,
         currentFile: urlState.currentFile ?? prev.currentFile,
         currentSection: urlState.currentSection ?? prev.currentSection,
       }));
@@ -86,9 +89,17 @@ export const useAppState = (defaultFile: string | null) => {
     }));
   }, []);
 
+  const setFontSize = useCallback((fontSize: AppState['fontSize']) => {
+    setState((prev) => ({
+      ...prev,
+      fontSize,
+    }));
+  }, []);
+
   return {
     state,
     setCurrentFile,
     setCurrentSection,
+    setFontSize,
   };
 };

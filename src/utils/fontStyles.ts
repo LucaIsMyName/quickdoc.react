@@ -23,14 +23,49 @@ export const applyFontStyles = (config: AppConfig) => {
     applyFontVariables(fonts, false);
   }
 
-  // Apply font size
-  const fontSizeMap = {
-    small: '14px',
-    medium: '16px',
-    large: '18px'
+  // Apply font size scale
+  // These values act as the central "zoom" configuration for the app.
+  // All typography and icon sizes should be derived from these variables.
+  const sizeConfig: Record<AppConfig['theme']['fonts']['size'], {
+    root: string;
+    body: string;
+    ui: string;
+    code: string;
+    icon: string;
+  }> = {
+    small: {
+      root: '14px',
+      body: '14px',
+      ui: '13px',
+      code: '13px',
+      icon: '0.9rem',
+    },
+    medium: {
+      root: '16px',
+      body: '16px',
+      ui: '15px',
+      code: '15px',
+      icon: '1rem',
+    },
+    large: {
+      root: '18px',
+      body: '18px',
+      ui: '17px',
+      code: '17px',
+      icon: '1.1rem',
+    },
   };
-  
-  root.style.setProperty('--font-size-base', fontSizeMap[fonts.size]);
+
+  const activeSize = sizeConfig[fonts.size];
+
+  root.style.setProperty('--font-size-root', activeSize.root);
+  root.style.setProperty('--font-size-body', activeSize.body);
+  root.style.setProperty('--font-size-ui', activeSize.ui);
+  root.style.setProperty('--font-size-code', activeSize.code);
+  root.style.setProperty('--icon-size-base', activeSize.icon);
+
+  // Backward compatibility: keep base in sync with body
+  root.style.setProperty('--font-size-base', activeSize.body);
 
   // Sidebar font family (defaults to sans if not specified)
   const sidebarFontChoice = config.theme.sidebarFont ?? 'sans';

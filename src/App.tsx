@@ -92,7 +92,10 @@ function App() {
   const defaultFile = files[0]?.slug ?? null;
 
   // Manage app state with URL and localStorage sync
-  const { state, setCurrentFile, setCurrentSection } = useAppState(defaultFile);
+  const { state, setCurrentFile, setCurrentSection, setFontSize } = useAppState(
+    defaultFile,
+    defaultConfig.theme.fonts.size
+  );
 
   // Sync app state when React Router location changes (only for external navigation)
   useEffect(() => {
@@ -328,16 +331,28 @@ function App() {
 
   // Consolidated style application - avoid duplicate calls
   useEffect(() => {
-    applyContentStyles(config, mainContentRef.current);
-    applyBorderStyles(config);
-    applyFontStyles(config);
+    // Derive an effective config that uses the live font size from state
+    const effectiveConfig = {
+      ...config,
+      theme: {
+        ...config.theme,
+        fonts: {
+          ...config.theme.fonts,
+          size: state.fontSize,
+        },
+      },
+    } as typeof config;
+
+    applyContentStyles(effectiveConfig, mainContentRef.current);
+    applyBorderStyles(effectiveConfig);
+    applyFontStyles(effectiveConfig);
     applyInlineCodeStyles(config);
     applyMetaNavStyles(files.length > 1);
-    applyColorStyles(config);
-    applyCodeBlockStyles(config);
-    applyCopyButtonStyles(config);
-    applyFooterStyles(config);
-  }, [config, files.length]); // Consolidated dependencies
+    applyColorStyles(effectiveConfig);
+    applyCodeBlockStyles(effectiveConfig);
+    applyCopyButtonStyles(effectiveConfig);
+    applyFooterStyles(effectiveConfig);
+  }, [config, files.length, state.fontSize]); // Consolidated dependencies
 
   // Initialize scroll-based hash updates
   useEffect(() => {
@@ -587,6 +602,8 @@ function App() {
           onToggleDarkMode={toggleDarkMode}
           onSearchOpen={handleSearchOpen}
           exportProps={floatingExportProps}
+          fontSize={state.fontSize}
+          onFontSizeChange={setFontSize}
         />
       </div>
     </>
